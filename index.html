@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>디어데이즈(Deardays) | 브랜드 성장 파트너</title>
+  <meta name="description" content="당신의 브랜드가 '품절'의 주인공이 되는 곳. 300명의 검증된 인플루언서와 함께 데이터로 증명되는 압도적 성장을 설계합니다.">
+
+  <meta property="og:title" content="디어데이즈(Deardays) | 브랜드 성장 파트너">
+  <meta property="og:description" content="당신의 브랜드가 '품절'의 주인공이 되는 곳. 300명의 검증된 인플루언서와 함께 데이터로 증명되는 압도적 성장을 설계합니다.">
+  <meta property="og:image" content="https://deardays.kr/title.gif">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://deardays.kr">
+  <meta property="og:site_name" content="디어데이즈">
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'primary': '#0f172a',
+            'primary-rich': '#1e293b',
+            'accent': '#d4a574',
+            'accent-bright': '#e8c89e',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet">
+  
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  
+  
+  <style>
+    :root {
+      --color-primary: #0f172a;
+      --color-primary-rich: #1e293b;
+      --color-accent: #d4a574;
+      --color-accent-bright: #e8c89e;
+      --color-text: #1a1a1a;
+      --color-text-secondary: #525252;
+      --color-text-muted: #a3a3a3;
+      --color-bg: #fafaf9;
+      --color-bg-alt: #f5f5f4;
+      --color-bg-card: #ffffff;
+      --shadow-soft: 0 4px 20px rgba(15, 23, 42, 0.08);
+      --shadow-medium: 0 8px 30px rgba(15, 23, 42, 0.12);
+      --shadow-dramatic: 0 20px 50px rgba(15, 23, 42, 0.15);
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: 'Pretendard', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Header & Logo Styles */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      padding: 1.5rem 0;
+      transition: all 0.3s ease;
+      background: rgba(15, 23, 42, 0.1); /* Transparent initially */
+      backdrop-filter: blur(8px);
+    }
+    
+    header.scrolled {
+      background: rgba(15, 23, 42, 0.9);
+      padding: 1rem 0;
+      box-shadow: var(--shadow-medium);
+    }
+
+    .logo {
+      font-family: 'Noto Serif KR', serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: white;
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    
+    .logo span {
+      color: var(--color-accent);
+    }
+    
+    .nav-link {
+      font-family: 'Pretendard', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    
+    .nav-link:hover {
+      color: var(--color-accent);
+    }
+
+    .hero-gradient {
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 40%, rgba(212, 165, 116, 0.15), transparent),
+        radial-gradient(ellipse 60% 60% at 80% 20%, rgba(30, 41, 59, 0.3), transparent),
+        linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+    }
+
+    .hero-bg-gif {
+      background-image: url('title.gif');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .hero-overlay {
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.7) 0%, rgba(15, 23, 42, 0.85) 100%);
+    }
+    
+    .hero-noise {
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
+    }
+    
+    .hero-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+    
+    .cta-button-hero {
+      background: linear-gradient(135deg, #d4a574, #e8c89e);
+      color: #0f172a;
+      box-shadow: 0 10px 40px rgba(212, 165, 116, 0.4);
+      transition: all 200ms ease;
+    }
+    
+    .cta-button-hero:hover {
+      transform: scale(1.02);
+      box-shadow: 0 15px 50px rgba(212, 165, 116, 0.5);
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .animate-bounce {
+      animation: bounce 1.5s infinite;
+    }
+    
+    .counter-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 10vw, 8rem);
+      line-height: 1;
+      color: var(--color-text);
+    }
+    
+    .counter-label {
+      font-family: 'Pretendard', sans-serif;
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 0.5rem;
+    }
+    
+    .section-heading {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+      font-weight: 700;
+      line-height: 1.4;
+      letter-spacing: -0.02em;
+    }
+    
+    @property --num {
+      syntax: '<integer>';
+      initial-value: 0;
+      inherits: false;
+    }
+    
+    .counter-animate {
+      animation: count 2s ease-out forwards;
+      counter-reset: num var(--num);
+    }
+    
+    .counter-animate::after {
+      content: counter(num);
+    }
+    
+    @keyframes count {
+      to { --num: var(--target); }
+    }
+
+    /* Impact Journey Styles */
+    .impact-section {
+      background-color: var(--color-primary);
+      padding: 4rem 2rem;
+      border-radius: 1.5rem;
+    }
+
+    .impact-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      text-align: center;
+      color: white;
+      letter-spacing: 0.1em;
+      margin-bottom: 2rem;
+    }
+
+    .impact-journey {
+      position: relative;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .impact-connector {
+      position: absolute;
+      top: 50%;
+      left: 10%;
+      right: 10%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--color-accent), var(--color-accent-bright));
+      transform: translateY(-50%) scaleX(0);
+      transform-origin: left center;
+      z-index: 0;
+    }
+
+    .impact-journey.animate .impact-connector {
+      animation: connectorGrow 1.5s ease forwards;
+    }
+
+    @keyframes connectorGrow {
+      to {
+        transform: translateY(-50%) scaleX(1);
+      }
+    }
+
+    .impact-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .impact-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .impact-journey.animate .impact-card {
+      animation: cardReveal 0.6s ease forwards;
+    }
+
+    .impact-journey.animate .impact-card:nth-child(1) { animation-delay: 0.5s; }
+    .impact-journey.animate .impact-card:nth-child(2) { animation-delay: 0.8s; }
+    .impact-journey.animate .impact-card:nth-child(3) { animation-delay: 1.1s; }
+    .impact-journey.animate .impact-card:nth-child(4) { animation-delay: 1.4s; }
+
+    @keyframes cardReveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .impact-card:hover {
+      transform: translateY(-8px);
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 20px 40px rgba(212, 165, 116, 0.15);
+      border-color: rgba(212, 165, 116, 0.3);
+    }
+
+    .impact-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-bright));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.75rem;
+    }
+
+    .impact-title-ko {
+      font-family: 'Pretendard', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.25rem;
+      word-break: keep-all;
+    }
+
+    .impact-title-en {
+      font-family: 'Pretendard', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+    }
+
+    .impact-desc {
+      font-family: 'Pretendard', sans-serif;
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.5;
+      word-break: keep-all;
+    }
+
+    /* Tablet: 2x2 grid */
+    @media (max-width: 900px) {
+      .impact-steps {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+
+      .impact-connector {
+        display: none;
+      }
+    }
+
+    /* Mobile: 1 column */
+    @media (max-width: 576px) {
+      .impact-section {
+        padding: 2.5rem 1.5rem;
+      }
+
+      .impact-steps {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .impact-card {
+        padding: 1.25rem;
+      }
+    }
+
+    /* Organization Chart Styles */
+    .org-chart {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .org-level {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .org-node {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 165, 116, 0.3);
+      border-radius: 1rem;
+      padding: 1.25rem 1.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      min-width: 120px;
+    }
+
+    .org-node:hover {
+      transform: translateY(-4px);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 15px 40px rgba(212, 165, 116, 0.2);
+      border-color: rgba(212, 165, 116, 0.5);
+    }
+
+    .org-node-primary {
+      background: linear-gradient(135deg, rgba(212, 165, 116, 0.15), rgba(232, 200, 158, 0.1));
+      border: 2px solid rgba(212, 165, 116, 0.6);
+      padding: 1.5rem 2.5rem;
+      min-width: 160px;
+    }
+
+    .org-node-primary:hover {
+      box-shadow: 0 20px 50px rgba(212, 165, 116, 0.3);
+    }
+
+    .org-node-staff {
+      border-style: dashed;
+      border-color: rgba(212, 165, 116, 0.5);
+    }
+
+    .org-node-title {
+      font-family: 'Pretendard', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.25rem;
+    }
+
+    .org-node-primary .org-node-title {
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-bright));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .org-node-subtitle {
+      font-family: 'Pretendard', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* CEO row with staff */
+    .org-ceo-row {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .org-ceo-center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .org-staff-wrapper {
+      position: absolute;
+      left: calc(50% + 100px);
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .org-staff-connector {
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--color-accent), var(--color-accent-bright));
+    }
+
+    /* Connector lines */
+    .org-connector-vertical {
+      width: 2px;
+      height: 32px;
+      background: linear-gradient(180deg, var(--color-accent), var(--color-accent-bright));
+    }
+
+    .org-connector-horizontal-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      height: 32px;
+    }
+
+    .org-connector-horizontal-wrapper::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 2px;
+      height: 16px;
+      background: linear-gradient(180deg, var(--color-accent), var(--color-accent-bright));
+      transform: translateX(-50%);
+    }
+
+    .org-connector-horizontal-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 16px;
+      left: 16.67%;
+      right: 16.67%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--color-accent), var(--color-accent-bright), var(--color-accent));
+    }
+
+    .org-divisions {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+      max-width: 600px;
+      padding-top: 16px;
+    }
+
+    .org-divisions .org-node {
+      flex: 1;
+      min-width: 120px;
+      position: relative;
+    }
+
+    .org-divisions .org-node::before {
+      content: '';
+      position: absolute;
+      top: -16px;
+      left: 50%;
+      width: 2px;
+      height: 16px;
+      background: var(--color-accent);
+      transform: translateX(-50%);
+    }
+
+    /* Responsive: Mobile */
+    @media (max-width: 768px) {
+      .org-chart {
+        gap: 0;
+      }
+
+      .org-node {
+        min-width: 100px;
+        padding: 0.875rem 1rem;
+      }
+
+      .org-node-title {
+        font-size: 0.95rem;
+      }
+
+      .org-node-primary {
+        padding: 1rem 1.5rem;
+        min-width: 100px;
+      }
+
+      .org-node-primary .org-node-title {
+        font-size: 1.25rem;
+      }
+
+      .org-ceo-row {
+        flex-direction: row;
+        justify-content: center;
+      }
+
+      .org-staff-wrapper {
+        position: absolute;
+        left: calc(50% + 60px);
+      }
+
+      .org-staff-connector {
+        width: 20px;
+        height: 2px;
+      }
+
+      .org-connector-horizontal-wrapper {
+        display: none;
+      }
+
+      .org-divisions {
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        padding-top: 0;
+      }
+
+      .org-divisions .org-node {
+        min-width: 140px;
+      }
+
+      .org-divisions .org-node::before {
+        display: none;
+      }
+
+      .org-div-connector {
+        width: 2px;
+        height: 24px;
+        background: linear-gradient(180deg, var(--color-accent), var(--color-accent-bright));
+      }
+    }
+
+    /* Floating CTA Styles */
+    .floating-cta {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 1.5rem;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-bright));
+      color: var(--color-primary);
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      box-shadow: 0 10px 40px rgba(212, 165, 116, 0.4);
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .floating-cta.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .floating-cta:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 50px rgba(212, 165, 116, 0.5);
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-3deg); }
+      75% { transform: rotate(3deg); }
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 10px 40px rgba(212, 165, 116, 0.4); }
+      50% { box-shadow: 0 10px 60px rgba(212, 165, 116, 0.8); }
+    }
+
+    .floating-cta.active {
+      animation: wiggle 0.5s ease-in-out, glow 2s ease-in-out infinite;
+    }
+
+    .floating-cta.active:hover {
+      animation: glow 2s ease-in-out infinite;
+    }
+
+    @media (max-width: 768px) {
+      .floating-cta {
+        bottom: 1.5rem;
+        right: 1rem;
+        left: 1rem;
+        justify-content: center;
+        padding: 1rem;
+      }
+
+      .floating-cta.active {
+        /* Hide floating CTA when contact section is visible on mobile */
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+
+    /* Contact Section Redesign */
+    .contact-section {
+      background: linear-gradient(180deg, var(--color-primary) 0%, #0a1628 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 20% 80%, rgba(212, 165, 116, 0.08), transparent),
+        radial-gradient(ellipse 50% 50% at 80% 20%, rgba(30, 41, 59, 0.4), transparent);
+      pointer-events: none;
+    }
+
+    .contact-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .contact-heading {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+      font-weight: 700;
+      line-height: 1.4;
+      color: white;
+      letter-spacing: -0.02em;
+    }
+
+    .contact-subheading {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.7;
+    }
+
+    .contact-trust-badges {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .trust-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1.25rem 1.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .trust-badge:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(212, 165, 116, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .trust-badge-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(212, 165, 116, 0.2), rgba(232, 200, 158, 0.1));
+      color: var(--color-accent);
+    }
+
+    .trust-badge-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      color: white;
+      letter-spacing: 0.02em;
+    }
+
+    .trust-badge-label {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .contact-cta-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .contact-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1.25rem 3rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-decoration: none;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-bright));
+      color: var(--color-primary);
+      box-shadow:
+        0 0 0 0 rgba(212, 165, 116, 0.4),
+        0 10px 40px rgba(212, 165, 116, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .contact-cta:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow:
+        0 0 0 4px rgba(212, 165, 116, 0.2),
+        0 20px 60px rgba(212, 165, 116, 0.4);
+    }
+
+    .contact-cta:hover::before {
+      left: 100%;
+    }
+
+    @keyframes pulse-ring {
+      0% {
+        transform: scale(1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(1.3);
+        opacity: 0;
+      }
+    }
+
+    .contact-cta-pulse {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 9999px;
+      border: 2px solid var(--color-accent);
+      animation: pulse-ring 2s ease-out infinite;
+      pointer-events: none;
+    }
+
+    .contact-response {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .contact-response svg {
+      color: var(--color-accent);
+    }
+
+    .contact-footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 2rem;
+    }
+
+    .contact-footer p {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.875rem;
+    }
+
+    @media (max-width: 768px) {
+      .contact-trust-badges {
+        gap: 1rem;
+      }
+
+      .trust-badge {
+        padding: 1rem 1.25rem;
+        flex: 1;
+        min-width: 140px;
+      }
+
+      .contact-cta {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header id="main-header">
+    <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+      <a href="#" class="logo">
+        Deardays
+      </a>
+      <nav class="hidden md:flex gap-8">
+        <a href="#growth" class="nav-link">About</a>
+        <a href="#services" class="nav-link">Services</a>
+        <a href="#portfolio" class="nav-link">Portfolio</a>
+        <a href="#organization" class="nav-link">Team</a>
+        <a href="#contact" class="nav-link" style="color: var(--color-accent);">Contact</a>
+      </nav>
+      <button id="mobile-menu-btn" class="md:hidden text-white p-2">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+    <nav id="mobile-menu" class="hidden md:hidden absolute top-full left-0 right-0 bg-primary/95 backdrop-blur-md border-t border-white/10">
+      <div class="px-6 py-4 flex flex-col gap-4">
+        <a href="#growth" class="nav-link text-lg">About</a>
+        <a href="#services" class="nav-link text-lg">Services</a>
+        <a href="#portfolio" class="nav-link text-lg">Portfolio</a>
+        <a href="#organization" class="nav-link text-lg">Team</a>
+        <a href="#contact" class="nav-link text-lg" style="color: var(--color-accent);">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <div class="absolute inset-0 hero-bg-gif"></div>
+      <div class="absolute inset-0 hero-overlay"></div>
+      <div class="absolute inset-0 hero-noise"></div>
+      
+      <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
+        <div data-aos="fade-up" data-aos-duration="800">
+          <h1 class="hero-title text-white mb-4" id="hero-title"></h1>
+          <div class="w-20 h-0.5 mx-auto mb-8" style="background-color: var(--color-accent);"></div>
+          <p class="text-lg sm:text-xl text-white/80 mb-12 max-w-2xl mx-auto" id="hero-subcopy"></p>
+        </div>
+        
+        <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+          <a href="#contact" class="cta-button-hero inline-flex items-center gap-2 px-12 py-5 rounded-xl font-bold text-lg" id="hero-cta">
+            <span></span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+      
+      <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <svg class="w-6 h-6 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+        </svg>
+      </div>
+    </section>
+    
+    <section id="growth" class="py-20 lg:py-32" style="background-color: var(--color-bg);">
+      <div class="max-w-7xl mx-auto px-6">
+        <div data-aos="fade-up" class="text-center mb-16">
+          <h2 class="section-heading" style="color: var(--color-text);" id="growth-heading"></h2>
+          <p class="mt-4 text-lg max-w-3xl mx-auto" style="color: var(--color-text-secondary);" id="growth-subheading"></p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="text-center p-8" style="border-bottom: 2px solid var(--color-accent);">
+            <div class="counter-number mb-2">
+              <span id="counter-0">0</span><span id="suffix-0"></span>
+            </div>
+            <p class="counter-label" id="label-0"></p>
+          </div>
+          <div class="text-center p-8" style="border-bottom: 2px solid var(--color-accent);">
+            <div class="counter-number mb-2">
+              <span id="counter-1">0</span><span id="suffix-1"></span>
+            </div>
+            <p class="counter-label" id="label-1"></p>
+          </div>
+          <div class="text-center p-8" style="border-bottom: 2px solid var(--color-accent);">
+            <div class="counter-number mb-2">
+              <span id="counter-2">0</span><span id="suffix-2"></span>
+            </div>
+            <p class="counter-label" id="label-2"></p>
+          </div>
+        </div>
+        
+        <div class="max-w-5xl mx-auto mt-16">
+          <div class="impact-section">
+            <h3 class="impact-title">THE DEARDAYS IMPACT</h3>
+            <div class="impact-journey">
+              <div class="impact-connector"></div>
+              <div class="impact-steps" id="impact-steps">
+                <!-- Impact cards will be rendered by JavaScript -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section id="services" class="py-20 lg:py-32" style="background-color: var(--color-bg-card);">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="section-heading" style="color: var(--color-text);" id="services-heading"></h2>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div data-aos="fade-up" data-aos-delay="0" class="p-8 rounded-2xl" style="background-color: var(--color-bg-card); box-shadow: var(--shadow-medium); transition: box-shadow 0.3s;">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-6 mx-auto" style="background-color: var(--color-accent); color: var(--color-primary); font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; font-weight: 700;">
+              01
+            </div>
+            <h3 class="text-xl font-bold mb-3 text-center" style="font-family: 'Pretendard', sans-serif; font-weight: 900;" id="service-title-0"></h3>
+            <div class="w-16 h-0.5 mx-auto mb-4" style="background-color: var(--color-accent);"></div>
+            <p class="text-center" style="color: var(--color-text-secondary);" id="service-desc-0"></p>
+          </div>
+          
+          <div data-aos="fade-up" data-aos-delay="100" class="p-8 rounded-2xl" style="background-color: var(--color-bg-card); box-shadow: var(--shadow-medium); transition: box-shadow 0.3s;">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-6 mx-auto" style="background-color: var(--color-accent); color: var(--color-primary); font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; font-weight: 700;">
+              02
+            </div>
+            <h3 class="text-xl font-bold mb-3 text-center" style="font-family: 'Pretendard', sans-serif; font-weight: 900;" id="service-title-1"></h3>
+            <div class="w-16 h-0.5 mx-auto mb-4" style="background-color: var(--color-accent);"></div>
+            <p class="text-center" style="color: var(--color-text-secondary);" id="service-desc-1"></p>
+          </div>
+          
+          <div data-aos="fade-up" data-aos-delay="200" class="p-8 rounded-2xl" style="background-color: var(--color-bg-card); box-shadow: var(--shadow-medium); transition: box-shadow 0.3s;">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-6 mx-auto" style="background-color: var(--color-accent); color: var(--color-primary); font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; font-weight: 700;">
+              03
+            </div>
+            <h3 class="text-xl font-bold mb-3 text-center" style="font-family: 'Pretendard', sans-serif; font-weight: 900;" id="service-title-2"></h3>
+            <div class="w-16 h-0.5 mx-auto mb-4" style="background-color: var(--color-accent);"></div>
+            <p class="text-center" style="color: var(--color-text-secondary);" id="service-desc-2"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="portfolio" class="py-20 lg:py-32" style="background-color: var(--color-bg-alt);">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div data-aos="fade-up" data-aos-delay="0" class="relative overflow-hidden rounded-2xl" style="box-shadow: var(--shadow-medium); transition: transform 0.3s, box-shadow 0.3s;">
+            <div class="aspect-[4/3]" style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);"></div>
+            <div class="absolute inset-0 flex flex-col justify-end p-8" style="background: linear-gradient(to top, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.4), transparent);">
+              <span class="inline-block px-3 py-1 rounded-full text-sm font-medium mb-3" style="background-color: var(--color-accent); color: var(--color-primary); width: fit-content;" id="portfolio-tag-0"></span>
+              <h3 class="text-2xl font-bold text-white mb-2" style="font-family: 'Pretendard', sans-serif; font-weight: 900;" id="portfolio-title-0"></h3>
+              <p class="text-white/80" id="portfolio-desc-0"></p>
+            </div>
+          </div>
+          
+          <div data-aos="fade-up" data-aos-delay="100" class="relative overflow-hidden rounded-2xl" style="box-shadow: var(--shadow-medium); transition: transform 0.3s, box-shadow 0.3s;">
+            <div class="aspect-[4/3]" style="background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-bright) 100%);"></div>
+            <div class="absolute inset-0 flex flex-col justify-end p-8" style="background: linear-gradient(to top, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.4), transparent);">
+              <span class="inline-block px-3 py-1 rounded-full text-sm font-medium mb-3" style="background-color: var(--color-accent); color: var(--color-primary); width: fit-content;" id="portfolio-tag-1"></span>
+              <h3 class="text-2xl font-bold text-white mb-2" style="font-family: 'Pretendard', sans-serif; font-weight: 900;" id="portfolio-title-1"></h3>
+              <p class="text-white/80" id="portfolio-desc-1"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="organization" class="py-20 lg:py-32" style="background-color: var(--color-primary); color: white;">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="section-heading text-white mb-4" id="organization-heading"></h2>
+          <p class="mt-4 text-lg max-w-3xl mx-auto text-white/70" id="organization-subheading"></p>
+        </div>
+
+        <div class="org-chart" id="org-chart">
+          <!-- Organization chart will be rendered by JavaScript -->
+        </div>
+      </div>
+    </section>
+    <section id="contact" class="contact-section py-24 lg:py-32">
+      <div class="contact-content max-w-4xl mx-auto px-6 text-center">
+        <!-- Heading -->
+        <div data-aos="fade-up">
+          <h2 class="contact-heading mb-6" id="contact-heading"></h2>
+          <p class="contact-subheading mb-12 max-w-2xl mx-auto" id="contact-subheading"></p>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="contact-trust-badges mb-12" data-aos="fade-up" data-aos-delay="100">
+          <div class="trust-badge">
+            <div class="trust-badge-icon">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+            </div>
+            <span class="trust-badge-value">150+</span>
+            <span class="trust-badge-label">파트너 브랜드</span>
+          </div>
+          <div class="trust-badge">
+            <div class="trust-badge-icon">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <span class="trust-badge-value">98%</span>
+            <span class="trust-badge-label">재계약률</span>
+          </div>
+          <div class="trust-badge">
+            <div class="trust-badge-icon">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <span class="trust-badge-value">1H</span>
+            <span class="trust-badge-label">평균 응답</span>
+          </div>
+        </div>
+
+        <!-- CTA Button -->
+        <div data-aos="fade-up" data-aos-delay="200" class="mb-6">
+          <div class="contact-cta-wrapper">
+            <a href="#" id="kakao-cta" class="contact-cta">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 3C6.477 3 2 6.463 2 10.691c0 2.643 1.693 4.968 4.232 6.322-.143.471-.56 1.893-.64 2.185-.097.354.13.35.272.255.111-.074 1.767-1.184 2.49-1.665C9.24 17.923 10.599 18 12 18c5.523 0 10-3.463 10-7.309C22 6.463 17.523 3 12 3z"/>
+              </svg>
+              <span id="contact-cta-text"></span>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </a>
+            <div class="contact-cta-pulse"></div>
+          </div>
+        </div>
+
+        <!-- Response Time -->
+        <div data-aos="fade-up" data-aos-delay="300">
+          <p class="contact-response">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span id="contact-response-time"></span>
+          </p>
+        </div>
+      </div>
+
+      <footer class="contact-footer mt-20 mx-6">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+          <p>&copy; 2025 Deardays. All rights reserved.</p>
+        </div>
+      </footer>
+    </section>
+  </main>
+
+  <!-- Floating CTA -->
+  <a href="#" id="floating-cta" class="floating-cta">
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 3C6.477 3 2 6.463 2 10.691c0 2.643 1.693 4.968 4.232 6.322-.143.471-.56 1.893-.64 2.185-.097.354.13.35.272.255.111-.074 1.767-1.184 2.49-1.665C9.24 17.923 10.599 18 12 18c5.523 0 10-3.463 10-7.309C22 6.463 17.523 3 12 3z"/>
+    </svg>
+    <span id="floating-cta-text"></span>
+  </a>
+  
+  <script src="data.js"></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    document.title = SITE_DATA.meta.title;
+    document.querySelector('meta[name="description"]').content = SITE_DATA.meta.description;
+    document.querySelector('meta[property="og:title"]').content = SITE_DATA.meta.title;
+    document.querySelector('meta[property="og:description"]').content = SITE_DATA.meta.description;
+    document.querySelector('meta[property="og:image"]').content = SITE_DATA.meta.ogImage;
+    document.querySelector('meta[property="og:url"]').content = SITE_DATA.meta.ogUrl;
+
+    document.getElementById('hero-title').textContent = SITE_DATA.hero.mainCopy;
+    document.getElementById('hero-subcopy').textContent = SITE_DATA.hero.subCopy;
+    document.querySelector('#hero-cta span').textContent = SITE_DATA.hero.ctaText;
+    
+    document.getElementById('growth-heading').textContent = SITE_DATA.growth.heading;
+    document.getElementById('growth-subheading').textContent = SITE_DATA.growth.subHeading;
+    SITE_DATA.growth.metrics.forEach((metric, i) => {
+      document.getElementById(`counter-${i}`).textContent = metric.number;
+      document.getElementById(`suffix-${i}`).textContent = metric.suffix;
+      document.getElementById(`label-${i}`).textContent = metric.label;
+    });
+    
+    // Impact Journey rendering
+    const impactStepsContainer = document.getElementById('impact-steps');
+
+    SITE_DATA.growth.impact.steps.forEach((step) => {
+      const card = document.createElement('div');
+      card.className = 'impact-card';
+
+      card.innerHTML = `
+        <div class="impact-number">${step.number}</div>
+        <div class="impact-title-ko">${step.titleKo}</div>
+        <div class="impact-title-en">${step.titleEn}</div>
+        <p class="impact-desc">${step.desc}</p>
+      `;
+
+      impactStepsContainer.appendChild(card);
+    });
+
+    // Impact Journey scroll animation observer
+    const impactObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate');
+          impactObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    const impactSection = document.querySelector('.impact-journey');
+    if (impactSection) {
+      impactObserver.observe(impactSection);
+    }
+
+    document.getElementById('services-heading').textContent = SITE_DATA.services.heading;
+    SITE_DATA.services.steps.forEach((step, i) => {
+      document.getElementById(`service-title-${i}`).textContent = step.title;
+      document.getElementById(`service-desc-${i}`).textContent = step.desc;
+    });
+    
+    SITE_DATA.portfolio.cases.forEach((caseItem, i) => {
+      document.getElementById(`portfolio-tag-${i}`).textContent = caseItem.tag;
+      document.getElementById(`portfolio-title-${i}`).textContent = caseItem.title;
+      document.getElementById(`portfolio-desc-${i}`).textContent = caseItem.desc;
+    });
+    
+    document.getElementById('organization-heading').textContent = SITE_DATA.organization.heading;
+    document.getElementById('organization-subheading').textContent = SITE_DATA.organization.subHeading;
+
+    // Organization Chart rendering
+    const orgChartContainer = document.getElementById('org-chart');
+    const chart = SITE_DATA.organization.chart;
+
+    // Check if mobile
+    const isMobile = window.innerWidth <= 768;
+
+    if (isMobile) {
+      // Mobile layout: CEO centered with staff to the right, divisions below
+      orgChartContainer.innerHTML = `
+        <div class="org-ceo-row">
+          <div class="org-ceo-center">
+            <div class="org-node org-node-primary" data-aos="fade-up">
+              <div class="org-node-title">${chart.ceo.title}</div>
+              <div class="org-node-subtitle">${chart.ceo.titleEn}</div>
+            </div>
+          </div>
+          <div class="org-staff-wrapper">
+            <div class="org-staff-connector"></div>
+            <div class="org-node org-node-staff" data-aos="fade-up" data-aos-delay="100">
+              <div class="org-node-title">${chart.staff.title}</div>
+              <div class="org-node-subtitle">${chart.staff.titleEn}</div>
+            </div>
+          </div>
+        </div>
+        <div class="org-connector-vertical"></div>
+        <div class="org-level org-divisions">
+          ${chart.divisions.map((div, i) => `
+            ${i > 0 ? '<div class="org-div-connector"></div>' : ''}
+            <div class="org-node" data-aos="fade-up" data-aos-delay="${200 + i * 100}">
+              <div class="org-node-title">${div.title}</div>
+              <div class="org-node-subtitle">${div.titleEn}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    } else {
+      // Desktop layout: CEO centered with staff on right, 3 divisions below
+      orgChartContainer.innerHTML = `
+        <div class="org-ceo-row">
+          <div class="org-ceo-center">
+            <div class="org-node org-node-primary" data-aos="fade-up">
+              <div class="org-node-title">${chart.ceo.title}</div>
+              <div class="org-node-subtitle">${chart.ceo.titleEn}</div>
+            </div>
+          </div>
+          <div class="org-staff-wrapper">
+            <div class="org-staff-connector"></div>
+            <div class="org-node org-node-staff" data-aos="fade-up" data-aos-delay="100">
+              <div class="org-node-title">${chart.staff.title}</div>
+              <div class="org-node-subtitle">${chart.staff.titleEn}</div>
+            </div>
+          </div>
+        </div>
+        <div class="org-connector-vertical"></div>
+        <div class="org-connector-horizontal-wrapper"></div>
+        <div class="org-level org-divisions">
+          ${chart.divisions.map((div, i) => `
+            <div class="org-node" data-aos="fade-up" data-aos-delay="${200 + i * 100}">
+              <div class="org-node-title">${div.title}</div>
+              <div class="org-node-subtitle">${div.titleEn}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // Re-render on resize
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        const newIsMobile = window.innerWidth <= 768;
+        if (newIsMobile !== isMobile) {
+          location.reload();
+        }
+      }, 250);
+    });
+    
+    document.getElementById('contact-heading').textContent = SITE_DATA.contact.heading;
+    document.getElementById('contact-subheading').textContent = SITE_DATA.contact.subHeading || '';
+    document.getElementById('contact-cta-text').textContent = SITE_DATA.contact.ctaText;
+    document.getElementById('contact-response-time').textContent = SITE_DATA.contact.responseTime || '평균 1시간 내 답변';
+    document.getElementById('floating-cta-text').textContent = SITE_DATA.contact.ctaText;
+
+    const kakaoCTA = document.getElementById('kakao-cta');
+    const floatingCTA = document.getElementById('floating-cta');
+    if (SITE_DATA.contact.kakaoUrl) {
+      kakaoCTA.href = SITE_DATA.contact.kakaoUrl;
+      kakaoCTA.target = '_blank';
+      kakaoCTA.rel = 'noopener noreferrer';
+      floatingCTA.href = SITE_DATA.contact.kakaoUrl;
+      floatingCTA.target = '_blank';
+      floatingCTA.rel = 'noopener noreferrer';
+    } else {
+      kakaoCTA.href = '#';
+      floatingCTA.href = '#';
+      const handleEmptyUrl = (e) => {
+        e.preventDefault();
+        alert('TODO: KakaoTalk 오픈채팅 URL을 data.js의 contact.kakaoUrl에 추가해주세요.');
+      };
+      kakaoCTA.addEventListener('click', handleEmptyUrl);
+      floatingCTA.addEventListener('click', handleEmptyUrl);
+    }
+
+    const trackCtaClick = () => {
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'cta_click', {
+          event_category: 'engagement',
+          event_label: 'kakao_openchat',
+          value: 1
+        });
+      }
+    };
+    kakaoCTA.addEventListener('click', trackCtaClick);
+    floatingCTA.addEventListener('click', trackCtaClick);
+    
+    if (SITE_DATA.analytics.ga4Id && SITE_DATA.analytics.ga4Id !== '') {
+      const scripts = document.querySelectorAll('script[src*="googletagmanager"]');
+      scripts.forEach(script => {
+        script.src = script.src.replace('G-XXXXXXXXXX', SITE_DATA.analytics.ga4Id);
+      });
+      const inlineScripts = document.querySelectorAll('script');
+      inlineScripts.forEach(script => {
+        if (script.textContent.includes('G-XXXXXXXXXX')) {
+          script.textContent = script.textContent.replace(/G-XXXXXXXXXX/g, SITE_DATA.analytics.ga4Id);
+        }
+      });
+    }
+    
+    AOS.init({ duration: 1000, easing: "ease", once: false });
+
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuIcon = document.getElementById('menu-icon');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+      const isOpen = !mobileMenu.classList.contains('hidden');
+      menuIcon.setAttribute('d', isOpen
+        ? 'M6 18L18 6M6 6l12 12'
+        : 'M4 6h16M4 12h16M4 18h16');
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        menuIcon.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+      });
+    });
+
+    // Header Scroll Effect
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('main-header');
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+    
+    const observerOptions = {
+      threshold: 0.5,
+      rootMargin: '0px'
+    };
+    
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          SITE_DATA.growth.metrics.forEach((metric, i) => {
+            const counter = document.getElementById(`counter-${i}`);
+            let start = 0;
+            const end = metric.number;
+            const duration = 2000;
+            const increment = end / (duration / 16);
+            
+            const timer = setInterval(() => {
+              start += increment;
+              if (start >= end) {
+                counter.textContent = end;
+                clearInterval(timer);
+              } else {
+                counter.textContent = Math.floor(start);
+              }
+            }, 16);
+          });
+          counterObserver.disconnect();
+        }
+      });
+    }, observerOptions);
+    
+    const growthSection = document.getElementById('growth');
+    if (growthSection) {
+      counterObserver.observe(growthSection);
+    }
+
+    // Floating CTA visibility observer
+    const floatingCtaObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        // Show floating CTA after scrolling past hero
+        if (!entry.isIntersecting) {
+          floatingCTA.classList.add('visible');
+        } else {
+          floatingCTA.classList.remove('visible');
+          floatingCTA.classList.remove('active');
+        }
+      });
+    }, { threshold: 0 });
+
+    const heroSection = document.getElementById('hero');
+    if (heroSection) {
+      floatingCtaObserver.observe(heroSection);
+    }
+
+    // Floating CTA active effect when contact section is visible
+    const contactObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          floatingCTA.classList.add('active');
+        } else {
+          floatingCTA.classList.remove('active');
+        }
+      });
+    }, { threshold: 0.3 });
+
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactObserver.observe(contactSection);
+    }
+  </script>
+</body>
+</html>
