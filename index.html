@@ -8,11 +8,17 @@
 
   <meta property="og:title" content="디어데이즈(Deardays) | 브랜드 성장 파트너">
   <meta property="og:description" content="당신의 브랜드가 '품절'의 주인공이 되는 곳. 300명의 검증된 인플루언서와 함께 데이터로 증명되는 압도적 성장을 설계합니다.">
-  <meta property="og:image" content="https://deardays.kr/title.gif">
+  <meta property="og:image" content="https://deardays.kr/title-og.jpg">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://deardays.kr">
   <meta property="og:site_name" content="디어데이즈">
-  
+
+  <!-- Preconnect to external origins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="preconnect" href="https://unpkg.com">
+
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -20,28 +26,13 @@
     gtag('js', new Date());
     gtag('config', 'G-XXXXXXXXXX');
   </script>
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'primary': '#0f172a',
-            'primary-rich': '#1e293b',
-            'accent': '#d4a574',
-            'accent-bright': '#e8c89e',
-          }
-        }
-      }
-    }
-  </script>
-  
+
+  <!-- Tailwind CSS (production build) -->
+  <link href="css/tailwind.css" rel="stylesheet">
   <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet">
   
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Serif+KR:wght@700&display=swap" rel="stylesheet">
   
   
   <style>
@@ -72,6 +63,8 @@
       font-family: 'Pretendard', sans-serif;
       margin: 0;
       padding: 0;
+      word-break: keep-all;
+      overflow-wrap: break-word;
     }
 
     /* Header & Logo Styles */
@@ -94,7 +87,7 @@
     }
 
     .logo {
-      font-family: 'Noto Serif KR', serif;
+      font-family: 'Noto Serif KR', 'Nanum Myeongjo', Georgia, serif;
       font-weight: 700;
       font-size: 1.5rem;
       color: white;
@@ -110,7 +103,7 @@
       font-family: 'Pretendard', sans-serif;
       font-size: 0.95rem;
       font-weight: 500;
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, 0.9);
       text-decoration: none;
       transition: color 0.2s ease;
     }
@@ -126,11 +119,25 @@
         linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
     }
 
-    .hero-bg-gif {
-      background-image: url('title.gif');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
+    .hero-bg-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    /* Fallback for prefers-reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+      .hero-bg-video {
+        display: none;
+      }
+      .hero-bg-fallback {
+        display: block;
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-rich) 100%);
+      }
     }
 
     .hero-overlay {
@@ -144,7 +151,7 @@
     }
     
     .hero-title {
-      font-family: 'Noto Serif KR', serif;
+      font-family: 'Noto Serif KR', 'Nanum Myeongjo', Georgia, serif;
       font-size: clamp(2.5rem, 5vw, 4.5rem);
       font-weight: 700;
       line-height: 1.2;
@@ -202,7 +209,7 @@
     }
     
     .counter-number {
-      font-family: 'Bebas Neue', sans-serif;
+      font-family: 'Bebas Neue', 'Arial Black', Impact, sans-serif;
       font-size: clamp(4rem, 10vw, 8rem);
       line-height: 1;
       color: var(--color-text);
@@ -226,7 +233,7 @@
     }
     
     .section-heading {
-      font-family: 'Noto Serif KR', serif;
+      font-family: 'Noto Serif KR', 'Nanum Myeongjo', Georgia, serif;
       font-size: clamp(1.75rem, 3.5vw, 2.5rem);
       font-weight: 700;
       line-height: 1.4;
@@ -319,6 +326,7 @@
       opacity: 0;
       transform: translateY(30px);
       box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+      overflow: hidden;
     }
 
     .impact-journey.animate .impact-card {
@@ -345,7 +353,7 @@
     }
 
     .impact-number {
-      font-family: 'Bebas Neue', sans-serif;
+      font-family: 'Bebas Neue', 'Arial Black', Impact, sans-serif;
       font-size: 2.5rem;
       background: linear-gradient(135deg, var(--color-accent), var(--color-accent-bright));
       -webkit-background-clip: text;
@@ -395,8 +403,36 @@
       }
     }
 
-    /* Mobile: 1 column */
+    /* Mobile: 1 column + Text Visibility Fixes */
     @media (max-width: 576px) {
+      /* P1: Font size reductions */
+      .hero-title {
+        font-size: clamp(1.75rem, 6vw, 2.5rem);
+        white-space: normal;
+      }
+
+      .section-heading {
+        font-size: clamp(1.5rem, 5vw, 2rem);
+        white-space: normal;
+      }
+
+      .contact-heading {
+        font-size: clamp(1.5rem, 5vw, 2rem);
+        white-space: normal;
+      }
+
+      .contact-subheading {
+        white-space: normal;
+      }
+
+      .impact-title-ko {
+        font-size: 1.1rem;
+      }
+
+      .impact-desc {
+        font-size: 0.8rem;
+      }
+
       .impact-section {
         padding: 2.5rem 1.5rem;
       }
@@ -408,6 +444,24 @@
 
       .impact-card {
         padding: 1.25rem;
+      }
+
+      /* Portfolio card: taller aspect ratio for more text space */
+      .portfolio-card > div:first-child {
+        aspect-ratio: 1/1 !important;
+      }
+
+      .portfolio-card h3 {
+        font-size: 1.25rem;
+      }
+
+      .portfolio-card p {
+        font-size: 0.875rem;
+        line-height: 1.5;
+      }
+
+      .portfolio-card > div:last-child {
+        padding: 1.5rem;
       }
     }
 
@@ -435,6 +489,7 @@
       backdrop-filter: blur(10px);
       border: 1px solid rgba(212, 165, 116, 0.2);
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
     }
 
     .service-card-glass:hover {
@@ -450,7 +505,7 @@
     }
 
     .service-card-glass p {
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.85);
       white-space: pre-line;
     }
 
@@ -529,6 +584,7 @@
       text-align: center;
       transition: all 0.3s ease;
       min-width: 120px;
+      overflow: hidden;
     }
 
     .org-node:hover {
@@ -828,7 +884,7 @@
     }
 
     .contact-heading {
-      font-family: 'Noto Serif KR', serif;
+      font-family: 'Noto Serif KR', 'Nanum Myeongjo', Georgia, serif;
       font-size: clamp(1.75rem, 3.5vw, 2.5rem);
       font-weight: 700;
       line-height: 1.4;
@@ -839,16 +895,18 @@
 
     .contact-subheading {
       font-size: 1.1rem;
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.85);
       line-height: 1.7;
       white-space: pre-line;
     }
 
     .contact-trust-badges {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .trust-badge {
@@ -856,7 +914,7 @@
       flex-direction: column;
       align-items: center;
       gap: 0.5rem;
-      padding: 1.25rem 1.5rem;
+      padding: 1.5rem 1rem;
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 1rem;
@@ -882,7 +940,7 @@
     }
 
     .trust-badge-value {
-      font-family: 'Bebas Neue', sans-serif;
+      font-family: 'Bebas Neue', 'Arial Black', Impact, sans-serif;
       font-size: 1.5rem;
       color: white;
       letter-spacing: 0.02em;
@@ -988,13 +1046,21 @@
 
     @media (max-width: 768px) {
       .contact-trust-badges {
-        gap: 1rem;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+        max-width: 100%;
       }
 
       .trust-badge {
-        padding: 1rem 1.25rem;
-        flex: 1;
-        min-width: 140px;
+        padding: 1rem 0.5rem;
+      }
+
+      .trust-badge-value {
+        font-size: 1.25rem;
+      }
+
+      .trust-badge-label {
+        font-size: 0.65rem;
       }
 
       .contact-cta {
@@ -1002,6 +1068,7 @@
         font-size: 1rem;
       }
     }
+
   </style>
 </head>
 <body>
@@ -1036,7 +1103,11 @@
 
   <main>
     <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <div class="absolute inset-0 hero-bg-gif"></div>
+      <video class="hero-bg-video" autoplay muted loop playsinline>
+        <source src="title.webm" type="video/webm">
+        <source src="title.mp4" type="video/mp4">
+      </video>
+      <div class="absolute inset-0 hero-bg-fallback hidden"></div>
       <div class="absolute inset-0 hero-overlay"></div>
       <div class="absolute inset-0 hero-noise"></div>
       
@@ -1496,17 +1567,15 @@
       }
     });
     
-    const observerOptions = {
-      threshold: 0.5,
-      rootMargin: '0px'
-    };
-
     // Store active timers to clear them when leaving view
     let counterTimers = [];
+    let countersAnimated = false;
 
     const counterObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !countersAnimated) {
+          countersAnimated = true;
+
           // Clear any existing timers first
           counterTimers.forEach(timer => clearInterval(timer));
           counterTimers = [];
@@ -1536,8 +1605,9 @@
 
             counterTimers.push(timer);
           });
-        } else {
-          // Hide counters when leaving view
+        } else if (!entry.isIntersecting && countersAnimated) {
+          // Reset when completely out of view
+          countersAnimated = false;
           counterTimers.forEach(timer => clearInterval(timer));
           counterTimers = [];
 
@@ -1553,11 +1623,15 @@
           });
         }
       });
-    }, observerOptions);
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -10% 0px'
+    });
 
-    const growthSection = document.getElementById('growth');
-    if (growthSection) {
-      counterObserver.observe(growthSection);
+    // Observe the stat cards grid directly, not the entire section
+    const statCardsGrid = document.querySelector('#growth .grid');
+    if (statCardsGrid) {
+      counterObserver.observe(statCardsGrid);
     }
 
     // Floating CTA visibility observer

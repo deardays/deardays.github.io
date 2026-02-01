@@ -3,7 +3,7 @@ const SITE_DATA = {
     title: "디어데이즈(Deardays) | 브랜드 성장 파트너",
     siteName: "디어데이즈",
     description: "당신의 브랜드가 '품절'의 주인공이 되는 곳. 300명의 검증된 인플루언서와 함께 데이터로 증명되는 압도적 성장을 설계합니다.",
-    ogImage: "https://deardays.kr/title.gif",
+    ogImage: "https://deardays.kr/title-og.jpg",
     ogUrl: "https://deardays.kr",
   },
   
