@@ -1591,7 +1591,7 @@
       });
     }
     
-    AOS.init({ duration: 1000, easing: "ease", once: false });
+    AOS.init({ duration: 1000, easing: "ease", once: true });
 
     // Mobile Menu Toggle
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -1660,22 +1660,6 @@
             }, 16);
 
             counterTimers.push(timer);
-          });
-        } else if (!entry.isIntersecting && countersAnimated) {
-          // Reset when completely out of view
-          countersAnimated = false;
-          counterTimers.forEach(timer => clearInterval(timer));
-          counterTimers = [];
-
-          SITE_DATA.growth.metrics.forEach((metric, i) => {
-            const counterNum = document.querySelector(`#counter-${i}`).parentElement;
-            const counter = document.getElementById(`counter-${i}`);
-            if (counterNum) {
-              counterNum.classList.remove('visible');
-            }
-            if (counter) {
-              counter.textContent = '0';
-            }
           });
         }
       });
