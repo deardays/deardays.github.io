@@ -1044,6 +1044,55 @@
       font-size: 0.875rem;
     }
 
+    .contact-footer-legal {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+    }
+
+    .contact-footer-copyright {
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      color: rgba(255, 255, 255, 0.25);
+      font-size: 0.75rem;
+    }
+
+    .contact-footer-legal span {
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 0.75rem;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .contact-footer-legal span::before {
+      content: '';
+      display: inline-block;
+      width: 3px;
+      height: 3px;
+      background: rgba(212, 165, 116, 0.4);
+      border-radius: 50%;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+
+    .contact-footer-legal span:first-child::before {
+      display: none;
+    }
+
+    @media (max-width: 640px) {
+      .contact-footer-legal {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .contact-footer-legal span::before {
+        display: none;
+      }
+    }
+
     @media (max-width: 768px) {
       .contact-trust-badges {
         grid-template-columns: repeat(3, 1fr);
@@ -1316,7 +1365,14 @@
 
       <footer class="contact-footer mt-20 mx-6">
         <div class="max-w-7xl mx-auto px-6 text-center">
-          <p>&copy; 2025 Deardays. All rights reserved.</p>
+          <div class="contact-footer-legal">
+            <span>사업자명 : 디어데이즈</span>
+            <span>대표자 : 박찬미</span>
+            <span>사업자등록번호 : 269-06-03267</span>
+            <span>통신판매업신고번호 : 2026-서울서대문-0173</span>
+            <span>문의 : deardays.agency@gmail.com</span>
+          </div>
+          <p class="contact-footer-copyright">&copy; 2025 Deardays. All rights reserved.</p>
         </div>
       </footer>
     </section>
