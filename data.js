@@ -93,6 +93,6 @@ const SITE_DATA = {
   },
   
   analytics: {
-    ga4Id: "", // TODO: Add GA4 Measurement ID (G-XXXXXXXXXX)
+    ga4Id: "G-JLYQ4LGHZG",
   },
 };
