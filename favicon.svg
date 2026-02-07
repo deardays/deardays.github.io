@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <!-- Elegant gold gradient -->
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e8c89e"/>
+      <stop offset="50%" style="stop-color:#d4a574"/>
+      <stop offset="100%" style="stop-color:#c49464"/>
+    </linearGradient>
+
+    <!-- Subtle shine effect -->
+    <linearGradient id="shine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#d4a574;stop-opacity:0"/>
+      <stop offset="50%" style="stop-color:#fff;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#d4a574;stop-opacity:0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Navy background with subtle rounded corners -->
+  <rect width="32" height="32" rx="6" fill="#0f172a"/>
+
+  <!-- Subtle noise texture overlay -->
+  <rect width="32" height="32" rx="6" fill="url(#shine)" opacity="0.1"/>
+
+  <!-- Stylized "D" letterform - editorial luxury style -->
+  <!-- Main D shape with elegant curves -->
+  <path
+    d="M9 7
+       L9 25
+       L15 25
+       C21 25 24.5 21 24.5 16
+       C24.5 11 21 7 15 7
+       L9 7
+       Z
+       M12.5 10.5
+       L14.5 10.5
+       C18.5 10.5 21 12.8 21 16
+       C21 19.2 18.5 21.5 14.5 21.5
+       L12.5 21.5
+       L12.5 10.5
+       Z"
+    fill="url(#goldGradient)"
+    fill-rule="evenodd"
+  />
+
+  <!-- Decorative accent line - editorial touch -->
+  <rect x="7" y="26.5" width="18" height="1" rx="0.5" fill="#d4a574" opacity="0.6"/>
+</svg>

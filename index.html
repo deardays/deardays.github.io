@@ -4,14 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>디어데이즈(Deardays) | 브랜드 성장 파트너</title>
-  <meta name="description" content="당신의 브랜드가 '품절'의 주인공이 되는 곳. 300명의 검증된 인플루언서와 함께 데이터로 증명되는 압도적 성장을 설계합니다.">
+  <meta name="description" content="당신의 브랜드가 '품절'의 주인공이 되는 곳. 300+명의 검증된 인플루언서와 함께 데이터 기반으로 브랜드 성장을 설계합니다.">
 
   <meta property="og:title" content="디어데이즈(Deardays) | 브랜드 성장 파트너">
-  <meta property="og:description" content="당신의 브랜드가 '품절'의 주인공이 되는 곳. 300명의 검증된 인플루언서와 함께 데이터로 증명되는 압도적 성장을 설계합니다.">
+  <meta property="og:description" content="당신의 브랜드가 '품절'의 주인공이 되는 곳. 300+명의 검증된 인플루언서와 함께 데이터 기반으로 브랜드 성장을 설계합니다.">
   <meta property="og:image" content="https://deardays.kr/title-og.jpg">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://deardays.kr">
   <meta property="og:site_name" content="디어데이즈">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#0f172a">
 
   <!-- Preconnect to external origins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1313,7 +1320,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
               </svg>
             </div>
-            <span class="trust-badge-value">150+</span>
+            <span class="trust-badge-value">400+</span>
             <span class="trust-badge-label">파트너 브랜드</span>
           </div>
           <div class="trust-badge">
@@ -1322,8 +1329,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
             </div>
-            <span class="trust-badge-value">98%</span>
-            <span class="trust-badge-label">재계약률</span>
+            <span class="trust-badge-value">4.8</span>
+            <span class="trust-badge-label">만족도</span>
           </div>
           <div class="trust-badge">
             <div class="trust-badge-icon">
@@ -1425,18 +1432,12 @@
       impactStepsContainer.appendChild(card);
     });
 
-    // Impact Journey scroll animation observer
-    const impactObserver = new IntersectionObserver((entries) => {
+    // Impact Journey scroll animation observer (once only)
+    const impactObserver = new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          // Reset animations by removing and re-adding the class
-          entry.target.classList.remove('animate');
-          // Force reflow to restart animations
-          void entry.target.offsetWidth;
           entry.target.classList.add('animate');
-        } else {
-          // Remove animate class when leaving view
-          entry.target.classList.remove('animate');
+          observer.unobserve(entry.target);
         }
       });
     }, { threshold: 0.3 });
