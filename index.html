@@ -1218,11 +1218,13 @@
         left: 1rem;
         justify-content: center;
         padding: 1rem;
+        transition: all 0.4s ease;
       }
 
-      .floating-cta.active {
-        /* Hide floating CTA when contact section is visible on mobile */
+      .floating-cta.hidden-for-cta {
+        /* Smooth crossover with contact CTA */
         opacity: 0;
+        transform: translateY(20px);
         pointer-events: none;
       }
     }
@@ -2296,6 +2298,24 @@
     const contactSection = document.getElementById('contact');
     if (contactSection) {
       contactObserver.observe(contactSection);
+    }
+
+    // Mobile: Hide floating CTA when contact CTA button is visible (crossover)
+    const contactCtaObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (window.innerWidth <= 768) {
+          if (entry.isIntersecting) {
+            floatingCTA.classList.add('hidden-for-cta');
+          } else {
+            floatingCTA.classList.remove('hidden-for-cta');
+          }
+        }
+      });
+    }, { threshold: 0.5 });
+
+    const contactCtaWrapper = document.querySelector('.contact-cta-wrapper');
+    if (contactCtaWrapper) {
+      contactCtaObserver.observe(contactCtaWrapper);
     }
   </script>
 </body>
