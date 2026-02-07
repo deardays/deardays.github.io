@@ -720,6 +720,119 @@
       border-radius: 50%;
     }
 
+    /* Reviews Ticker */
+    .reviews-section {
+      background: var(--color-primary);
+      border-top: 1px solid rgba(212, 165, 116, 0.1);
+      border-bottom: 1px solid rgba(212, 165, 116, 0.1);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .reviews-section::before,
+    .reviews-section::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 60px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .reviews-section::before {
+      top: 0;
+      background: linear-gradient(to bottom, var(--color-primary), transparent);
+    }
+
+    .reviews-section::after {
+      bottom: 0;
+      background: linear-gradient(to top, var(--color-primary), transparent);
+    }
+
+    .reviews-ticker {
+      height: 200px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .reviews-track {
+      display: flex;
+      flex-direction: column;
+      animation: tickerScroll 20s linear infinite;
+    }
+
+    .reviews-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes tickerScroll {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-50%); }
+    }
+
+    .review-item {
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(212, 165, 116, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .review-rating {
+      display: flex;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+
+    .review-star {
+      width: 14px;
+      height: 14px;
+      color: var(--color-accent);
+    }
+
+    .review-star.empty {
+      color: rgba(212, 165, 116, 0.3);
+    }
+
+    .review-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .review-text {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .reviews-header {
+      text-align: center;
+      padding-bottom: 1.5rem;
+    }
+
+    .reviews-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.25rem;
+      color: var(--color-accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .reviews-avg {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: white;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.05em;
+    }
+
+    .reviews-avg-stars {
+      display: flex;
+      gap: 2px;
+    }
+
     /* Portfolio Slider */
     .portfolio-slider {
       position: relative;
@@ -1214,6 +1327,81 @@
       display: inline-block;
     }
 
+    /* Inline Reviews Ticker for Contact Section */
+    .contact-reviews {
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      position: relative;
+      height: 120px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 1rem;
+      border: 1px solid rgba(212, 165, 116, 0.15);
+    }
+
+    .contact-reviews::before,
+    .contact-reviews::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 30px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .contact-reviews::before {
+      top: 0;
+      background: linear-gradient(to bottom, rgba(15, 23, 42, 0.95), transparent);
+    }
+
+    .contact-reviews::after {
+      bottom: 0;
+      background: linear-gradient(to top, rgba(15, 23, 42, 0.95), transparent);
+    }
+
+    .contact-reviews-track {
+      display: flex;
+      flex-direction: column;
+      animation: contactTickerScroll 16s linear infinite;
+    }
+
+    .contact-reviews-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes contactTickerScroll {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-50%); }
+    }
+
+    .contact-review-item {
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      border-bottom: 1px solid rgba(212, 165, 116, 0.1);
+    }
+
+    .contact-review-text {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .contact-review-stars {
+      display: flex;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+
+    .contact-review-stars svg {
+      width: 14px;
+      height: 14px;
+      color: var(--color-accent);
+    }
+
     .contact-cta {
       display: inline-flex;
       align-items: center;
@@ -1593,6 +1781,13 @@
           </div>
         </div>
 
+        <!-- Inline Reviews -->
+        <div class="contact-reviews" data-aos="fade-up" data-aos-delay="150">
+          <div class="contact-reviews-track" id="contact-reviews-track">
+            <!-- Reviews will be dynamically generated -->
+          </div>
+        </div>
+
         <!-- CTA Button -->
         <div data-aos="fade-up" data-aos-delay="200" class="mb-6">
           <div class="contact-cta-wrapper">
@@ -1619,20 +1814,19 @@
           </p>
         </div>
       </div>
-
-      <footer class="contact-footer mt-20 mx-6">
-        <div class="max-w-7xl mx-auto px-6 text-center">
-          <div class="contact-footer-legal">
-            <span>사업자명 : 디어데이즈</span>
-            <span>대표자 : 박찬미</span>
-            <span>사업자등록번호 : 269-06-03267</span>
-            <span>통신판매업신고번호 : 2026-서울서대문-0173</span>
-            <span>문의 : deardays.agency@gmail.com</span>
-          </div>
-          <p class="contact-footer-copyright">&copy; 2025 Deardays. All rights reserved.</p>
-        </div>
-      </footer>
     </section>
+    <footer class="contact-footer py-12" style="background: var(--color-primary);">
+      <div class="max-w-7xl mx-auto px-6 text-center">
+        <div class="contact-footer-legal">
+          <span>사업자명 : 디어데이즈</span>
+          <span>대표자 : 박찬미</span>
+          <span>사업자등록번호 : 269-06-03267</span>
+          <span>통신판매업신고번호 : 2026-서울서대문-0173</span>
+          <span>문의 : deardays.agency@gmail.com</span>
+        </div>
+        <p class="contact-footer-copyright">&copy; 2025 Deardays. All rights reserved.</p>
+      </div>
+    </footer>
   </main>
 
   <!-- Floating CTA -->
@@ -1813,6 +2007,45 @@
       });
 
       renderSlider();
+    })();
+
+    // Reviews Ticker initialization
+    (function initReviewsTicker() {
+      const reviews = SITE_DATA.reviews;
+      if (!reviews) return;
+
+      // Create star SVG
+      function starSVG(filled, size = 14) {
+        return `<svg class="review-star${filled ? '' : ' empty'}" width="${size}" height="${size}" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>`;
+      }
+
+      function renderStars(rating, size = 14) {
+        let html = '';
+        for (let i = 1; i <= 5; i++) {
+          html += starSVG(i <= Math.round(rating), size);
+        }
+        return html;
+      }
+
+      const itemCount = reviews.items.length;
+
+      // Render inline reviews in contact section
+      const contactTrack = document.getElementById('contact-reviews-track');
+      if (contactTrack) {
+        function createContactReviewItem(review) {
+          return `
+            <div class="contact-review-item">
+              <div class="contact-review-stars">${renderStars(review.rating, 14)}</div>
+              <p class="contact-review-text">"${review.text}"</p>
+            </div>
+          `;
+        }
+        const contactReviewsHTML = reviews.items.map(createContactReviewItem).join('');
+        contactTrack.innerHTML = contactReviewsHTML + contactReviewsHTML;
+        contactTrack.style.animationDuration = `${itemCount * 2.5}s`;
+      }
     })();
 
     document.getElementById('organization-heading').textContent = SITE_DATA.organization.heading;
