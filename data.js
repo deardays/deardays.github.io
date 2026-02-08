@@ -88,7 +88,7 @@ const SITE_DATA = {
     subHeading: "복잡한 유통 고민은 잠시 내려두셔도 좋습니다.\n디어데이즈와 함께라면 당신의 브랜드는 더 높고 멀리 도약할 수 있습니다.",
     ctaText: "카카오톡 상담하기",
     socialProof: "400+ 프로젝트를 성공적으로 완수한 디어데이즈와 함께하세요",
-    responseTime: "평균 1시간 내 답변",
+    responseTime: "평균 10분 내 답변",
     kakaoUrl: "https://open.kakao.com/o/s9XdCNdi",
   },
   
