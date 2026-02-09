@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>디어데이즈 제안서 생성기</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Work+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 입력 폼 영역 */
+        .form-panel {
+            width: 400px;
+            background: #1a1a2e;
+            color: #fff;
+            padding: 30px;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .form-panel h1 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: #ffaf5f;
+        }
+
+        .form-panel .subtitle {
+            font-size: 12px;
+            color: #8c91a0;
+            margin-bottom: 30px;
+        }
+
+        .form-section {
+            margin-bottom: 25px;
+        }
+
+        .form-section h3 {
+            font-size: 13px;
+            color: #ffaf5f;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #32323c;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            color: #8c91a0;
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            background: #26262f;
+            border: 1px solid #32323c;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ffaf5f;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        /* 인플루언서 카드 */
+        .influencer-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .influencer-item {
+            background: #26262f;
+            border-radius: 8px;
+            padding: 15px;
+            position: relative;
+        }
+
+        .influencer-item .remove-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #f09b82;
+            cursor: pointer;
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        .influencer-item .form-group {
+            margin-bottom: 10px;
+        }
+
+        .influencer-item .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .influencer-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .influencer-row .form-group {
+            flex: 1;
+        }
+
+        .add-influencer-btn {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 2px dashed #32323c;
+            border-radius: 8px;
+            color: #8c91a0;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .add-influencer-btn:hover {
+            border-color: #ffaf5f;
+            color: #ffaf5f;
+        }
+
+        /* Notion 연동 */
+        .notion-search {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .notion-search input {
+            flex: 1;
+        }
+
+        .notion-search button {
+            padding: 10px 14px;
+            background: #82b4af;
+            border: none;
+            border-radius: 6px;
+            color: #1a1a2e;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .notion-search button:hover {
+            background: #9fc9c4;
+        }
+
+        .notion-search button:disabled {
+            background: #32323c;
+            color: #8c91a0;
+            cursor: not-allowed;
+        }
+
+        .notion-status {
+            font-size: 11px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: none;
+        }
+
+        .notion-status.show {
+            display: block;
+        }
+
+        .notion-status.loading {
+            background: #ffaf5f20;
+            color: #ffaf5f;
+        }
+
+        .notion-status.success {
+            background: #82b4af20;
+            color: #82b4af;
+        }
+
+        .notion-status.error {
+            background: #f09b8220;
+            color: #f09b82;
+        }
+
+        .fetch-btn {
+            padding: 6px 10px;
+            background: #82b4af;
+            border: none;
+            border-radius: 4px;
+            color: #1a1a2e;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+
+        .fetch-btn:hover {
+            background: #9fc9c4;
+        }
+
+        /* Notion 검색 */
+        .notion-search {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .notion-search input {
+            flex: 1;
+            padding: 10px 12px;
+            background: #26262f;
+            border: 1px solid #32323c;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 13px;
+        }
+
+        .notion-search input:focus {
+            outline: none;
+            border-color: #ffaf5f;
+        }
+
+        .notion-search button {
+            padding: 10px 16px;
+            background: #ffaf5f;
+            border: none;
+            border-radius: 6px;
+            color: #1a1a2e;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .notion-search button:hover {
+            background: #ffd28c;
+        }
+
+        .notion-search button:disabled {
+            background: #32323c;
+            color: #8c91a0;
+            cursor: not-allowed;
+        }
+
+        .notion-status {
+            font-size: 11px;
+            color: #8c91a0;
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background: #26262f;
+            border-radius: 6px;
+        }
+
+        .notion-status.success {
+            color: #82b4af;
+            background: #82b4af15;
+        }
+
+        .notion-status.error {
+            color: #f09b82;
+            background: #f09b8215;
+        }
+
+        .api-config {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #20202a;
+            border-radius: 8px;
+        }
+
+        .api-config summary {
+            font-size: 11px;
+            color: #8c91a0;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+
+        .api-config input {
+            width: 100%;
+            padding: 8px 10px;
+            background: #26262f;
+            border: 1px solid #32323c;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+
+        /* 버튼 */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #ffaf5f;
+            color: #1a1a2e;
+        }
+
+        .btn-primary:hover {
+            background: #ffd28c;
+        }
+
+        .btn-secondary {
+            background: #32323c;
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: #3d3d4a;
+        }
+
+        /* 미리보기 영역 */
+        .preview-panel {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+        }
+
+        .preview-header {
+            width: 100%;
+            max-width: 210mm;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .preview-header h2 {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .preview-actions button {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            background: #fff;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .preview-actions button:hover {
+            background: #f5f5f5;
+        }
+
+        .preview-frame {
+            background: #fff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        /* 제안서 스타일 (미리보기용) */
+        .proposal-preview {
+            /* 기존 제안서 스타일 그대로 포함 */
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+            }
+            .form-panel {
+                width: 100%;
+            }
+        }
+
+        /* ========== 제안서 스타일 (인라인) ========== */
+        .proposal {
+            --bg-dark: #16161c;
+            --bg-medium: #20202a;
+            --card-bg: #26262f;
+            --accent-amber: #ffaf5f;
+            --accent-gold: #ffd28c;
+            --text-white: #faf8f5;
+            --text-muted: #8c91a0;
+            --coral: #f09b82;
+            --teal: #82b4af;
+            --purple: #a89bc9;
+            --border-radius: 10px;
+
+            width: 210mm;
+            height: 297mm;
+            padding: 35px;
+            position: relative;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-medium) 100%);
+            color: var(--text-white);
+            font-family: 'Noto Sans KR', sans-serif;
+            overflow: hidden;
+        }
+
+        .proposal .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent-amber);
+        }
+
+        .proposal .corner-bracket {
+            position: absolute;
+            width: 35px;
+            height: 35px;
+        }
+        .proposal .corner-bracket.top-left {
+            top: 25px;
+            left: 28px;
+            border-top: 2px solid var(--accent-gold);
+            border-left: 2px solid var(--accent-gold);
+        }
+        .proposal .corner-bracket.top-right {
+            top: 25px;
+            right: 28px;
+            border-top: 2px solid var(--accent-gold);
+            border-right: 2px solid var(--accent-gold);
+        }
+        .proposal .corner-bracket.bottom-right {
+            bottom: 25px;
+            right: 28px;
+            border-bottom: 2px solid var(--accent-gold);
+            border-right: 2px solid var(--accent-gold);
+        }
+
+        .proposal .header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-top: 30px;
+        }
+        .proposal .header span {
+            font-family: 'Work Sans', sans-serif;
+            font-size: 11px;
+            font-weight: 300;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        .proposal .title-section {
+            margin-bottom: 25px;
+        }
+        .proposal .title-section .accent-line {
+            width: 70px;
+            height: 3px;
+            background: var(--accent-amber);
+            margin-bottom: 15px;
+        }
+        .proposal .title-section h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .proposal .title-section h2 {
+            font-size: 34px;
+            font-weight: 700;
+            color: var(--accent-amber);
+            margin-bottom: 10px;
+        }
+        .proposal .title-section .subtitle {
+            font-family: 'Work Sans', sans-serif;
+            font-size: 11px;
+            font-weight: 400;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+        .proposal .title-section .divider {
+            width: 28px;
+            height: 1px;
+            background: var(--text-muted);
+        }
+
+        .proposal .product-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 20px 25px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        .proposal .product-card::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 15px;
+            bottom: 15px;
+            width: 3px;
+            background: var(--accent-amber);
+            border-radius: 2px;
+        }
+        .proposal .product-info {
+            padding-left: 15px;
+        }
+        .proposal .product-info .label {
+            font-family: 'Work Sans', sans-serif;
+            font-size: 10px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+        .proposal .product-info h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .proposal .product-info .detail {
+            font-size: 12px;
+            color: var(--accent-gold);
+            margin-bottom: 6px;
+        }
+        .proposal .product-info .company {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .proposal .section-header {
+            margin-bottom: 14px;
+        }
+        .proposal .section-header .line {
+            width: 50px;
+            height: 1px;
+            background: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .proposal .section-header .eng {
+            font-family: 'Work Sans', sans-serif;
+            font-size: 9px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            margin-bottom: 3px;
+        }
+        .proposal .section-header h4 {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .proposal .influencer-section {
+            margin-bottom: 25px;
+        }
+        .proposal .influencer-cards {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .proposal .influencer-card {
+            flex: 1;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 14px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            text-align: center;
+        }
+        .proposal .influencer-card .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+        }
+        .proposal .influencer-card .avatar.coral { background: var(--coral); }
+        .proposal .influencer-card .avatar.teal { background: var(--teal); }
+        .proposal .influencer-card .avatar.purple { background: var(--purple); }
+        .proposal .influencer-card .avatar.amber { background: var(--accent-amber); }
+        .proposal .influencer-card .info h5 {
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+        .proposal .influencer-card .info .handle {
+            font-size: 10px;
+            color: var(--accent-amber);
+            margin-bottom: 3px;
+        }
+        .proposal .influencer-card .info .stats {
+            font-size: 9px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+        .proposal .influencer-note {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        .proposal .promise-section {
+            margin-bottom: 25px;
+        }
+        .proposal .promise-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .proposal .promise-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .proposal .promise-item .number {
+            width: 22px;
+            height: 22px;
+            background: var(--accent-amber);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Work Sans', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--bg-dark);
+        }
+        .proposal .promise-item .text {
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        .proposal .agency-section {
+            border-top: 1px solid #32323c;
+            padding-top: 18px;
+            margin-bottom: 22px;
+        }
+        .proposal .agency-header {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        .proposal .agency-header h4 {
+            font-family: 'Work Sans', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent-amber);
+        }
+        .proposal .agency-header span {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        .proposal .stats {
+            display: flex;
+            gap: 30px;
+            align-items: flex-end;
+        }
+        .proposal .stat {
+            flex: 1;
+        }
+        .proposal .stat .value {
+            font-family: 'Work Sans', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .proposal .stat .label {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+        .proposal .stat.website .value {
+            font-size: 12px;
+            color: var(--accent-amber);
+        }
+
+        .proposal .contact-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 16px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            margin-bottom: 18px;
+        }
+        .proposal .contact-card::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 12px;
+            bottom: 12px;
+            width: 3px;
+            background: var(--accent-amber);
+            border-radius: 2px;
+        }
+        .proposal .contact-info {
+            padding-left: 14px;
+        }
+        .proposal .contact-info .label {
+            font-family: 'Work Sans', sans-serif;
+            font-size: 9px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        .proposal .contact-info h5 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .proposal .contact-info .company {
+            font-size: 11px;
+            color: var(--accent-gold);
+            margin-bottom: 3px;
+        }
+        .proposal .contact-info .note {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+        .proposal .contact-decoration {
+            width: 50px;
+            height: 50px;
+            border: 2px solid var(--accent-amber);
+            border-radius: 4px;
+            position: relative;
+        }
+        .proposal .contact-decoration::after {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            right: 6px;
+            bottom: 6px;
+            border: 1px solid var(--accent-gold);
+            border-radius: 2px;
+        }
+
+        .proposal .footer {
+            border-top: 2px solid var(--accent-amber);
+            padding-top: 12px;
+            text-align: center;
+        }
+        .proposal .footer p {
+            font-family: 'Work Sans', sans-serif;
+            font-size: 9px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        /* 이메일 모달 */
+        .email-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .email-modal.show {
+            display: block;
+        }
+
+        .email-modal-content {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #1a1a2e;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .email-modal-header {
+            padding: 20px 25px;
+            background: #26262f;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .email-modal-header h3 {
+            color: #ffaf5f;
+            font-size: 16px;
+        }
+
+        .email-modal-close {
+            background: none;
+            border: none;
+            color: #8c91a0;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .email-modal-body {
+            padding: 25px;
+        }
+
+        .email-field {
+            margin-bottom: 20px;
+        }
+
+        .email-field label {
+            display: block;
+            font-size: 11px;
+            color: #8c91a0;
+            margin-bottom: 8px;
+        }
+
+        .email-field input,
+        .email-field textarea {
+            width: 100%;
+            padding: 12px;
+            background: #26262f;
+            border: 1px solid #32323c;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 13px;
+            font-family: inherit;
+            line-height: 1.6;
+        }
+
+        .email-field textarea {
+            min-height: 400px;
+            resize: vertical;
+        }
+
+        .email-actions {
+            display: flex;
+            gap: 10px;
+            padding: 20px 25px;
+            background: #26262f;
+        }
+
+        .email-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .email-actions .copy-btn {
+            background: #ffaf5f;
+            color: #1a1a2e;
+        }
+
+        .email-actions .close-btn {
+            background: #32323c;
+            color: #fff;
+        }
+
+        /* 인쇄용 */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .proposal, .proposal * {
+                visibility: visible;
+            }
+            .proposal {
+                position: absolute;
+                left: 0;
+                top: 0;
+                margin: 0;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .form-panel, .preview-header {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 입력 폼 -->
+        <div class="form-panel">
+            <h1>제안서 생성기</h1>
+            <p class="subtitle">정보를 입력하면 제안서가 자동으로 생성됩니다</p>
+
+            <!-- 제품 정보 -->
+            <div class="form-section">
+                <h3>제품 정보</h3>
+                <div class="form-group">
+                    <label>제품명 *</label>
+                    <input type="text" id="productName" placeholder="예: 파스퇴르 우유" oninput="updatePreview()">
+                </div>
+                <div class="form-group">
+                    <label>제품 상세</label>
+                    <input type="text" id="productDetail" placeholder="예: 꼬미루미 과일우유 · 소화가 잘되는 우유" oninput="updatePreview()">
+                </div>
+                <div class="form-group">
+                    <label>회사명</label>
+                    <input type="text" id="companyName" placeholder="예: 롯데웰푸드" oninput="updatePreview()">
+                </div>
+            </div>
+
+            <!-- 인플루언서 -->
+            <div class="form-section">
+                <h3>추천 인플루언서</h3>
+                <div class="notion-search">
+                    <input type="text" id="notionSearchInput" placeholder="인플루언서 ID (예: unidongdong)" onkeypress="if(event.key==='Enter') fetchFromNotion()">
+                    <button onclick="fetchFromNotion()" id="notionFetchBtn">Notion 불러오기</button>
+                </div>
+                <div class="notion-status" id="notionStatus"></div>
+                <div class="influencer-list" id="influencerList">
+                    <!-- 인플루언서 항목들이 여기에 추가됨 -->
+                </div>
+                <button class="add-influencer-btn" onclick="addInfluencer()">+ 인플루언서 추가</button>
+            </div>
+
+            <!-- 날짜 -->
+            <div class="form-section">
+                <h3>기타 정보</h3>
+                <div class="form-group">
+                    <label>제안 날짜</label>
+                    <input type="text" id="proposalDate" placeholder="예: 2025.02" oninput="updatePreview()">
+                </div>
+            </div>
+
+            <!-- 버튼 -->
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="printProposal()">PDF 저장</button>
+                <button class="btn btn-secondary" onclick="downloadHTML()">HTML 다운로드</button>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-secondary" onclick="generateEmail()" style="flex:1; background:#82b4af; color:#1a1a2e;">이메일 생성</button>
+            </div>
+        </div>
+
+        <!-- 미리보기 -->
+        <div class="preview-panel">
+            <div class="preview-header">
+                <h2>미리보기</h2>
+            </div>
+            <div class="preview-frame">
+                <div class="proposal" id="proposalPreview">
+                    <!-- 제안서 내용이 여기에 렌더링됨 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 이메일 모달 -->
+    <div class="email-modal" id="emailModal" onclick="if(event.target===this) closeEmailModal()">
+        <div class="email-modal-content">
+            <div class="email-modal-header">
+                <h3>제안 이메일 생성</h3>
+                <button class="email-modal-close" onclick="closeEmailModal()">&times;</button>
+            </div>
+            <div class="email-modal-body">
+                <div class="email-field">
+                    <label>제목</label>
+                    <input type="text" id="emailSubject" readonly>
+                </div>
+                <div class="email-field">
+                    <label>본문</label>
+                    <textarea id="emailBody" readonly></textarea>
+                </div>
+            </div>
+            <div class="email-actions">
+                <button class="copy-btn" onclick="copyEmail()">전체 복사</button>
+                <button class="close-btn" onclick="closeEmailModal()">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============ 설정 ============
+        // Cloudflare Worker 배포 후 이 URL을 변경하세요
+        const NOTION_PROXY_URL = 'https://notion-proxy.dev-joongi.workers.dev';
+        const NOTION_DATABASE_ID = '2fb3d45b094580ac9fe0e622afc21c4a';
+
+        // 아바타 색상 배열
+        const avatarColors = ['coral', 'teal', 'purple', 'amber'];
+
+        // 인플루언서 데이터
+        let influencers = [];
+        let influencerIdCounter = 0;
+
+        // 인플루언서 기본 구조
+        function createInfluencer() {
+            return { id: influencerIdCounter++, name: '', handle: '', followers: '', avgViews: '', category: '' };
+        }
+
+        // ============ Notion 연동 ============
+        function showNotionStatus(message, type) {
+            const status = document.getElementById('notionStatus');
+            status.textContent = message;
+            status.className = 'notion-status show ' + type;
+            if (type === 'success' || type === 'error') {
+                setTimeout(() => status.classList.remove('show'), 3000);
+            }
+        }
+
+        async function fetchFromNotion() {
+            const input = document.getElementById('notionSearchInput');
+            const btn = document.getElementById('notionFetchBtn');
+            const query = input.value.trim();
+
+            if (!query) {
+                showNotionStatus('인플루언서 ID를 입력하세요', 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = '로딩...';
+            showNotionStatus('Notion에서 검색 중...', 'loading');
+
+            try {
+                const response = await fetch(NOTION_PROXY_URL + '/query', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        influencerId: query,
+                        databaseId: NOTION_DATABASE_ID
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('API 요청 실패');
+                }
+
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                if (!data.name) {
+                    showNotionStatus(`"${query}" 인플루언서를 찾을 수 없습니다`, 'error');
+                    return;
+                }
+
+                // 인플루언서 추가
+                addInfluencerFromNotion(data);
+                showNotionStatus(`${data.name} 추가됨`, 'success');
+                input.value = '';
+
+            } catch (error) {
+                console.error('Notion fetch error:', error);
+                showNotionStatus('Notion 연결 실패: ' + error.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Notion 불러오기';
+            }
+        }
+
+        function addInfluencerFromNotion(data) {
+            const id = influencerIdCounter++;
+            const followers = data.followers ? data.followers + '만' : '';
+            const avgViews = data.avgViews ? data.avgViews + '만' : '';
+
+            influencers.push({
+                id,
+                name: data.name.split('ㅣ')[0].trim(), // "우니동동ㅣYunhee Choi" -> "우니동동"
+                handle: data.handle || '@' + data.influencerId,
+                followers: followers,
+                avgViews: avgViews,
+                category: data.categoryMain?.join('·') || ''
+            });
+
+            renderInfluencerList();
+            updatePreview();
+        }
+
+        // 초기화
+        function init() {
+            // 기본값 설정
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            document.getElementById('proposalDate').value = `${year}.${month}`;
+
+            // 빈 인플루언서 1개로 시작 (Notion에서 불러오기 사용 권장)
+            addInfluencer();
+
+            updatePreview();
+        }
+
+        // 인플루언서 추가
+        function addInfluencer() {
+            influencers.push(createInfluencer());
+            renderInfluencerList();
+            updatePreview();
+        }
+
+        // 인플루언서 삭제
+        function removeInfluencer(id) {
+            influencers = influencers.filter(inf => inf.id !== id);
+            renderInfluencerList();
+            updatePreview();
+        }
+
+        // 인플루언서 업데이트
+        function updateInfluencer(id, field, value) {
+            const inf = influencers.find(i => i.id === id);
+            if (inf) {
+                inf[field] = value;
+                updatePreview();
+            }
+        }
+
+        // 인플루언서 리스트 렌더링
+        function renderInfluencerList() {
+            const list = document.getElementById('influencerList');
+            list.innerHTML = influencers.map((inf, index) => `
+                <div class="influencer-item">
+                    ${influencers.length > 1 ? `<button class="remove-btn" onclick="removeInfluencer(${inf.id})">×</button>` : ''}
+                    <div class="form-group">
+                        <label>이름</label>
+                        <input type="text" value="${inf.name}" placeholder="예: 우니동동"
+                            oninput="updateInfluencer(${inf.id}, 'name', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label>인스타그램 핸들</label>
+                        <input type="text" value="${inf.handle}" placeholder="예: @unidongdong"
+                            oninput="updateInfluencer(${inf.id}, 'handle', this.value)">
+                    </div>
+                    <div class="influencer-row">
+                        <div class="form-group">
+                            <label>팔로워</label>
+                            <input type="text" value="${inf.followers}" placeholder="예: 23.1만"
+                                oninput="updateInfluencer(${inf.id}, 'followers', this.value)">
+                        </div>
+                        <div class="form-group">
+                            <label>평균 릴스 조회수</label>
+                            <input type="text" value="${inf.avgViews}" placeholder="예: 10만"
+                                oninput="updateInfluencer(${inf.id}, 'avgViews', this.value)">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>카테고리</label>
+                        <input type="text" value="${inf.category || ''}" placeholder="예: 살림·리빙"
+                            oninput="updateInfluencer(${inf.id}, 'category', this.value)">
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 미리보기 업데이트
+        function updatePreview() {
+            const productName = document.getElementById('productName').value || '[제품명]';
+            const productDetail = document.getElementById('productDetail').value || '[제품 상세]';
+            const companyName = document.getElementById('companyName').value || '[회사명]';
+            const proposalDate = document.getElementById('proposalDate').value || '2025.02';
+
+            // 인플루언서 카드 생성
+            const influencerCards = influencers.map((inf, index) => `
+                <div class="influencer-card">
+                    <div class="avatar ${avatarColors[index % avatarColors.length]}"></div>
+                    <div class="info">
+                        <h5>${inf.name || '[이름]'}</h5>
+                        <p class="handle">${inf.handle || '@handle'}</p>
+                        <p class="stats">팔로워 ${inf.followers || '-'} · 평균 릴스 조회수 ${inf.avgViews || '-'}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('proposalPreview').innerHTML = `
+                <div class="top-bar"></div>
+                <div class="corner-bracket top-left"></div>
+                <div class="corner-bracket top-right"></div>
+                <div class="corner-bracket bottom-right"></div>
+
+                <div class="header">
+                    <span>DEARDAYS AGENCY</span>
+                    <span>${proposalDate}</span>
+                </div>
+
+                <div class="title-section">
+                    <div class="accent-line"></div>
+                    <h1>인플루언서 공동구매</h1>
+                    <h2>협업 제안서</h2>
+                    <p class="subtitle">INFLUENCER COLLABORATION PROPOSAL</p>
+                    <div class="divider"></div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-info">
+                        <p class="label">PRODUCT</p>
+                        <h3>${productName}</h3>
+                        <p class="detail">${productDetail}</p>
+                        <p class="company">${companyName}</p>
+                    </div>
+                </div>
+
+                <div class="influencer-section">
+                    <div class="section-header">
+                        <div class="line"></div>
+                        <p class="eng">RECOMMENDED INFLUENCERS</p>
+                        <h4>추천 인플루언서</h4>
+                    </div>
+                    <div class="influencer-cards">
+                        ${influencerCards}
+                    </div>
+                    <p class="influencer-note">* 비슷한 규모의 다른 인플루언서와의 협업도 가능합니다</p>
+                </div>
+
+                <div class="promise-section">
+                    <div class="section-header">
+                        <div class="line"></div>
+                        <p class="eng">OUR PROMISE</p>
+                        <h4>협업 약속</h4>
+                    </div>
+                    <div class="promise-list">
+                        <div class="promise-item">
+                            <span class="number">1</span>
+                            <span class="text">구매자가 브랜드를 기억하게 만드는 기획</span>
+                        </div>
+                        <div class="promise-item">
+                            <span class="number">2</span>
+                            <span class="text">브랜드 인지도 상승과 매출을 동시에 달성</span>
+                        </div>
+                        <div class="promise-item">
+                            <span class="number">3</span>
+                            <span class="text">장기적 파트너십을 위한 투명한 커뮤니케이션</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="agency-section">
+                    <div class="agency-header">
+                        <h4>DEARDAYS</h4>
+                        <span>공동구매 전문 에이전시</span>
+                    </div>
+                    <div class="stats">
+                        <div class="stat">
+                            <p class="value">300+</p>
+                            <p class="label">공동구매 진행</p>
+                        </div>
+                        <div class="stat">
+                            <p class="value">ONE-STOP</p>
+                            <p class="label">원스탑 서비스</p>
+                        </div>
+                        <div class="stat">
+                            <p class="value">CUSTOM</p>
+                            <p class="label">맞춤 전략 설계</p>
+                        </div>
+                        <div class="stat website">
+                            <p class="value">deardays.kr</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-info">
+                        <p class="label">CONTACT</p>
+                        <h5>정준기 이사</h5>
+                        <p class="company">디어데이즈 공동구매 에이전시</p>
+                        <p class="note">010.4343.3685</p>
+                    </div>
+                    <div class="contact-decoration"></div>
+                </div>
+
+                <div class="footer">
+                    <p>© 2026 DEARDAYS AGENCY | INFLUENCER COLLABORATION PROPOSAL</p>
+                </div>
+            `;
+        }
+
+        // PDF 저장 (인쇄)
+        function printProposal() {
+            window.print();
+        }
+
+        // HTML 다운로드
+        function downloadHTML() {
+            const proposalContent = document.getElementById('proposalPreview').outerHTML;
+            const fullHTML = generateFullHTML(proposalContent);
+
+            const blob = new Blob([fullHTML], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `proposal-${Date.now()}.html`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // 전체 HTML 생성
+        function generateFullHTML(content) {
+            return `<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>디어데이즈 협업 제안서</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Work+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        @page { size: A4; margin: 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans KR', sans-serif; background: #16161c; }
+        .proposal {
+            --bg-dark: #16161c;
+            --bg-medium: #20202a;
+            --card-bg: #26262f;
+            --accent-amber: #ffaf5f;
+            --accent-gold: #ffd28c;
+            --text-white: #faf8f5;
+            --text-muted: #8c91a0;
+            --coral: #f09b82;
+            --teal: #82b4af;
+            --purple: #a89bc9;
+            --border-radius: 10px;
+            width: 210mm; height: 297mm; margin: 0 auto; padding: 35px;
+            position: relative; background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-medium) 100%);
+            color: var(--text-white); overflow: hidden;
+        }
+        .proposal .top-bar { position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--accent-amber); }
+        .proposal .corner-bracket { position: absolute; width: 35px; height: 35px; }
+        .proposal .corner-bracket.top-left { top: 25px; left: 28px; border-top: 2px solid var(--accent-gold); border-left: 2px solid var(--accent-gold); }
+        .proposal .corner-bracket.top-right { top: 25px; right: 28px; border-top: 2px solid var(--accent-gold); border-right: 2px solid var(--accent-gold); }
+        .proposal .corner-bracket.bottom-right { bottom: 25px; right: 28px; border-bottom: 2px solid var(--accent-gold); border-right: 2px solid var(--accent-gold); }
+        .proposal .header { display: flex; justify-content: space-between; margin-bottom: 20px; padding-top: 30px; }
+        .proposal .header span { font-family: 'Work Sans', sans-serif; font-size: 11px; font-weight: 300; color: var(--text-muted); letter-spacing: 1px; }
+        .proposal .title-section { margin-bottom: 25px; }
+        .proposal .title-section .accent-line { width: 70px; height: 3px; background: var(--accent-amber); margin-bottom: 15px; }
+        .proposal .title-section h1 { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+        .proposal .title-section h2 { font-size: 34px; font-weight: 700; color: var(--accent-amber); margin-bottom: 10px; }
+        .proposal .title-section .subtitle { font-family: 'Work Sans', sans-serif; font-size: 11px; font-weight: 400; color: var(--text-muted); letter-spacing: 2px; margin-bottom: 8px; }
+        .proposal .title-section .divider { width: 28px; height: 1px; background: var(--text-muted); }
+        .proposal .product-card { background: var(--card-bg); border-radius: var(--border-radius); padding: 20px 25px; margin-bottom: 25px; position: relative; }
+        .proposal .product-card::before { content: ''; position: absolute; left: 12px; top: 15px; bottom: 15px; width: 3px; background: var(--accent-amber); border-radius: 2px; }
+        .proposal .product-info { padding-left: 15px; }
+        .proposal .product-info .label { font-family: 'Work Sans', sans-serif; font-size: 10px; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 6px; }
+        .proposal .product-info h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+        .proposal .product-info .detail { font-size: 12px; color: var(--accent-gold); margin-bottom: 6px; }
+        .proposal .product-info .company { font-size: 11px; color: var(--text-muted); }
+        .proposal .section-header { margin-bottom: 14px; }
+        .proposal .section-header .line { width: 50px; height: 1px; background: var(--text-muted); margin-bottom: 8px; }
+        .proposal .section-header .eng { font-family: 'Work Sans', sans-serif; font-size: 9px; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 3px; }
+        .proposal .section-header h4 { font-size: 15px; font-weight: 700; }
+        .proposal .influencer-section { margin-bottom: 25px; }
+        .proposal .influencer-cards { display: flex; gap: 12px; margin-bottom: 10px; }
+        .proposal .influencer-card { flex: 1; background: var(--card-bg); border-radius: var(--border-radius); padding: 14px 12px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+        .proposal .influencer-card .avatar { width: 45px; height: 45px; border-radius: 50%; }
+        .proposal .influencer-card .avatar.coral { background: var(--coral); }
+        .proposal .influencer-card .avatar.teal { background: var(--teal); }
+        .proposal .influencer-card .avatar.purple { background: var(--purple); }
+        .proposal .influencer-card .avatar.amber { background: var(--accent-amber); }
+        .proposal .influencer-card .info h5 { font-size: 12px; font-weight: 700; margin-bottom: 3px; }
+        .proposal .influencer-card .info .handle { font-size: 10px; color: var(--accent-amber); margin-bottom: 3px; }
+        .proposal .influencer-card .info .stats { font-size: 9px; color: var(--text-muted); line-height: 1.5; }
+        .proposal .influencer-note { font-size: 10px; color: var(--text-muted); }
+        .proposal .promise-section { margin-bottom: 25px; }
+        .proposal .promise-list { display: flex; flex-direction: column; gap: 10px; }
+        .proposal .promise-item { display: flex; align-items: center; gap: 12px; }
+        .proposal .promise-item .number { width: 22px; height: 22px; background: var(--accent-amber); border-radius: 5px; display: flex; align-items: center; justify-content: center; font-family: 'Work Sans', sans-serif; font-size: 11px; font-weight: 600; color: var(--bg-dark); }
+        .proposal .promise-item .text { font-size: 12px; font-weight: 400; }
+        .proposal .agency-section { border-top: 1px solid #32323c; padding-top: 18px; margin-bottom: 22px; }
+        .proposal .agency-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 15px; }
+        .proposal .agency-header h4 { font-family: 'Work Sans', sans-serif; font-size: 20px; font-weight: 700; color: var(--accent-amber); }
+        .proposal .agency-header span { font-size: 11px; color: var(--text-muted); }
+        .proposal .stats { display: flex; gap: 30px; align-items: flex-end; }
+        .proposal .stat { flex: 1; }
+        .proposal .stat .value { font-family: 'Work Sans', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+        .proposal .stat .label { font-size: 10px; color: var(--text-muted); }
+        .proposal .stat.website .value { font-size: 12px; color: var(--accent-amber); }
+        .proposal .contact-card { background: var(--card-bg); border-radius: var(--border-radius); padding: 16px 22px; display: flex; justify-content: space-between; align-items: center; position: relative; margin-bottom: 18px; }
+        .proposal .contact-card::before { content: ''; position: absolute; left: 12px; top: 12px; bottom: 12px; width: 3px; background: var(--accent-amber); border-radius: 2px; }
+        .proposal .contact-info { padding-left: 14px; }
+        .proposal .contact-info .label { font-family: 'Work Sans', sans-serif; font-size: 9px; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px; }
+        .proposal .contact-info h5 { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+        .proposal .contact-info .company { font-size: 11px; color: var(--accent-gold); margin-bottom: 3px; }
+        .proposal .contact-info .note { font-size: 10px; color: var(--text-muted); }
+        .proposal .contact-decoration { width: 50px; height: 50px; border: 2px solid var(--accent-amber); border-radius: 4px; position: relative; }
+        .proposal .contact-decoration::after { content: ''; position: absolute; top: 6px; left: 6px; right: 6px; bottom: 6px; border: 1px solid var(--accent-gold); border-radius: 2px; }
+        .proposal .footer { border-top: 2px solid var(--accent-amber); padding-top: 12px; text-align: center; }
+        .proposal .footer p { font-family: 'Work Sans', sans-serif; font-size: 9px; color: var(--text-muted); letter-spacing: 1px; }
+        @media print { html, body { width: 210mm; height: 297mm; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } .proposal { margin: 0; } }
+    </style>
+</head>
+<body>
+    ${content}
+</body>
+</html>`;
+        }
+
+        // ============ 이메일 생성 ============
+        function generateEmail() {
+            const productName = document.getElementById('productName').value || '[제품명]';
+            const companyName = document.getElementById('companyName').value || '[회사명]';
+
+            // 제목 생성
+            const subject = `[${companyName} x 디어데이즈] 공동구매 제안 ${productName}`;
+
+            // 인플루언서 목록 생성
+            let influencerSection = '';
+            influencers.forEach((inf, index) => {
+                if (inf.name || inf.handle) {
+                    const name = inf.name || '[이름]';
+                    const handle = inf.handle || '@handle';
+                    const followers = inf.followers || '-';
+                    const avgViews = inf.avgViews || '-';
+                    const instagramUrl = handle.startsWith('@')
+                        ? `https://www.instagram.com/${handle.substring(1)}/`
+                        : `https://www.instagram.com/${handle}/`;
+
+                    const category = inf.category || '살림';
+                    influencerSection += `
+${index + 1}. ${handle.replace('@', '')} | ${name} ${followers} ${instagramUrl}
+• ${category} 카테고리
+• 공구제품 활용한 콘텐츠의 릴스 조회수(평균 ${avgViews}) / 팔로워들과 소통 활발함
+
+`;
+                }
+            });
+
+            // 본문 생성
+            const body = `안녕하세요
+공동구매 벤더 디어데이즈의 정준기 이사 입니다.
+
+${companyName}의 「${productName}」 제품을 보고 좋은 제품을 판매하고 계셔
+공동구매 프로모션을 함께 진행하고 싶어 연락드립니다.
+
+저희가 협업 중인 살림·리빙 인플루언서 분들과 ${productName} 제품과 핏이 맞는 분들이 계셔 공동구매를 제안드립니다.
+전반적으로 공구 판매실적, 릴스 조회수, 팔로워 소통, 이벤트, 공구활동의 참여율 외 내부 검토 프로세스로 매칭하였습니다.
+
+${influencerSection}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+디어데이즈 소개 : https://deardays.kr
+저희는 400건 이상의 공동구매를 진행한 전문 벤더입니다.
+
+• 인플루언서 협업부터 콘텐츠 기획, 판매 운영까지 원스톱으로 진행
+• 리빙·주방·식품·육아 등 다양한 카테고리 인플루언서와 협업 네트워크를 보유
+• 브랜드·제품별 타깃에 맞춘 맞춤 전략으로 목표 매출은 물론 장기 고객 확보까지 함께 도모하고 있습니다.
+
+저희의 목표는 단순 매출 상승이 아니라, 공동구매를 통해 브랜드가 고객에게 기억되도록 돕는 것입니다.
+
+긍정적인 검토 부탁드리며
+필요하다면 언제든지 유선으로 연락 부탁드립니다.
+
+감사합니다.
+정준기 드림`;
+
+            document.getElementById('emailSubject').value = subject;
+            document.getElementById('emailBody').value = body;
+            document.getElementById('emailModal').classList.add('show');
+        }
+
+        function closeEmailModal() {
+            document.getElementById('emailModal').classList.remove('show');
+        }
+
+        function copyEmail() {
+            const subject = document.getElementById('emailSubject').value;
+            const body = document.getElementById('emailBody').value;
+            const fullEmail = `제목: ${subject}\n\n${body}`;
+
+            navigator.clipboard.writeText(fullEmail).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = '복사됨!';
+                setTimeout(() => btn.textContent = '전체 복사', 2000);
+            });
+        }
+
+        // 페이지 로드 시 초기화
+        window.onload = init;
+    </script>
+</body>
+</html>
