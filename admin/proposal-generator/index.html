@@ -415,6 +415,26 @@
             .form-panel {
                 width: 100%;
             }
+            .preview-panel {
+                padding: 15px;
+                min-height: auto;
+            }
+            .preview-frame {
+                width: 100%;
+                overflow: visible;
+            }
+            .proposal {
+                transform: scale(0.45);
+                transform-origin: top left;
+                margin-bottom: -600px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .proposal {
+                transform: scale(0.35);
+                margin-bottom: -700px;
+            }
         }
 
         /* ========== 제안서 스타일 (인라인) ========== */
