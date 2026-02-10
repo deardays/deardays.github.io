@@ -1767,11 +1767,11 @@
                 currentProduct = product;
 
                 // 폼에 제품 정보 채우기
-                document.getElementById('productName').value = product.name || '';
-                document.getElementById('companyName').value = product.companyName || '';
-                if (product.officialSite) {
-                    document.getElementById('productSite').value = product.officialSite;
-                }
+                const productNameEl = document.getElementById('productName');
+                const companyNameEl = document.getElementById('companyName');
+
+                if (productNameEl) productNameEl.value = product.name || '';
+                if (companyNameEl) companyNameEl.value = product.companyName || '';
 
                 // 핏한 인플루언서가 있으면 자동 추가
                 if (product.fitInfluencers && product.fitInfluencers.length > 0) {
