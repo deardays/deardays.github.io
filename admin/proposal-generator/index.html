@@ -1308,21 +1308,29 @@
             btn.textContent = 'PDF 생성 중...';
             btn.disabled = true;
 
+            // 원본 스타일 저장
+            const originalStyle = element.style.cssText;
+
+            // A4 크기로 고정 (96dpi 기준: 210mm=794px, 297mm=1123px)
+            element.style.width = '794px';
+            element.style.height = '1123px';
+            element.style.minHeight = '1123px';
+            element.style.overflow = 'visible';
+
             try {
                 const canvas = await html2canvas(element, {
                     scale: 2,
                     useCORS: true,
                     backgroundColor: '#16161c',
-                    logging: false
+                    logging: false,
+                    width: 794,
+                    height: 1123
                 });
 
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF('p', 'mm', 'a4');
 
-                const imgWidth = 210;
-                const imgHeight = 297;
-
-                pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, imgWidth, imgHeight);
+                pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 210, 297);
 
                 const productName = document.getElementById('productName').value || 'proposal';
                 const fileName = `제안서_${productName}_${new Date().toISOString().slice(0,10)}.pdf`;
@@ -1331,6 +1339,8 @@
                 console.error('PDF 생성 실패:', error);
                 alert('PDF 생성에 실패했습니다. 다시 시도해주세요.');
             } finally {
+                // 원본 스타일 복원
+                element.style.cssText = originalStyle;
                 btn.textContent = originalText;
                 btn.disabled = false;
             }
