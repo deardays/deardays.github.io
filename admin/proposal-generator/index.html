@@ -1498,6 +1498,11 @@
             <div class="btn-group" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #32323c;">
                 <button class="btn btn-secondary" onclick="saveProposal('초안')" style="flex:1; background:#a89bc9; color:#1a1a2e;">Notion에 저장</button>
             </div>
+            <div id="proposalLinkArea" style="display: none; margin-top: 10px; padding: 10px; background: #2a2a3a; border-radius: 8px; text-align: center;">
+                <a id="proposalNotionLink" href="#" target="_blank" style="color: #a89bc9; text-decoration: none; font-weight: 600;">
+                    📄 Notion에서 보기 →
+                </a>
+            </div>
         </div>
 
         <!-- 미리보기 -->
@@ -1742,7 +1747,8 @@
                 handle: data.handle || '@' + data.influencerId,
                 followers: followers,
                 avgViews: avgViews,
-                category: data.categoryMain?.join('·') || ''
+                category: data.categoryMain?.join('·') || '',
+                notionPageId: data.id  // Notion 페이지 ID 저장 (제안서 저장용)
             });
 
             renderInfluencerList();
@@ -1879,6 +1885,10 @@
 
                 if (data.success) {
                     showNotionStatus(`제안서 저장됨: ${title}`, 'success');
+                    // 바로가기 링크 표시
+                    if (data.url) {
+                        showProposalLink(data.url);
+                    }
                     return data;
                 } else {
                     throw new Error(data.error || '저장 실패');
@@ -1887,6 +1897,16 @@
                 console.error('Save proposal error:', error);
                 showNotionStatus('제안서 저장 실패: ' + error.message, 'error');
                 return null;
+            }
+        }
+
+        // 제안서 Notion 링크 표시
+        function showProposalLink(url) {
+            const linkArea = document.getElementById('proposalLinkArea');
+            const link = document.getElementById('proposalNotionLink');
+            if (linkArea && link) {
+                link.href = url;
+                linkArea.style.display = 'block';
             }
         }
 
@@ -2037,6 +2057,11 @@
                     await loadProductFromNotion(productIds[0]);
                 } else {
                     updatePreview();
+                }
+
+                // 바로가기 링크 표시
+                if (data.url) {
+                    showProposalLink(data.url);
                 }
 
                 showNotionStatus(`제안서 "${title}" 불러옴`, 'success');
