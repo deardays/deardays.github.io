@@ -414,26 +414,23 @@
             }
             .form-panel {
                 width: 100%;
+                max-height: 50vh;
+                overflow-y: auto;
             }
             .preview-panel {
-                padding: 15px;
-                min-height: auto;
+                padding: 10px;
+                width: 100%;
+                align-items: center;
+            }
+            .preview-header {
+                display: none;
             }
             .preview-frame {
                 width: 100%;
-                overflow: visible;
+                overflow: hidden;
             }
             .proposal {
-                transform: scale(0.45);
                 transform-origin: top left;
-                margin-bottom: -600px;
-            }
-        }
-
-        @media (max-width: 500px) {
-            .proposal {
-                transform: scale(0.35);
-                margin-bottom: -700px;
             }
         }
 
@@ -1124,6 +1121,34 @@
             updatePreview();
         }
 
+        // 모바일 미리보기 스케일 조정
+        function adjustPreviewScale() {
+            const proposal = document.getElementById('proposalPreview');
+            const previewPanel = document.querySelector('.preview-panel');
+            if (!proposal || !previewPanel) return;
+
+            if (window.innerWidth <= 900) {
+                const padding = 20;
+                const availableWidth = previewPanel.clientWidth - padding;
+                const proposalWidth = 794; // 210mm in pixels
+                const scale = availableWidth / proposalWidth;
+
+                proposal.style.transform = `scale(${scale})`;
+
+                // 컨테이너 높이 조정
+                const previewFrame = document.querySelector('.preview-frame');
+                if (previewFrame) {
+                    previewFrame.style.height = (1123 * scale) + 'px'; // 297mm in pixels
+                }
+            } else {
+                proposal.style.transform = '';
+                const previewFrame = document.querySelector('.preview-frame');
+                if (previewFrame) {
+                    previewFrame.style.height = '';
+                }
+            }
+        }
+
         // 초기화
         function init() {
             // 기본값 설정
@@ -1134,6 +1159,10 @@
 
             // 빈 인플루언서 1개로 시작 (Notion에서 불러오기 사용 권장)
             addInfluencer();
+
+            // 미리보기 스케일 조정
+            adjustPreviewScale();
+            window.addEventListener('resize', adjustPreviewScale);
 
             updatePreview();
         }
