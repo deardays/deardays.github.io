@@ -3014,6 +3014,28 @@ ${influencerSection}
             };
         }
 
+        // ESC 키로 모달 닫기
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                // 인플루언서 브라우저
+                if (document.getElementById('influencerBrowserModal')?.classList.contains('show')) {
+                    closeInfluencerBrowser();
+                }
+                // 제품 브라우저
+                if (document.getElementById('productBrowserModal')?.classList.contains('show')) {
+                    closeProductBrowser();
+                }
+                // 제안서 브라우저
+                if (document.getElementById('proposalBrowserModal')?.classList.contains('show')) {
+                    closeProposalBrowser();
+                }
+                // 이메일 모달
+                if (document.getElementById('emailModal')?.classList.contains('show')) {
+                    closeEmailModal();
+                }
+            }
+        });
+
         // 페이지 로드 시 초기화
         window.onload = async function() {
             init();
