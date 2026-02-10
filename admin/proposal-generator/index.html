@@ -1445,6 +1445,10 @@
             <!-- 제품 정보 -->
             <div class="form-section">
                 <h3>제품 정보</h3>
+                <div style="display: flex; gap: 8px; margin-bottom: 15px;">
+                    <button class="add-influencer-btn" onclick="openProductBrowser()" style="flex:1; background: #ffaf5f; color: #1a1a2e; border: none; font-weight: 600; padding: 10px;">📦 제품 불러오기</button>
+                    <button class="add-influencer-btn" onclick="openProposalBrowser()" style="flex:1; background: #a89bc9; color: #1a1a2e; border: none; font-weight: 600; padding: 10px;">📄 제안서 불러오기</button>
+                </div>
                 <div class="form-group">
                     <label>제품명 *</label>
                     <input type="text" id="productName" placeholder="예: 파스퇴르 우유" oninput="updatePreview()">
@@ -1578,6 +1582,40 @@
                 </div>
                 <div class="browser-footer">
                     <button onclick="addSelectedToProposal()" id="addToProposalBtn" disabled>제안서에 추가</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 제품 브라우저 모달 -->
+    <div class="email-modal" id="productBrowserModal" onclick="if(event.target===this) closeProductBrowser()">
+        <div class="email-modal-content" style="max-width: 600px;">
+            <div class="email-modal-header">
+                <h3>📦 제품 불러오기</h3>
+                <button class="email-modal-close" onclick="closeProductBrowser()">&times;</button>
+            </div>
+            <div class="email-modal-body" style="padding: 20px;">
+                <div style="display: flex; gap: 8px; margin-bottom: 15px;">
+                    <input type="text" id="productSearchInput" placeholder="제품명 검색..." style="flex:1; padding: 10px; background: #26262f; border: 1px solid #32323c; border-radius: 6px; color: #fff;">
+                    <button onclick="searchProducts()" style="padding: 10px 16px; background: #ffaf5f; border: none; border-radius: 6px; color: #1a1a2e; font-weight: 600; cursor: pointer;">검색</button>
+                </div>
+                <div id="productSearchResults" style="max-height: 400px; overflow-y: auto;">
+                    <p style="color: #8c91a0; text-align: center; padding: 20px;">검색어를 입력하거나 검색 버튼을 눌러 전체 목록을 확인하세요</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 제안서 브라우저 모달 -->
+    <div class="email-modal" id="proposalBrowserModal" onclick="if(event.target===this) closeProposalBrowser()">
+        <div class="email-modal-content" style="max-width: 700px;">
+            <div class="email-modal-header">
+                <h3>📄 제안서 불러오기</h3>
+                <button class="email-modal-close" onclick="closeProposalBrowser()">&times;</button>
+            </div>
+            <div class="email-modal-body" style="padding: 20px;">
+                <div id="proposalList" style="max-height: 450px; overflow-y: auto;">
+                    <p style="color: #8c91a0; text-align: center; padding: 20px;">로딩 중...</p>
                 </div>
             </div>
         </div>
@@ -1851,6 +1889,173 @@
                 return null;
             }
         }
+
+        // ============ 제품 브라우저 ============
+        function openProductBrowser() {
+            document.getElementById('productBrowserModal').classList.add('show');
+            document.getElementById('productSearchInput').value = '';
+            document.getElementById('productSearchResults').innerHTML = '<p style="color: #8c91a0; text-align: center; padding: 20px;">검색어를 입력하거나 검색 버튼을 눌러 전체 목록을 확인하세요</p>';
+        }
+
+        function closeProductBrowser() {
+            document.getElementById('productBrowserModal').classList.remove('show');
+        }
+
+        async function searchProducts() {
+            const query = document.getElementById('productSearchInput').value.trim();
+            const resultsContainer = document.getElementById('productSearchResults');
+
+            resultsContainer.innerHTML = '<p style="color: #8c91a0; text-align: center; padding: 20px;">검색 중...</p>';
+
+            try {
+                const response = await fetch(NOTION_PROXY_URL + '/search-products', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        databaseId: PRODUCT_DATABASE_ID,
+                        query: query,
+                        limit: 30
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!data.results || data.results.length === 0) {
+                    resultsContainer.innerHTML = '<p style="color: #8c91a0; text-align: center; padding: 20px;">검색 결과가 없습니다</p>';
+                    return;
+                }
+
+                resultsContainer.innerHTML = data.results.map(product => `
+                    <div style="padding: 12px; background: #26262f; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: background 0.2s;"
+                         onclick="selectProduct('${product.id}')"
+                         onmouseover="this.style.background='#32323c'"
+                         onmouseout="this.style.background='#26262f'">
+                        <div style="font-weight: 600; color: #fff; margin-bottom: 4px;">${product.name || '(제품명 없음)'}</div>
+                        <div style="font-size: 12px; color: #8c91a0;">
+                            ${product.companyName || ''} ${product.category?.length ? '· ' + product.category.join(', ') : ''}
+                        </div>
+                        <div style="font-size: 11px; color: #ffaf5f; margin-top: 4px;">
+                            핏한 인플루언서: ${product.fitInfluencerIds?.length || 0}명
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error('Search products error:', error);
+                resultsContainer.innerHTML = '<p style="color: #f09b82; text-align: center; padding: 20px;">검색 실패: ' + error.message + '</p>';
+            }
+        }
+
+        async function selectProduct(productId) {
+            closeProductBrowser();
+            await loadProductFromNotion(productId);
+        }
+
+        // ============ 제안서 브라우저 ============
+        function openProposalBrowser() {
+            document.getElementById('proposalBrowserModal').classList.add('show');
+            loadProposalList();
+        }
+
+        function closeProposalBrowser() {
+            document.getElementById('proposalBrowserModal').classList.remove('show');
+        }
+
+        async function loadProposalList() {
+            const listContainer = document.getElementById('proposalList');
+            listContainer.innerHTML = '<p style="color: #8c91a0; text-align: center; padding: 20px;">로딩 중...</p>';
+
+            try {
+                const response = await fetch(NOTION_PROXY_URL + '/load-proposals', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        proposalDatabaseId: PROPOSAL_DATABASE_ID,
+                        limit: 30
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!data.results || data.results.length === 0) {
+                    listContainer.innerHTML = '<p style="color: #8c91a0; text-align: center; padding: 20px;">저장된 제안서가 없습니다</p>';
+                    return;
+                }
+
+                listContainer.innerHTML = data.results.map(proposal => `
+                    <div style="padding: 15px; background: #26262f; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: background 0.2s;"
+                         onclick="selectProposal('${proposal.id}')"
+                         onmouseover="this.style.background='#32323c'"
+                         onmouseout="this.style.background='#26262f'">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <span style="font-weight: 600; color: #fff;">${proposal.title || '(제목 없음)'}</span>
+                            <span style="font-size: 11px; padding: 3px 8px; background: ${proposal.status === '발송완료' ? '#82b4af' : '#a89bc9'}; color: #1a1a2e; border-radius: 4px;">${proposal.status || '초안'}</span>
+                        </div>
+                        <div style="font-size: 12px; color: #8c91a0;">
+                            생성일: ${proposal.createdDate || '-'} · 인플루언서: ${proposal.influencerIds?.length || 0}명
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error('Load proposals error:', error);
+                listContainer.innerHTML = '<p style="color: #f09b82; text-align: center; padding: 20px;">불러오기 실패: ' + error.message + '</p>';
+            }
+        }
+
+        async function selectProposal(proposalId) {
+            closeProposalBrowser();
+            showNotionStatus('제안서 로딩 중...', 'loading');
+
+            try {
+                // 제안서 상세 정보 조회
+                const response = await fetch(NOTION_PROXY_URL + '/fetch', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pageId: proposalId })
+                });
+
+                const data = await response.json();
+
+                // 제안서 데이터 파싱
+                const props = data.properties;
+                const title = props['제안서명']?.title?.[0]?.plain_text || '';
+                const emailContent = props['이메일 본문']?.rich_text?.[0]?.plain_text || '';
+                const productIds = props['제품']?.relation?.map(r => r.id) || [];
+
+                // 제품명 추출 (제안서명에서)
+                const productName = title.split(' - ')[0] || '';
+                document.getElementById('productName').value = productName;
+
+                // 이메일 본문이 있으면 이메일 모달에 설정
+                if (emailContent) {
+                    document.getElementById('emailBody').value = emailContent;
+                }
+
+                // 제품이 연결되어 있으면 로드
+                if (productIds.length > 0) {
+                    await loadProductFromNotion(productIds[0]);
+                } else {
+                    updatePreview();
+                }
+
+                showNotionStatus(`제안서 "${title}" 불러옴`, 'success');
+
+            } catch (error) {
+                console.error('Select proposal error:', error);
+                showNotionStatus('제안서 불러오기 실패: ' + error.message, 'error');
+            }
+        }
+
+        // Enter 키로 제품 검색
+        document.addEventListener('DOMContentLoaded', function() {
+            const productSearchInput = document.getElementById('productSearchInput');
+            if (productSearchInput) {
+                productSearchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') searchProducts();
+                });
+            }
+        });
 
         function init() {
             // 기본값 설정
