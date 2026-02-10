@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>디어데이즈 제안서 생성기</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Work+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -1297,9 +1299,41 @@
             `;
         }
 
-        // PDF 저장 (인쇄)
-        function printProposal() {
-            window.print();
+        // PDF 저장 (html2canvas + jsPDF)
+        async function printProposal() {
+            const element = document.getElementById('proposalPreview');
+            const btn = document.querySelector('.btn-primary');
+            const originalText = btn.textContent;
+
+            btn.textContent = 'PDF 생성 중...';
+            btn.disabled = true;
+
+            try {
+                const canvas = await html2canvas(element, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#16161c',
+                    logging: false
+                });
+
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+
+                const imgWidth = 210;
+                const imgHeight = 297;
+
+                pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, imgWidth, imgHeight);
+
+                const productName = document.getElementById('productName').value || 'proposal';
+                const fileName = `제안서_${productName}_${new Date().toISOString().slice(0,10)}.pdf`;
+                pdf.save(fileName);
+            } catch (error) {
+                console.error('PDF 생성 실패:', error);
+                alert('PDF 생성에 실패했습니다. 다시 시도해주세요.');
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
         }
 
         // HTML 다운로드
