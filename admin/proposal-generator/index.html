@@ -906,6 +906,513 @@
             color: #fff;
         }
 
+        /* 인플루언서 브라우저 모달 */
+        .influencer-browser-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            overflow: hidden;
+        }
+
+        .influencer-browser-modal.show {
+            display: flex;
+        }
+
+        .browser-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            background: #1a1a2e;
+        }
+
+        /* 좌측: 검색/결과 영역 */
+        .browser-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #32323c;
+            min-width: 0;
+        }
+
+        .browser-header {
+            padding: 20px 25px;
+            background: #26262f;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .browser-header h3 {
+            color: #ffaf5f;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .browser-close {
+            background: none;
+            border: none;
+            color: #8c91a0;
+            font-size: 28px;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .browser-close:hover {
+            color: #fff;
+        }
+
+        /* 검색 및 필터 */
+        .browser-search {
+            padding: 20px 25px;
+            background: #20202a;
+            flex-shrink: 0;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .search-input-wrapper input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            background: #26262f;
+            border: 1px solid #32323c;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .search-input-wrapper input:focus {
+            outline: none;
+            border-color: #ffaf5f;
+        }
+
+        .search-input-wrapper::before {
+            content: '🔍';
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-dropdown {
+            position: relative;
+        }
+
+        .filter-btn {
+            padding: 8px 14px;
+            background: #26262f;
+            border: 1px solid #32323c;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-btn:hover {
+            border-color: #ffaf5f;
+        }
+
+        .filter-btn.active {
+            border-color: #ffaf5f;
+            background: #ffaf5f20;
+        }
+
+        .filter-btn::after {
+            content: '▼';
+            font-size: 8px;
+            color: #8c91a0;
+        }
+
+        .filter-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 4px;
+            background: #26262f;
+            border: 1px solid #32323c;
+            border-radius: 8px;
+            padding: 8px 0;
+            min-width: 160px;
+            z-index: 100;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .filter-menu.show {
+            display: block;
+        }
+
+        .filter-menu label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #fff;
+        }
+
+        .filter-menu label:hover {
+            background: #32323c;
+        }
+
+        .filter-menu input[type="checkbox"],
+        .filter-menu input[type="radio"] {
+            accent-color: #ffaf5f;
+        }
+
+        .sort-select {
+            padding: 8px 14px;
+            background: #26262f;
+            border: 1px solid #32323c;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 12px;
+            cursor: pointer;
+            margin-left: auto;
+        }
+
+        /* 검색 결과 그리드 */
+        .browser-results {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 25px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .result-card {
+            background: #26262f;
+            border-radius: 10px;
+            padding: 16px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .result-card:hover {
+            border-color: #32323c;
+            transform: translateY(-2px);
+        }
+
+        .result-card.selected {
+            border-color: #ffaf5f;
+            background: #ffaf5f10;
+        }
+
+        .result-card .card-name {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #fff;
+        }
+
+        .result-card .card-handle {
+            font-size: 12px;
+            color: #ffaf5f;
+            margin-bottom: 12px;
+        }
+
+        .result-card .card-stats {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 10px;
+        }
+
+        .result-card .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .result-card .stat-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .result-card .stat-label {
+            font-size: 10px;
+            color: #8c91a0;
+        }
+
+        .result-card .card-category {
+            font-size: 11px;
+            color: #82b4af;
+            margin-bottom: 12px;
+        }
+
+        .result-card .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .result-card .card-actions button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .result-card .btn-instagram {
+            background: #32323c;
+            color: #fff;
+        }
+
+        .result-card .btn-instagram:hover {
+            background: #3d3d4a;
+        }
+
+        .result-card .btn-select {
+            background: #ffaf5f;
+            color: #1a1a2e;
+        }
+
+        .result-card .btn-select:hover {
+            background: #ffd28c;
+        }
+
+        .result-card.selected .btn-select {
+            background: #82b4af;
+        }
+
+        .results-loading,
+        .results-empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: #8c91a0;
+        }
+
+        .results-loading::before {
+            content: '⏳';
+            display: block;
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .results-empty::before {
+            content: '🔍';
+            display: block;
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        /* 우측: 선택된 인플루언서 + 체크리스트 */
+        .browser-right {
+            width: 380px;
+            display: flex;
+            flex-direction: column;
+            background: #20202a;
+            flex-shrink: 0;
+        }
+
+        .selected-header {
+            padding: 20px 25px;
+            background: #26262f;
+            border-bottom: 1px solid #32323c;
+        }
+
+        .selected-header h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .selected-header span {
+            font-size: 12px;
+            color: #8c91a0;
+        }
+
+        .selected-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .selected-item {
+            background: #26262f;
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        .selected-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .selected-item-info h5 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+
+        .selected-item-info span {
+            font-size: 11px;
+            color: #ffaf5f;
+        }
+
+        .selected-item-remove {
+            background: none;
+            border: none;
+            color: #f09b82;
+            font-size: 18px;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        /* 메모 입력 */
+        .memo-input {
+            width: 100%;
+            padding: 10px;
+            background: #1a1a2e;
+            border: 1px solid #32323c;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 11px;
+            font-family: inherit;
+            resize: none;
+            min-height: 60px;
+            margin-bottom: 8px;
+        }
+
+        .memo-input:focus {
+            outline: none;
+            border-color: #ffaf5f;
+        }
+
+        .memo-save-btn {
+            width: 100%;
+            padding: 8px;
+            background: #82b4af;
+            border: none;
+            border-radius: 6px;
+            color: #1a1a2e;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .memo-save-btn:hover {
+            background: #9fc9c4;
+        }
+
+        .memo-save-btn:disabled {
+            background: #32323c;
+            color: #8c91a0;
+            cursor: not-allowed;
+        }
+
+        .memo-save-btn.saved {
+            background: #82b4af;
+        }
+
+        /* 하단 버튼 */
+        .browser-footer {
+            padding: 20px 25px;
+            background: #26262f;
+            border-top: 1px solid #32323c;
+        }
+
+        .browser-footer button {
+            width: 100%;
+            padding: 14px;
+            background: #ffaf5f;
+            border: none;
+            border-radius: 8px;
+            color: #1a1a2e;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .browser-footer button:hover {
+            background: #ffd28c;
+        }
+
+        .browser-footer button:disabled {
+            background: #32323c;
+            color: #8c91a0;
+            cursor: not-allowed;
+        }
+
+        /* 모바일 반응형 */
+        @media (max-width: 900px) {
+            .browser-container {
+                flex-direction: column;
+            }
+
+            .browser-left {
+                border-right: none;
+                border-bottom: 1px solid #32323c;
+            }
+
+            .browser-right {
+                width: 100%;
+                max-height: 50vh;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-row {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 5px;
+            }
+
+            .filter-btn {
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .browser-header {
+                padding: 15px 20px;
+            }
+
+            .browser-search {
+                padding: 15px 20px;
+            }
+
+            .browser-results {
+                padding: 15px 20px;
+            }
+
+            .browser-right {
+                max-height: 60vh;
+            }
+        }
+
         /* 인쇄용 */
         @media print {
             body * {
@@ -955,6 +1462,7 @@
             <!-- 인플루언서 -->
             <div class="form-section">
                 <h3>추천 인플루언서</h3>
+                <button class="add-influencer-btn" onclick="openInfluencerBrowser()" style="margin-bottom: 15px; background: #ffaf5f; color: #1a1a2e; border: none; font-weight: 600;">🔍 인플루언서 찾기</button>
                 <div class="notion-search">
                     <input type="text" id="notionSearchInput" placeholder="인플루언서 ID (예: unidongdong)" onkeypress="if(event.key==='Enter') fetchFromNotion()">
                     <button onclick="fetchFromNotion()" id="notionFetchBtn">Notion 불러오기</button>
@@ -993,6 +1501,80 @@
             <div class="preview-frame">
                 <div class="proposal" id="proposalPreview">
                     <!-- 제안서 내용이 여기에 렌더링됨 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 인플루언서 브라우저 모달 -->
+    <div class="influencer-browser-modal" id="influencerBrowserModal">
+        <div class="browser-container">
+            <!-- 좌측: 검색/결과 -->
+            <div class="browser-left">
+                <div class="browser-header">
+                    <h3>인플루언서 찾기</h3>
+                    <button class="browser-close" onclick="closeInfluencerBrowser()">&times;</button>
+                </div>
+                <div class="browser-search">
+                    <div class="search-input-wrapper">
+                        <input type="text" id="browserSearchInput" placeholder="이름, 핸들, 카테고리로 검색..." oninput="debounceSearch()">
+                    </div>
+                    <div class="filter-row">
+                        <div class="filter-dropdown">
+                            <button class="filter-btn" onclick="toggleFilterMenu('categoryFilter')" id="categoryFilterBtn">
+                                카테고리
+                            </button>
+                            <div class="filter-menu" id="categoryFilter">
+                                <!-- 캐시 로드 후 동적 생성 -->
+                                <div style="padding: 8px 14px; color: #8c91a0; font-size: 11px;">로딩 중...</div>
+                            </div>
+                        </div>
+                        <div class="filter-dropdown">
+                            <button class="filter-btn" onclick="toggleFilterMenu('followerFilter')" id="followerFilterBtn">
+                                팔로워
+                            </button>
+                            <div class="filter-menu" id="followerFilter">
+                                <label><input type="radio" name="follower" value="0" checked onchange="applyFilters()"> 전체</label>
+                                <label><input type="radio" name="follower" value="10000" onchange="applyFilters()"> 1만 이상</label>
+                                <label><input type="radio" name="follower" value="50000" onchange="applyFilters()"> 5만 이상</label>
+                                <label><input type="radio" name="follower" value="100000" onchange="applyFilters()"> 10만 이상</label>
+                                <label><input type="radio" name="follower" value="200000" onchange="applyFilters()"> 20만 이상</label>
+                            </div>
+                        </div>
+                        <div class="filter-dropdown">
+                            <button class="filter-btn" onclick="toggleFilterMenu('viewsFilter')" id="viewsFilterBtn">
+                                릴스 조회수
+                            </button>
+                            <div class="filter-menu" id="viewsFilter">
+                                <label><input type="radio" name="views" value="0" checked onchange="applyFilters()"> 전체</label>
+                                <label><input type="radio" name="views" value="10000" onchange="applyFilters()"> 1만 이상</label>
+                                <label><input type="radio" name="views" value="50000" onchange="applyFilters()"> 5만 이상</label>
+                                <label><input type="radio" name="views" value="100000" onchange="applyFilters()"> 10만 이상</label>
+                                <label><input type="radio" name="views" value="200000" onchange="applyFilters()"> 20만 이상</label>
+                            </div>
+                        </div>
+                        <select class="sort-select" id="sortSelect" onchange="applyFilters()">
+                            <option value="avgViews">조회수 높은 순</option>
+                            <option value="followers">팔로워 많은 순</option>
+                            <option value="name">이름 순</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="browser-results" id="browserResults">
+                    <div class="results-empty">검색어를 입력하거나 필터를 선택하세요</div>
+                </div>
+            </div>
+
+            <!-- 우측: 선택된 인플루언서 + 체크리스트 -->
+            <div class="browser-right">
+                <div class="selected-header">
+                    <h4>선택된 인플루언서 <span id="selectedCount">(0/5)</span></h4>
+                </div>
+                <div class="selected-list" id="selectedList">
+                    <div class="results-empty" style="padding: 40px 20px;">인플루언서를 선택하세요</div>
+                </div>
+                <div class="browser-footer">
+                    <button onclick="addSelectedToProposal()" id="addToProposalBtn" disabled>제안서에 추가</button>
                 </div>
             </div>
         </div>
@@ -1532,7 +2114,7 @@
                     influencerSection += `
 ${index + 1}. ${handle.replace('@', '')} | ${name} ${followers} ${instagramUrl}
 • ${category} 카테고리
-• 공구제품 활용한 콘텐츠의 릴스 조회수(평균 ${avgViews}) / 팔로워들과 소통 활발함
+• 공구제품 활용한 콘텐츠의 릴스 조회수(평균 ${avgViews})
 
 `;
                 }
@@ -1588,8 +2170,529 @@ ${influencerSection}
             });
         }
 
+        // ============ 인플루언서 브라우저 ============
+        let browserSelectedInfluencers = [];
+        let searchDebounceTimer = null;
+        let currentSearchCursor = null;
+        let isLoadingMore = false;
+
+        // 캐시: 전체 인플루언서 목록 (메모리 저장)
+        let influencerCache = [];
+        let cacheLoaded = false;
+        let cacheLoadingPromise = null;
+
+        // 전체 인플루언서 로드 (캐시용)
+        async function loadAllInfluencersToCache() {
+            if (cacheLoaded) return influencerCache;
+            if (cacheLoadingPromise) return cacheLoadingPromise;
+
+            cacheLoadingPromise = (async () => {
+                let allResults = [];
+                let cursor = null;
+                let hasMore = true;
+
+                while (hasMore) {
+                    const response = await fetch(NOTION_PROXY_URL + '/list', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            databaseId: NOTION_DATABASE_ID,
+                            filters: {},
+                            sort: 'avgViews',
+                            cursor: cursor,
+                            limit: 100
+                        })
+                    });
+
+                    const data = await response.json();
+                    if (data.error) throw new Error(data.error);
+
+                    allResults = allResults.concat(data.results || []);
+                    cursor = data.nextCursor;
+                    hasMore = data.hasMore;
+                }
+
+                influencerCache = allResults;
+                cacheLoaded = true;
+                cacheLoadingPromise = null;
+                console.log(`캐시 로드 완료: ${allResults.length}명`);
+
+                // 카테고리 필터 동적 생성
+                updateCategoryFilter();
+
+                return allResults;
+            })();
+
+            return cacheLoadingPromise;
+        }
+
+        // 캐시 새로고침
+        async function refreshCache() {
+            cacheLoaded = false;
+            influencerCache = [];
+            await loadAllInfluencersToCache();
+            updateCategoryFilter();
+            applyFilters();
+        }
+
+        // 캐시에서 카테고리 목록 추출 및 필터 업데이트
+        function updateCategoryFilter() {
+            const categorySet = new Set();
+            influencerCache.forEach(inf => {
+                if (inf.categoryMain) {
+                    inf.categoryMain.forEach(cat => categorySet.add(cat));
+                }
+            });
+
+            const categories = Array.from(categorySet).sort();
+            const filterMenu = document.getElementById('categoryFilter');
+
+            if (categories.length === 0) {
+                filterMenu.innerHTML = '<div style="padding: 8px 14px; color: #8c91a0; font-size: 11px;">카테고리 없음</div>';
+                return;
+            }
+
+            filterMenu.innerHTML = categories.map(cat => `
+                <label><input type="checkbox" value="${cat}" onchange="applyFilters()"> ${cat}</label>
+            `).join('');
+        }
+
+        // 상태 저장/복원 키
+        const BROWSER_STATE_KEY = 'influencerBrowserState';
+
+        function saveBrowserState() {
+            const state = {
+                isOpen: document.getElementById('influencerBrowserModal').classList.contains('show'),
+                selected: browserSelectedInfluencers,
+                cache: influencerCache,
+                cacheLoaded: cacheLoaded
+            };
+            localStorage.setItem(BROWSER_STATE_KEY, JSON.stringify(state));
+        }
+
+        function restoreBrowserState() {
+            try {
+                const saved = localStorage.getItem(BROWSER_STATE_KEY);
+                if (!saved) return;
+
+                const state = JSON.parse(saved);
+
+                // 캐시 복원
+                if (state.cache && state.cache.length > 0) {
+                    influencerCache = state.cache;
+                    cacheLoaded = state.cacheLoaded;
+                }
+
+                // 모달이 열려있었으면 복원
+                if (state.isOpen) {
+                    document.getElementById('influencerBrowserModal').classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                    browserSelectedInfluencers = state.selected || [];
+                    updateSelectedList();
+                    loadInfluencers();
+                    updateCategoryFilter();
+                }
+            } catch (e) {
+                console.error('상태 복원 실패:', e);
+                localStorage.removeItem(BROWSER_STATE_KEY);
+            }
+        }
+
+        function openInfluencerBrowser() {
+            document.getElementById('influencerBrowserModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+            browserSelectedInfluencers = [];
+            updateSelectedList();
+            saveBrowserState();
+            // 초기 로드
+            loadInfluencers();
+        }
+
+        function closeInfluencerBrowser() {
+            document.getElementById('influencerBrowserModal').classList.remove('show');
+            document.body.style.overflow = '';
+            // 상태 초기화
+            localStorage.removeItem(BROWSER_STATE_KEY);
+        }
+
+        function toggleFilterMenu(menuId) {
+            const menu = document.getElementById(menuId);
+            const allMenus = document.querySelectorAll('.filter-menu');
+            allMenus.forEach(m => {
+                if (m.id !== menuId) m.classList.remove('show');
+            });
+            menu.classList.toggle('show');
+        }
+
+        // 클릭 외부 영역 클릭 시 필터 메뉴 닫기
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.filter-dropdown')) {
+                document.querySelectorAll('.filter-menu').forEach(m => m.classList.remove('show'));
+            }
+        });
+
+        function debounceSearch() {
+            clearTimeout(searchDebounceTimer);
+            searchDebounceTimer = setTimeout(() => {
+                applyFilters();
+            }, 300);
+        }
+
+        function getFilters() {
+            const search = document.getElementById('browserSearchInput').value.trim();
+
+            // 카테고리 (다중 선택)
+            const categories = [];
+            document.querySelectorAll('#categoryFilter input:checked').forEach(cb => {
+                categories.push(cb.value);
+            });
+
+            // 팔로워 (단일 선택)
+            const followerRadio = document.querySelector('input[name="follower"]:checked');
+            const minFollowers = followerRadio ? parseInt(followerRadio.value) : 0;
+
+            // 조회수 (단일 선택)
+            const viewsRadio = document.querySelector('input[name="views"]:checked');
+            const minAvgViews = viewsRadio ? parseInt(viewsRadio.value) : 0;
+
+            // 정렬
+            const sort = document.getElementById('sortSelect').value;
+
+            // 필터 버튼 활성 상태 업데이트
+            document.getElementById('categoryFilterBtn').classList.toggle('active', categories.length > 0);
+            document.getElementById('followerFilterBtn').classList.toggle('active', minFollowers > 0);
+            document.getElementById('viewsFilterBtn').classList.toggle('active', minAvgViews > 0);
+
+            return { search, categories, minFollowers, minAvgViews, sort };
+        }
+
+        function applyFilters() {
+            currentSearchCursor = null;
+            loadInfluencers();
+        }
+
+        async function loadInfluencers(append = false) {
+            const resultsContainer = document.getElementById('browserResults');
+
+            if (!append) {
+                resultsContainer.innerHTML = '<div class="results-loading">인플루언서 목록을 불러오는 중...</div>';
+            }
+
+            const filters = getFilters();
+
+            try {
+                // 캐시에서 불러오기 (첫 로드 시 API 호출)
+                const allInfluencers = await loadAllInfluencersToCache();
+
+                // 클라이언트 측 필터링
+                let results = [...allInfluencers];
+
+                // 검색어 필터
+                if (filters.search) {
+                    const searchLower = filters.search.toLowerCase();
+                    results = results.filter(inf =>
+                        inf.name?.toLowerCase().includes(searchLower) ||
+                        inf.influencerId?.toLowerCase().includes(searchLower) ||
+                        inf.handle?.toLowerCase().includes(searchLower) ||
+                        inf.categoryMain?.some(cat => cat.toLowerCase().includes(searchLower))
+                    );
+                }
+
+                // 카테고리 필터
+                if (filters.categories.length > 0) {
+                    results = results.filter(inf =>
+                        inf.categoryMain?.some(cat => filters.categories.includes(cat))
+                    );
+                }
+
+                // 팔로워 필터
+                if (filters.minFollowers > 0) {
+                    const minInMan = filters.minFollowers / 10000;
+                    results = results.filter(inf => {
+                        const val = parseFloat(inf.followers) || 0;
+                        return val >= minInMan;
+                    });
+                }
+
+                // 조회수 필터
+                if (filters.minAvgViews > 0) {
+                    const minInMan = filters.minAvgViews / 10000;
+                    results = results.filter(inf => {
+                        const val = parseFloat(inf.avgViews) || 0;
+                        return val >= minInMan;
+                    });
+                }
+
+                // 정렬
+                results.sort((a, b) => {
+                    if (filters.sort === 'avgViews') {
+                        return (parseFloat(b.avgViews) || 0) - (parseFloat(a.avgViews) || 0);
+                    } else if (filters.sort === 'followers') {
+                        return (parseFloat(b.followers) || 0) - (parseFloat(a.followers) || 0);
+                    } else {
+                        return (a.name || '').localeCompare(b.name || '');
+                    }
+                });
+
+                // 결과 표시
+                if (results.length === 0) {
+                    resultsContainer.innerHTML = '<div class="results-empty">검색 결과가 없습니다</div>';
+                    return;
+                }
+
+                resultsContainer.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <span style="font-size: 12px; color: #8c91a0;">${results.length}명의 인플루언서</span>
+                        <button onclick="refreshCache()" style="padding: 6px 12px; background: #32323c; border: none; border-radius: 4px; color: #8c91a0; font-size: 11px; cursor: pointer;">🔄 새로고침</button>
+                    </div>
+                    <div class="results-grid" id="resultsGrid"></div>
+                `;
+
+                const grid = document.getElementById('resultsGrid');
+                results.forEach(inf => {
+                    grid.appendChild(createResultCard(inf));
+                });
+
+            } catch (error) {
+                console.error('Load influencers error:', error);
+                resultsContainer.innerHTML = `<div class="results-empty">오류 발생: ${error.message}</div>`;
+            }
+        }
+
+        function createResultCard(inf) {
+            const isSelected = browserSelectedInfluencers.some(s => s.id === inf.id);
+            const card = document.createElement('div');
+            card.className = `result-card ${isSelected ? 'selected' : ''}`;
+            card.dataset.id = inf.id;
+
+            const followers = inf.followers ? inf.followers + '만' : '-';
+            const avgViews = inf.avgViews ? inf.avgViews + '만' : '-';
+            const category = inf.categoryMain?.join(' · ') || '-';
+            const displayName = inf.name.split('ㅣ')[0].trim();
+
+            card.innerHTML = `
+                <div class="card-name">${displayName}</div>
+                <div class="card-handle">${inf.handle}</div>
+                <div class="card-stats">
+                    <div class="stat-item">
+                        <span class="stat-value">${followers}</span>
+                        <span class="stat-label">팔로워</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">${avgViews}</span>
+                        <span class="stat-label">릴스 평균</span>
+                    </div>
+                </div>
+                <div class="card-category">🏷️ ${category}</div>
+                <div class="card-actions">
+                    <button class="btn-instagram" onclick="event.stopPropagation(); openInstagram('${inf.instagramUrl || ''}', '${inf.influencerId}')">인스타 열기</button>
+                    <button class="btn-select" onclick="event.stopPropagation(); toggleSelectInfluencer('${inf.id}')">${isSelected ? '✓ 선택됨' : '+ 선택'}</button>
+                </div>
+            `;
+
+            // 카드 전체 클릭으로 선택/해제
+            card.addEventListener('click', () => toggleSelectInfluencer(inf.id, inf));
+
+            // 데이터 저장
+            card._data = inf;
+
+            return card;
+        }
+
+        function openInstagram(url, handle) {
+            let targetUrl = url || `https://www.instagram.com/${handle}/`;
+            // 끝의 / 제거 후 ?auto=notion 추가
+            targetUrl = targetUrl.replace(/\/+$/, '') + '?auto=notion';
+            window.open(targetUrl, '_blank');
+        }
+
+        function toggleSelectInfluencer(id, data) {
+            const existingIndex = browserSelectedInfluencers.findIndex(s => s.id === id);
+
+            if (existingIndex >= 0) {
+                // 선택 해제
+                browserSelectedInfluencers.splice(existingIndex, 1);
+            } else {
+                // 선택 추가 (최대 5명)
+                if (browserSelectedInfluencers.length >= 5) {
+                    alert('최대 5명까지 선택할 수 있습니다.');
+                    return;
+                }
+
+                // 데이터 찾기
+                if (!data) {
+                    const card = document.querySelector(`.result-card[data-id="${id}"]`);
+                    if (card && card._data) {
+                        data = card._data;
+                    }
+                }
+
+                if (data) {
+                    browserSelectedInfluencers.push({
+                        ...data,
+                        memo: data.memo || ''
+                    });
+                }
+            }
+
+            updateResultCardsSelection();
+            updateSelectedList();
+            saveBrowserState();
+        }
+
+        function updateResultCardsSelection() {
+            document.querySelectorAll('.result-card').forEach(card => {
+                const id = card.dataset.id;
+                const isSelected = browserSelectedInfluencers.some(s => s.id === id);
+                card.classList.toggle('selected', isSelected);
+                const btn = card.querySelector('.btn-select');
+                if (btn) {
+                    btn.textContent = isSelected ? '✓ 선택됨' : '+ 선택';
+                }
+            });
+        }
+
+        function updateSelectedList() {
+            const container = document.getElementById('selectedList');
+            const countSpan = document.getElementById('selectedCount');
+            const addBtn = document.getElementById('addToProposalBtn');
+
+            countSpan.textContent = `(${browserSelectedInfluencers.length}/5)`;
+            addBtn.disabled = browserSelectedInfluencers.length === 0;
+
+            if (browserSelectedInfluencers.length === 0) {
+                container.innerHTML = '<div class="results-empty" style="padding: 40px 20px;">인플루언서를 선택하세요</div>';
+                return;
+            }
+
+            container.innerHTML = browserSelectedInfluencers.map((inf, index) => {
+                const displayName = inf.name.split('ㅣ')[0].trim();
+
+                return `
+                    <div class="selected-item" data-id="${inf.id}">
+                        <div class="selected-item-header">
+                            <div class="selected-item-info">
+                                <h5>${displayName}</h5>
+                                <span>${inf.handle}</span>
+                            </div>
+                            <button class="selected-item-remove" onclick="toggleSelectInfluencer('${inf.id}')">&times;</button>
+                        </div>
+                        <textarea class="memo-input" placeholder="메모 (예: 살림 콘텐츠 퀄리티 좋음)"
+                                  onchange="updateMemo('${inf.id}', this.value)">${inf.memo || ''}</textarea>
+                        <button class="memo-save-btn" onclick="saveMemoToNotion('${inf.id}')" id="memoBtn_${inf.id}">
+                            Notion에 저장
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateMemo(infId, value) {
+            const inf = browserSelectedInfluencers.find(s => s.id === infId);
+            if (inf) {
+                inf.memo = value;
+            }
+        }
+
+        async function saveMemoToNotion(infId) {
+            const inf = browserSelectedInfluencers.find(s => s.id === infId);
+            if (!inf) return;
+
+            const btn = document.getElementById(`memoBtn_${infId}`);
+            btn.disabled = true;
+            btn.textContent = '저장 중...';
+
+            try {
+                const response = await fetch(NOTION_PROXY_URL + '/update-memo', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        pageId: inf.id,
+                        memo: inf.memo
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    btn.textContent = '저장됨 ✓';
+                    btn.classList.add('saved');
+                    setTimeout(() => {
+                        btn.textContent = 'Notion에 저장';
+                        btn.classList.remove('saved');
+                        btn.disabled = false;
+                    }, 2000);
+                } else {
+                    throw new Error(data.error || '저장 실패');
+                }
+            } catch (error) {
+                console.error('Save memo error:', error);
+                btn.textContent = '저장 실패';
+                btn.disabled = false;
+                setTimeout(() => {
+                    btn.textContent = 'Notion에 저장';
+                }, 2000);
+
+                // Notion DB에 '메모' 속성이 없을 수 있음
+                if (error.message.includes('property')) {
+                    alert('Notion 데이터베이스에 "메모" 속성(rich_text)을 추가해주세요.');
+                }
+            }
+        }
+
+        function addSelectedToProposal() {
+            // 기존 빈 인플루언서 제거
+            influencers = influencers.filter(inf => inf.name || inf.handle);
+
+            // 선택된 인플루언서 추가
+            browserSelectedInfluencers.forEach(inf => {
+                const displayName = inf.name.split('ㅣ')[0].trim();
+                const followers = inf.followers ? inf.followers + '만' : '';
+                const avgViews = inf.avgViews ? inf.avgViews + '만' : '';
+
+                influencers.push({
+                    id: influencerIdCounter++,
+                    name: displayName,
+                    handle: inf.handle || '@' + inf.influencerId,
+                    followers: followers,
+                    avgViews: avgViews,
+                    category: inf.categoryMain?.join('·') || ''
+                });
+            });
+
+            // 최소 1개 인플루언서 유지
+            if (influencers.length === 0) {
+                addInfluencer();
+            }
+
+            renderInfluencerList();
+            updatePreview();
+            closeInfluencerBrowser();
+        }
+
+        function setupInfiniteScroll() {
+            const resultsContainer = document.getElementById('browserResults');
+
+            resultsContainer.onscroll = () => {
+                if (isLoadingMore) return;
+
+                const { scrollTop, scrollHeight, clientHeight } = resultsContainer;
+                if (scrollTop + clientHeight >= scrollHeight - 100) {
+                    if (currentSearchCursor) {
+                        isLoadingMore = true;
+                        loadInfluencers(true).then(() => {
+                            isLoadingMore = false;
+                        });
+                    }
+                }
+            };
+        }
+
         // 페이지 로드 시 초기화
-        window.onload = init;
+        window.onload = function() {
+            init();
+            restoreBrowserState();
+        };
     </script>
 </body>
 </html>
