@@ -231,6 +231,13 @@
         thead th .sort-icon { display: inline-block; margin-left: 4px; font-size: 10px; opacity: 0.4; }
         thead th.sort-active .sort-icon { opacity: 1; color: #ffaf5f; }
         thead th.editable-header { background: #1e2435; }
+        thead th.editable-header::after {
+            content: '✎';
+            margin-left: 4px;
+            font-size: 9px;
+            opacity: 0.4;
+            vertical-align: middle;
+        }
 
         /* 고정 컬럼 - 명시적 배경색 */
         .col-sticky { position: sticky; z-index: 25; }
@@ -261,15 +268,46 @@
         .cell-name { font-weight: 500; color: #e8e8f0; max-width: 200px; overflow: hidden; text-overflow: ellipsis; }
         .cell-desc { max-width: 200px; overflow: hidden; text-overflow: ellipsis; color: #8c91a0; font-size: 11px; }
         .cell-number { font-family: 'Work Sans', sans-serif; font-weight: 400; color: #c8c8d8; }
+        .cell-number-highlight { font-weight: 600; color: #fff; }
         .cell-link { color: #82b4af; text-decoration: none; font-size: 14px; }
         .cell-link:hover { color: #ffaf5f; }
         .cell-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
         .tag-category { background: #a89bc920; color: #a89bc9; }
         .tag-sub { background: #82b4af20; color: #82b4af; }
 
-        .cell-editable { background: rgba(255,175,95,0.03); cursor: pointer; transition: background 0.2s; }
-        .cell-editable:hover { background: rgba(255,175,95,0.08); }
-        .cell-edit-number { display: block; width: 100%; height: 100%; padding: 8px 12px; margin: -8px -12px; cursor: pointer; }
+        .cell-editable {
+            background: rgba(255,175,95,0.06);
+            border-left: 2px solid rgba(255,175,95,0.3);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .cell-editable:hover {
+            background: rgba(255,175,95,0.12);
+            border-left-color: #ffaf5f;
+        }
+        .cell-edit-number {
+            display: block;
+            width: 100%;
+            height: 100%;
+            padding: 8px 12px;
+            margin: -8px -12px;
+            cursor: pointer;
+            border-radius: 4px;
+            position: relative;
+        }
+        .cell-edit-number::after {
+            content: '✎';
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 10px;
+            opacity: 0.3;
+            transition: opacity 0.2s;
+        }
+        .cell-edit-number:hover::after {
+            opacity: 0.8;
+        }
 
         /* 토글 */
         .toggle-btn {
@@ -299,8 +337,22 @@
         }
         .grade-badge {
             display: inline-flex; align-items: center; justify-content: center;
-            width: 28px; height: 22px; border-radius: 4px;
-            font-family: 'Work Sans', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer;
+            width: 32px; height: 24px; border-radius: 4px;
+            font-family: 'Work Sans', sans-serif; font-size: 12px; font-weight: 700;
+            cursor: pointer; position: relative;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .grade-badge:hover {
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(255,175,95,0.3);
+        }
+        .grade-badge::after {
+            content: '▾';
+            position: absolute;
+            right: 2px;
+            bottom: 1px;
+            font-size: 7px;
+            opacity: 0.4;
         }
         .grade-S { background: #ffaf5f30; color: #ffaf5f; }
         .grade-A { background: #82b4af30; color: #82b4af; }
@@ -486,8 +538,8 @@
         '설명란': { width: 200, type: 'desc' },
         '외부링크': { width: 50, align: 'center', type: 'link' },
         '프로필 링크': { width: 50, align: 'center', type: 'link' },
-        '팔로워': { width: 90, align: 'right', type: 'number' },
-        '최근 10 평균 릴스 조회수': { width: 100, align: 'right', type: 'number', label: '평균 릴스' },
+        '팔로워': { width: 90, align: 'right', type: 'number', highlight: true },
+        '최근 10 평균 릴스 조회수': { width: 100, align: 'right', type: 'number', label: '평균 릴스', highlight: true },
         '최대 릴스 조회수': { width: 100, align: 'right', type: 'number', label: '최대 릴스' },
         '카테고리(대)': { width: 100, type: 'tag-main' },
         '카테고리(중)': { width: 100, type: 'tag-sub' },
@@ -1017,8 +1069,10 @@
                 return `<span class="cell-desc" data-tooltip="${escapeHtml(value)}">${escapeHtml(value)}</span>`;
             case 'link':
                 return value ? `<a href="${escapeHtml(value)}" target="_blank" rel="noopener" class="cell-link">&#128279;</a>` : '<span style="color:#32323c">-</span>';
-            case 'number':
-                return `<span class="cell-number">${escapeHtml(formatNumber(value))}</span>`;
+            case 'number': {
+                const highlight = (COLUMN_CONFIG[header] || {}).highlight ? ' cell-number-highlight' : '';
+                return `<span class="cell-number${highlight}">${escapeHtml(formatNumber(value))}</span>`;
+            }
             case 'tag-main':
                 return value ? value.split(',').map(v => `<span class="cell-tag tag-category">${escapeHtml(v.trim())}</span>`).join(' ') : '';
             case 'tag-sub':
