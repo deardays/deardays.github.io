@@ -46,6 +46,11 @@ export default {
         });
       }
 
+      // API 사용량 통계
+      if (path === '/stats' && request.method === 'GET') {
+        return await handleGetStats(env);
+      }
+
       // 필수 환경변수 검증
       if (!env.GOOGLE_SERVICE_ACCOUNT_EMAIL || !env.GOOGLE_PRIVATE_KEY || !env.SPREADSHEET_ID) {
         return jsonResponse({
@@ -95,6 +100,7 @@ async function handleGetInfluencers(env) {
     try {
       const cached = await env.INFLUENCER_CACHE.get('influencer_data', 'json');
       if (cached) {
+        await incrementStats(env, 'cacheHit');
         return jsonResponse({
           data: cached.data,
           headers: cached.headers,
@@ -106,6 +112,7 @@ async function handleGetInfluencers(env) {
     } catch (e) { /* KV 오류 시 API 직접 호출 */ }
   }
 
+  await incrementStats(env, 'cacheMiss');
   return await fetchAndCache(env);
 }
 
@@ -427,6 +434,9 @@ async function fetchAndCache(env) {
     { headers: { Authorization: `Bearer ${token}` } }
   );
 
+  // API 호출 통계 기록
+  await incrementStats(env, 'apiCall');
+
   const result = await response.json();
 
   if (result.error) {
@@ -626,4 +636,73 @@ function jsonResponse(data, status = 200) {
       'Access-Control-Allow-Origin': '*'
     }
   });
+}
+
+// ─── API 통계 ───────────────────────────────────────────
+async function handleGetStats(env) {
+  const stats = {
+    apiCalls: 0,
+    cacheHits: 0,
+    cacheMisses: 0,
+    lastApiCall: null,
+    cacheHitRate: '0%',
+    quotaLimit: 300,  // Google Sheets API: 300 requests/min
+    quotaUsed: 0,
+    quotaResetAt: null
+  };
+
+  if (env.INFLUENCER_CACHE) {
+    try {
+      const savedStats = await env.INFLUENCER_CACHE.get('api_stats', 'json');
+      if (savedStats) {
+        const now = Date.now();
+        // 1분 이내의 API 호출만 쿼터에 반영
+        const oneMinuteAgo = now - 60000;
+        const recentCalls = savedStats.recentCalls?.filter(t => t > oneMinuteAgo) || [];
+
+        stats.apiCalls = savedStats.apiCalls || 0;
+        stats.cacheHits = savedStats.cacheHits || 0;
+        stats.cacheMisses = savedStats.cacheMisses || 0;
+        stats.lastApiCall = savedStats.lastApiCall;
+        stats.quotaUsed = recentCalls.length;
+        stats.quotaResetAt = recentCalls.length > 0 ? new Date(recentCalls[0] + 60000).toISOString() : null;
+
+        const total = stats.cacheHits + stats.cacheMisses;
+        if (total > 0) {
+          stats.cacheHitRate = Math.round((stats.cacheHits / total) * 100) + '%';
+        }
+      }
+    } catch (e) { /* 오류 시 기본값 반환 */ }
+  }
+
+  return jsonResponse(stats);
+}
+
+async function incrementStats(env, field) {
+  if (!env.INFLUENCER_CACHE) return;
+
+  try {
+    const stats = await env.INFLUENCER_CACHE.get('api_stats', 'json') || {
+      apiCalls: 0,
+      cacheHits: 0,
+      cacheMisses: 0,
+      lastApiCall: null,
+      recentCalls: []
+    };
+
+    const now = Date.now();
+
+    if (field === 'apiCall') {
+      stats.apiCalls++;
+      stats.lastApiCall = new Date().toISOString();
+      stats.recentCalls = (stats.recentCalls || []).filter(t => t > now - 60000);
+      stats.recentCalls.push(now);
+    } else if (field === 'cacheHit') {
+      stats.cacheHits++;
+    } else if (field === 'cacheMiss') {
+      stats.cacheMisses++;
+    }
+
+    await env.INFLUENCER_CACHE.put('api_stats', JSON.stringify(stats), { expirationTtl: 86400 });
+  } catch (e) { /* 통계 저장 실패 시 무시 */ }
 }
