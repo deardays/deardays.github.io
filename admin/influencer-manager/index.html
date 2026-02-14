@@ -269,6 +269,7 @@
 
         .cell-editable { background: rgba(255,175,95,0.03); cursor: pointer; transition: background 0.2s; }
         .cell-editable:hover { background: rgba(255,175,95,0.08); }
+        .cell-edit-number { display: block; width: 100%; height: 100%; padding: 8px 12px; margin: -8px -12px; cursor: pointer; }
 
         /* 토글 */
         .toggle-btn {
@@ -1027,7 +1028,7 @@
                 return `<button class="toggle-btn ${isOn ? 'on' : 'off'}" onclick="toggleBoolean(${rowIdx}, '${escapeAttr(header)}')" title="${isOn ? 'TRUE' : 'FALSE'}"></button>`;
             }
             case 'editNumber':
-                return `<span class="cell-number" onclick="startEditNumber(this, ${rowIdx}, '${escapeAttr(header)}')">${escapeHtml(value || '0')}</span>`;
+                return `<span class="cell-number cell-edit-number" onclick="startEditNumber(this, ${rowIdx}, '${escapeAttr(header)}')">${escapeHtml(value || '0')}</span>`;
             case 'grade': {
                 const gc = value ? `grade-${value}` : 'grade-default';
                 return `<span class="grade-badge ${gc}" onclick="startEditGrade(this, ${rowIdx}, '${escapeAttr(header)}')">${escapeHtml(value || '-')}</span>`;
