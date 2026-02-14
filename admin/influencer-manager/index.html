@@ -255,9 +255,10 @@
         .col-sticky-last { box-shadow: 2px 0 6px rgba(0,0,0,0.3); }
 
         tbody td {
-            padding: 8px 12px; white-space: nowrap; overflow: hidden;
+            padding: 10px 12px; white-space: nowrap; overflow: hidden;
             text-overflow: ellipsis; vertical-align: middle; font-size: 12px;
         }
+        tbody td.cell-wrap { white-space: normal; }
         .text-right { text-align: right; }
         .text-center { text-align: center; }
 
@@ -265,13 +266,69 @@
         .cell-id { color: #a89bc9; font-weight: 500; }
         .cell-id a { color: inherit; text-decoration: none; }
         .cell-id a:hover { color: #ffaf5f; text-decoration: underline; }
-        .cell-name { font-weight: 500; color: #e8e8f0; max-width: 200px; overflow: hidden; text-overflow: ellipsis; }
-        .cell-desc { max-width: 200px; overflow: hidden; text-overflow: ellipsis; color: #8c91a0; font-size: 11px; }
+        .cell-name {
+            font-weight: 500; color: #e8e8f0;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+            overflow: hidden; white-space: normal; line-height: 1.4;
+        }
+        .cell-desc {
+            color: #8c91a0; font-size: 11px;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+            overflow: hidden; white-space: normal; line-height: 1.5;
+        }
+        .cell-text-wrap {
+            color: #c8c8d8; font-size: 11px;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+            overflow: hidden; white-space: normal; line-height: 1.4;
+        }
+        .cell-memo {
+            color: #e8e8f0; font-size: 11px; cursor: pointer;
+            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+            overflow: hidden; white-space: normal; word-break: break-word;
+            line-height: 1.5; min-height: 18px;
+        }
+        .cell-memo:hover { color: #ffaf5f; }
+        .memo-placeholder { color: #5a5f6e; font-style: italic; }
+
+        /* ─── 메모 편집 모달 ─────────────── */
+        .memo-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.6); z-index: 900;
+            justify-content: center; align-items: center;
+        }
+        .memo-overlay.open { display: flex; }
+        .memo-modal {
+            background: #1a1a2e; border: 1px solid #32323c; border-radius: 12px;
+            width: 480px; max-width: 90vw; padding: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .memo-modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 16px;
+        }
+        .memo-modal-header h3 { font-size: 15px; font-weight: 700; }
+        .memo-modal-header .memo-id { color: #a89bc9; font-size: 12px; margin-left: 8px; }
+        .memo-modal-close {
+            background: none; border: none; color: #8c91a0; font-size: 18px;
+            cursor: pointer; padding: 4px 8px;
+        }
+        .memo-modal-close:hover { color: #fff; }
+        .memo-textarea {
+            width: 100%; min-height: 120px; padding: 12px; resize: vertical;
+            background: #0f0f17; border: 1px solid #32323c; border-radius: 8px;
+            color: #fff; font-size: 13px; font-family: inherit; outline: none;
+            line-height: 1.6; transition: border-color 0.2s;
+        }
+        .memo-textarea:focus { border-color: #ffaf5f; }
+        .memo-modal-footer {
+            display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px;
+        }
         .cell-number { font-family: 'Work Sans', sans-serif; font-weight: 400; color: #c8c8d8; }
         .cell-number-highlight { font-weight: 600; color: #fff; }
         .cell-link { color: #82b4af; text-decoration: none; font-size: 14px; }
         .cell-link:hover { color: #ffaf5f; }
-        .cell-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+        .cell-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+        .cell-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; white-space: nowrap; }
         .tag-category { background: #a89bc920; color: #a89bc9; }
         .tag-sub { background: #82b4af20; color: #82b4af; }
 
@@ -476,16 +533,17 @@
             </table>
 
             <div class="grade-config-hint">
-                <strong style="color:#ffaf5f">분류 로직:</strong><br/>
-                참여율 값이 <code>있으면</code>: 팔로워 &ge; 최소 <strong>AND</strong> (조회수 &ge; 최소 <strong>OR</strong> 참여율 &ge; 최소)<br/>
-                참여율 값이 <code>비어있으면</code>: 팔로워 &ge; 최소 <strong>AND</strong> 조회수 &ge; 최소<br/>
-                마지막 등급은 위 조건에 해당하지 않는 <strong>나머지</strong>에 적용됩니다.
+                <strong style="color:#ffaf5f">등급 판정 방식</strong><br/><br/>
+                위에서부터 순서대로 조건을 검사하여 <strong>첫 번째로 만족하는 등급</strong>이 부여됩니다.<br/><br/>
+                <span style="color:#e8e8f0">필수 조건:</span> 팔로워 &ge; 설정값<br/>
+                <span style="color:#e8e8f0">추가 조건:</span> 조회수 &ge; 설정값 <strong style="color:#82b4af">또는</strong> 참여율 &ge; 설정값 (둘 중 하나만 충족하면 OK)<br/><br/>
+                <span style="color:#8c91a0">예) S등급: 팔로워 20만 이상이면서, 조회수 10만 이상 <strong style="color:#82b4af">또는</strong> 참여율 3% 이상</span><br/>
+                <span style="color:#8c91a0">마지막 등급은 어디에도 해당하지 않는 나머지에 자동 적용됩니다.</span>
             </div>
 
             <div class="grade-config-footer">
                 <button class="btn" onclick="closeGradeConfig()">취소</button>
-                <button class="btn" onclick="saveGradeConfig(false)">저장만</button>
-                <button class="btn btn-primary" onclick="saveGradeConfig(true)">저장 + 수식 적용</button>
+                <button class="btn btn-primary" onclick="saveGradeConfig(true)">저장 및 등급 재계산</button>
             </div>
         </div>
     </div>
@@ -502,6 +560,21 @@
         </div>
     </div>
 
+    <!-- 메모 편집 모달 -->
+    <div class="memo-overlay" id="memoOverlay" onclick="if(event.target===this)closeMemo()">
+        <div class="memo-modal">
+            <div class="memo-modal-header">
+                <h3>메모 <span class="memo-id" id="memoTargetName"></span></h3>
+                <button class="memo-modal-close" onclick="closeMemo()">&times;</button>
+            </div>
+            <textarea class="memo-textarea" id="memoTextarea" placeholder="인플루언서 메모를 입력하세요..."></textarea>
+            <div class="memo-modal-footer">
+                <button class="btn" onclick="closeMemo()">취소</button>
+                <button class="btn btn-primary" onclick="saveMemo()">저장</button>
+            </div>
+        </div>
+    </div>
+
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
@@ -510,32 +583,56 @@
 
     const EDITABLE_BOOLEAN_COLUMNS = [];
     const EDITABLE_NUMBER_COLUMNS = ['공지채널 멤버수'];
-    const EDITABLE_GRADE_COLUMN = '인플루언서 등급';
-    const EDITABLE_BOOLEAN_EXTRA = ['활동성(24H스토리'];
-    const ALL_EDITABLE = [...EDITABLE_BOOLEAN_COLUMNS, ...EDITABLE_NUMBER_COLUMNS, EDITABLE_GRADE_COLUMN, ...EDITABLE_BOOLEAN_EXTRA];
+    const EDITABLE_GRADE_COLUMN = '';
+    const EDITABLE_BOOLEAN_EXTRA = ['스토리활동'];
+    const EDITABLE_MEMO_COLUMN = '메모';
+    const ALL_EDITABLE = [...EDITABLE_BOOLEAN_COLUMNS, ...EDITABLE_NUMBER_COLUMNS, ...EDITABLE_BOOLEAN_EXTRA, EDITABLE_MEMO_COLUMN].filter(Boolean);
 
-    const HIDDEN_COLUMNS = ['_rowIndex', '댓글활동여부', '소통채널여부', '최근 공동구매 상품'];
+    const HIDDEN_COLUMNS = ['_rowIndex'];
     const STICKY_COUNT = 3;
 
+    // 의사결정 흐름: 식별 → 카테고리 매칭 → 공동구매 경험 → 성과 → 보조 → 참고
+    const DISPLAY_ORDER = [
+        // ── 고정: 식별 ──
+        'No.', '인스타ID', '인스타 이름',
+        // ── 평가 핵심: 카테고리 & 공동구매 ──
+        '카테고리(대)', '카테고리(중)', '최근 공동구매 상품', '인플루언서 등급', '메모',
+        // ── 성과 지표 ──
+        '팔로워', '최근 10 평균 릴스 조회수', '팔로워수 대비 조회수', '전체인원대비 소통참여율',
+        // ── 보조 지표 ──
+        '최대 릴스 조회수', '최근10개 평균 댓글수', '스토리활동', '마지막 피드 게시일',
+        '공지채널 멤버수', '소통채널여부', '댓글활동여부',
+        // ── 참고 ──
+        '설명란', '외부링크', '프로필 링크'
+    ];
+
     const COLUMN_CONFIG = {
-        'No.': { width: 50, align: 'center', type: 'number' },
-        '인스타ID': { width: 140, type: 'id' },
-        '인스타 이름': { width: 200, type: 'name' },
+        'No.': { width: 42, align: 'center', type: 'number' },
+        '인스타ID': { width: 120, type: 'id' },
+        '인스타 이름': { width: 180, type: 'name' },
+        // ── 평가 핵심 ──
+        '카테고리(대)': { width: 110, type: 'tag-main' },
+        '카테고리(중)': { width: 90, type: 'tag-sub' },
+        '최근 공동구매 상품': { width: 130, type: 'text-wrap', label: '최근공구' },
+        '인플루언서 등급': { width: 70, align: 'center', type: 'grade', label: '등급' },
+        '메모': { width: 180, type: 'editMemo', label: '메모' },
+        // ── 성과 지표 ──
+        '팔로워': { width: 80, align: 'right', type: 'number' },
+        '최근 10 평균 릴스 조회수': { width: 90, align: 'right', type: 'number', label: '평균릴스' },
+        '팔로워수 대비 조회수': { width: 80, align: 'right', type: 'number', label: '조회/팔로워', highlight: true },
+        '전체인원대비 소통참여율': { width: 75, align: 'right', label: '참여율', highlight: true },
+        // ── 보조 지표 ──
+        '최대 릴스 조회수': { width: 80, align: 'right', type: 'number', label: '최대릴스' },
+        '최근10개 평균 댓글수': { width: 70, align: 'right', type: 'number', label: '평균댓글' },
+        '스토리활동': { width: 55, align: 'center', type: 'boolean', label: '24H' },
+        '마지막 피드 게시일': { width: 90, label: '최근게시' },
+        '공지채널 멤버수': { width: 70, align: 'right', type: 'editNumber', label: '공지멤버' },
+        '소통채널여부': { width: 55, align: 'center', type: 'boolLabel', label: '소통채널' },
+        '댓글활동여부': { width: 55, align: 'center', type: 'boolLabel', label: '댓글활동' },
+        // ── 참고 ──
         '설명란': { width: 200, type: 'desc' },
-        '외부링크': { width: 50, align: 'center', type: 'link' },
-        '프로필 링크': { width: 50, align: 'center', type: 'link' },
-        '팔로워': { width: 90, align: 'right', type: 'number', highlight: true },
-        '최근 10 평균 릴스 조회수': { width: 100, align: 'right', type: 'number', label: '평균 릴스', highlight: true },
-        '최대 릴스 조회수': { width: 100, align: 'right', type: 'number', label: '최대 릴스' },
-        '카테고리(대)': { width: 100, type: 'tag-main' },
-        '카테고리(중)': { width: 100, type: 'tag-sub' },
-        '공지채널 멤버수': { width: 85, align: 'right', type: 'editNumber', label: '공지멤버' },
-        '전체인원대비 소통참여율': { width: 90, align: 'right', label: '소통참여율' },
-        '팔로워수 대비 조회수': { width: 90, align: 'right', type: 'number', label: '조회수비' },
-        '활동성(24H스토리': { width: 80, align: 'center', type: 'boolean', label: '활동성24H' },
-        '최근10개 평균 댓글수': { width: 90, align: 'right', type: 'number', label: '평균댓글' },
-        '마지막 피드 게시일': { width: 110, label: '최근게시' },
-        '인플루언서 등급': { width: 60, align: 'center', type: 'grade', label: '등급' }
+        '외부링크': { width: 40, align: 'center', type: 'link' },
+        '프로필 링크': { width: 40, align: 'center', type: 'link' }
     };
 
     // ─── 상태 ────────────────────────────────────────────
@@ -771,7 +868,7 @@
         const nameCol = findHeader('인스타 이름');
         const catCol = findHeader('카테고리(대)');
         const gradeCol = findHeader('인플루언서 등급');
-        const activeCol = findHeader('활동성(24H스토리');
+        const activeCol = findHeader('스토리활동');
 
         filteredData = allData.filter(row => {
             if (search) {
@@ -943,7 +1040,11 @@
 
     // ─── 테이블 렌더링 ──────────────────────────────────
     function getVisibleHeaders() {
-        return headers.filter(h => !HIDDEN_COLUMNS.includes(h) && visibleColumns.has(h));
+        const visible = headers.filter(h => !HIDDEN_COLUMNS.includes(h) && visibleColumns.has(h));
+        // DISPLAY_ORDER에 정의된 순서대로 정렬, 미정의는 뒤에 원래 순서로
+        const ordered = DISPLAY_ORDER.filter(h => visible.includes(h));
+        const rest = visible.filter(h => !DISPLAY_ORDER.includes(h));
+        return [...ordered, ...rest];
     }
 
     function buildTableHeader() {
@@ -1023,6 +1124,7 @@
                 if (isEditable) classes.push('cell-editable');
                 if (align === 'right') classes.push('text-right');
                 if (align === 'center') classes.push('text-center');
+                if (['name', 'desc', 'tag-main', 'tag-sub', 'text-wrap', 'editMemo'].includes(type)) classes.push('cell-wrap');
 
                 let style = `width:${width}px;min-width:${width}px;`;
                 if (isSticky) {
@@ -1059,19 +1161,27 @@
                 const highlight = (COLUMN_CONFIG[header] || {}).highlight ? ' cell-number-highlight' : '';
                 return `<span class="cell-number${highlight}">${escapeHtml(formatNumber(value))}</span>`;
             }
+            case 'text-wrap':
+                return value ? `<span class="cell-text-wrap" data-tooltip="${escapeHtml(value)}">${escapeHtml(value)}</span>` : '<span style="color:#5a5f6e">-</span>';
             case 'tag-main':
-                return value ? value.split(',').map(v => `<span class="cell-tag tag-category">${escapeHtml(v.trim())}</span>`).join(' ') : '';
+                return value ? `<div class="cell-tags">${value.split(',').map(v => `<span class="cell-tag tag-category">${escapeHtml(v.trim())}</span>`).join(' ')}</div>` : '';
             case 'tag-sub':
-                return value ? value.split(',').map(v => `<span class="cell-tag tag-sub">${escapeHtml(v.trim())}</span>`).join(' ') : '';
+                return value ? `<div class="cell-tags">${value.split(',').map(v => `<span class="cell-tag tag-sub">${escapeHtml(v.trim())}</span>`).join(' ')}</div>` : '';
             case 'boolean': {
                 const isOn = value === 'TRUE' || value === 'true';
                 return `<button class="toggle-btn ${isOn ? 'on' : 'off'}" onclick="toggleBoolean(${rowIdx}, '${escapeAttr(header)}')" title="${isOn ? 'TRUE' : 'FALSE'}"></button>`;
             }
+            case 'boolLabel': {
+                const isOn = value === 'TRUE' || value === 'true';
+                return isOn ? '<span style="color:#82b4af;font-size:11px">Y</span>' : '<span style="color:#5a5f6e;font-size:11px">N</span>';
+            }
+            case 'editMemo':
+                return `<span class="cell-memo" onclick="startEditMemo(this, ${rowIdx}, '${escapeAttr(header)}')" data-tooltip="${escapeHtml(value)}">${value ? escapeHtml(value).replace(/\n/g, '<br>') : '<span class="memo-placeholder">메모 추가...</span>'}</span>`;
             case 'editNumber':
                 return `<span class="cell-number cell-edit-number" onclick="startEditNumber(this, ${rowIdx}, '${escapeAttr(header)}')">${escapeHtml(value || '0')}</span>`;
             case 'grade': {
                 const gc = value ? `grade-${value}` : 'grade-default';
-                return `<span class="grade-badge ${gc}" onclick="startEditGrade(this, ${rowIdx}, '${escapeAttr(header)}')">${escapeHtml(value || '-')}</span>`;
+                return `<span class="grade-badge ${gc}">${escapeHtml(value || '-')}</span>`;
             }
             default:
                 return escapeHtml(value);
@@ -1168,6 +1278,48 @@
         select.addEventListener('blur', save);
         select.addEventListener('change', () => select.blur());
         select.addEventListener('keydown', (e) => { if (e.key === 'Escape') { row[header] = current; applyFilters(); } });
+    }
+
+    // ─── 메모 편집 ───────────────────────────────────────
+    let memoState = { rowIdx: null, header: null, original: '' };
+
+    function startEditMemo(el, rowIdx, header) {
+        const row = filteredData[rowIdx];
+        const nameCol = findHeader('인스타 이름') || findHeader('인스타ID');
+        memoState = { rowIdx, header, original: row[header] || '' };
+        document.getElementById('memoTargetName').textContent = row[nameCol] || '';
+        document.getElementById('memoTextarea').value = row[header] || '';
+        document.getElementById('memoOverlay').classList.add('open');
+        const ta = document.getElementById('memoTextarea');
+        setTimeout(() => ta.focus(), 100);
+        ta.onkeydown = (e) => {
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); saveMemo(); }
+            if (e.key === 'Escape') closeMemo();
+        };
+    }
+
+    function closeMemo() {
+        document.getElementById('memoOverlay').classList.remove('open');
+        memoState = { rowIdx: null, header: null, original: '' };
+    }
+
+    async function saveMemo() {
+        const { rowIdx, header, original } = memoState;
+        if (rowIdx === null) return;
+        const nv = document.getElementById('memoTextarea').value.trim();
+        if (nv === original) { closeMemo(); return; }
+        const row = filteredData[rowIdx];
+        row[header] = nv;
+        closeMemo();
+        renderTable();
+        try {
+            await updateCell(row._rowIndex, headerIndexMap[header], nv);
+            showToast('메모 저장 완료', 'success');
+        } catch (err) {
+            row[header] = original;
+            renderTable();
+            showToast('저장 실패: ' + err.message, 'error');
+        }
     }
 
     async function updateCell(rowIndex, columnIndex, value) {
