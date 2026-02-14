@@ -1090,7 +1090,8 @@
         const row = filteredData[rowIdx];
         const current = row[header] || '';
         const input = document.createElement('input');
-        input.type = 'text'; input.className = 'edit-number-input'; input.value = current;
+        input.type = 'number'; input.className = 'edit-number-input'; input.value = current;
+        input.min = '0'; input.step = '1';
         el.replaceWith(input); input.focus(); input.select();
         const save = async () => {
             const nv = input.value.trim();
