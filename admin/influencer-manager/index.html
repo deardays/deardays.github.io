@@ -1027,7 +1027,7 @@
                 return `<button class="toggle-btn ${isOn ? 'on' : 'off'}" onclick="toggleBoolean(${rowIdx}, '${escapeAttr(header)}')" title="${isOn ? 'TRUE' : 'FALSE'}"></button>`;
             }
             case 'editNumber':
-                return `<span class="cell-number" ondblclick="startEditNumber(this, ${rowIdx}, '${escapeAttr(header)}')">${escapeHtml(value || '-')}</span>`;
+                return `<span class="cell-number" ondblclick="startEditNumber(this, ${rowIdx}, '${escapeAttr(header)}')">${escapeHtml(value || '0')}</span>`;
             case 'grade': {
                 const gc = value ? `grade-${value}` : 'grade-default';
                 return `<span class="grade-badge ${gc}" onclick="startEditGrade(this, ${rowIdx}, '${escapeAttr(header)}')">${escapeHtml(value || '-')}</span>`;
