@@ -370,7 +370,6 @@
                     <span>캐시: <span id="cacheStatus" style="color:#82b4af">-</span></span>
                     <span>|</span>
                     <span>API: <span id="apiQuota" style="color:#82b4af">-</span>/300</span>
-                    <span>적중률: <span id="cacheHitRate" style="color:#ffaf5f">-</span></span>
                 </div>
                 <button class="btn" onclick="openGradeConfig()">등급 설정</button>
                 <button class="btn" onclick="openColumnSettings()">컬럼 설정</button>
@@ -552,7 +551,6 @@
             if (statsRes && statsRes.ok) {
                 const stats = await statsRes.json();
                 document.getElementById('apiQuota').textContent = stats.quotaUsed || 0;
-                document.getElementById('cacheHitRate').textContent = stats.cacheHitRate || '0%';
             }
 
             // Config 처리
