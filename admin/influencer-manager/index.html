@@ -1027,7 +1027,7 @@
                 return `<button class="toggle-btn ${isOn ? 'on' : 'off'}" onclick="toggleBoolean(${rowIdx}, '${escapeAttr(header)}')" title="${isOn ? 'TRUE' : 'FALSE'}"></button>`;
             }
             case 'editNumber':
-                return `<span class="cell-number" ondblclick="startEditNumber(this, ${rowIdx}, '${escapeAttr(header)}')">${escapeHtml(value || '0')}</span>`;
+                return `<span class="cell-number" onclick="startEditNumber(this, ${rowIdx}, '${escapeAttr(header)}')">${escapeHtml(value || '0')}</span>`;
             case 'grade': {
                 const gc = value ? `grade-${value}` : 'grade-default';
                 return `<span class="grade-badge ${gc}" onclick="startEditGrade(this, ${rowIdx}, '${escapeAttr(header)}')">${escapeHtml(value || '-')}</span>`;
@@ -1090,8 +1090,9 @@
         const row = filteredData[rowIdx];
         const current = row[header] || '';
         const input = document.createElement('input');
-        input.type = 'number'; input.className = 'edit-number-input'; input.value = current;
-        input.min = '0'; input.step = '1';
+        input.type = 'text'; input.className = 'edit-number-input'; input.value = current;
+        input.inputMode = 'numeric'; input.pattern = '[0-9]*';
+        input.addEventListener('input', () => { input.value = input.value.replace(/[^0-9]/g, ''); });
         el.replaceWith(input); input.focus(); input.select();
         const save = async () => {
             const nv = input.value.trim();
