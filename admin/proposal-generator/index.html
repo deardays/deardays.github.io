@@ -501,8 +501,8 @@
         .proposal .header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
-            padding-top: 30px;
+            margin-bottom: 14px;
+            padding-top: 25px;
         }
         .proposal .header span {
             font-family: 'Work Sans', sans-serif;
@@ -513,24 +513,24 @@
         }
 
         .proposal .title-section {
-            margin-bottom: 25px;
+            margin-bottom: 16px;
         }
         .proposal .title-section .accent-line {
             width: 70px;
             height: 3px;
             background: var(--accent-amber);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         .proposal .title-section h1 {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .proposal .title-section h2 {
-            font-size: 34px;
+            font-size: 28px;
             font-weight: 700;
             color: var(--accent-amber);
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
         .proposal .title-section .subtitle {
             font-family: 'Work Sans', sans-serif;
@@ -549,8 +549,8 @@
         .proposal .product-card {
             background: var(--card-bg);
             border-radius: var(--border-radius);
-            padding: 20px 25px;
-            margin-bottom: 25px;
+            padding: 14px 25px;
+            margin-bottom: 18px;
             position: relative;
         }
         .proposal .product-card::before {
@@ -595,42 +595,42 @@
             width: 50px;
             height: 1px;
             background: var(--text-muted);
-            margin-bottom: 8px;
+            margin-bottom: 5px;
         }
         .proposal .section-header .eng {
             font-family: 'Work Sans', sans-serif;
             font-size: 9px;
             color: var(--text-muted);
             letter-spacing: 1px;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
         .proposal .section-header h4 {
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 700;
         }
 
         .proposal .influencer-section {
-            margin-bottom: 25px;
+            margin-bottom: 16px;
         }
         .proposal .influencer-cards {
             display: flex;
-            gap: 12px;
-            margin-bottom: 10px;
+            gap: 10px;
+            margin-bottom: 6px;
         }
         .proposal .influencer-card {
             flex: 1;
             background: var(--card-bg);
             border-radius: var(--border-radius);
-            padding: 14px 12px;
+            padding: 10px 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
             text-align: center;
         }
         .proposal .influencer-card .avatar {
-            width: 45px;
-            height: 45px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
         }
         .proposal .influencer-card .avatar.coral { background: var(--coral); }
@@ -658,21 +658,21 @@
         }
 
         .proposal .promise-section {
-            margin-bottom: 25px;
+            margin-bottom: 14px;
         }
         .proposal .promise-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 6px;
         }
         .proposal .promise-item {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
         .proposal .promise-item .number {
-            width: 22px;
-            height: 22px;
+            width: 20px;
+            height: 20px;
             background: var(--accent-amber);
             border-radius: 5px;
             display: flex;
@@ -684,24 +684,24 @@
             color: var(--bg-dark);
         }
         .proposal .promise-item .text {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 400;
         }
 
         .proposal .agency-section {
             border-top: 1px solid #32323c;
-            padding-top: 18px;
-            margin-bottom: 22px;
+            padding-top: 12px;
+            margin-bottom: 14px;
         }
         .proposal .agency-header {
             display: flex;
             align-items: baseline;
             gap: 12px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         .proposal .agency-header h4 {
             font-family: 'Work Sans', sans-serif;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             color: var(--accent-amber);
         }
@@ -719,7 +719,7 @@
         }
         .proposal .stat .value {
             font-family: 'Work Sans', sans-serif;
-            font-size: 22px;
+            font-size: 18px;
             font-weight: 700;
             margin-bottom: 4px;
         }
@@ -735,12 +735,12 @@
         .proposal .contact-card {
             background: var(--card-bg);
             border-radius: var(--border-radius);
-            padding: 16px 22px;
+            padding: 12px 22px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: relative;
-            margin-bottom: 18px;
+            margin-bottom: 12px;
         }
         .proposal .contact-card::before {
             content: '';
@@ -804,6 +804,53 @@
             font-size: 9px;
             color: var(--text-muted);
             letter-spacing: 1px;
+        }
+
+        /* 포트폴리오 미니 섹션 */
+        .proposal .portfolio-mini {
+            margin-bottom: 12px;
+        }
+        .proposal .portfolio-mini .cases {
+            display: flex;
+            gap: 8px;
+        }
+        .proposal .portfolio-mini .case-item {
+            flex: 1;
+            background: var(--card-bg);
+            border-radius: 6px;
+            padding: 8px 10px;
+            text-align: center;
+        }
+        .proposal .portfolio-mini .case-metric {
+            font-family: 'Work Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent-amber);
+            margin-bottom: 2px;
+        }
+        .proposal .portfolio-mini .case-label {
+            font-size: 8px;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+
+        /* 리뷰 인용 */
+        .proposal .review-quote {
+            margin-bottom: 12px;
+            padding: 8px 14px;
+            background: var(--card-bg);
+            border-radius: 6px;
+            border-left: 2px solid var(--accent-amber);
+        }
+        .proposal .review-quote .quote-text {
+            font-size: 9px;
+            color: var(--text-white);
+            font-style: italic;
+            margin-bottom: 3px;
+        }
+        .proposal .review-quote .quote-meta {
+            font-size: 8px;
+            color: var(--accent-gold);
         }
 
         /* 이메일 모달 */
@@ -2267,15 +2314,37 @@
                     <div class="promise-list">
                         <div class="promise-item">
                             <span class="number">1</span>
-                            <span class="text">구매자가 브랜드를 기억하게 만드는 기획</span>
+                            <span class="text">데이터 기반 분석으로 제품의 시장 잠재력을 발굴합니다</span>
                         </div>
                         <div class="promise-item">
                             <span class="number">2</span>
-                            <span class="text">브랜드 인지도 상승과 매출을 동시에 달성</span>
+                            <span class="text">브랜드 인지도 상승과 매출 목표를 동시에 달성합니다</span>
                         </div>
                         <div class="promise-item">
                             <span class="number">3</span>
-                            <span class="text">장기적 파트너십을 위한 투명한 커뮤니케이션</span>
+                            <span class="text">평균 10분 내 답변, 투명한 커뮤니케이션을 약속합니다</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="portfolio-mini">
+                    <div class="section-header">
+                        <div class="line"></div>
+                        <p class="eng">PORTFOLIO</p>
+                        <h4>성공 사례</h4>
+                    </div>
+                    <div class="cases">
+                        <div class="case-item">
+                            <p class="case-metric">5차 완판</p>
+                            <p class="case-label">뷰티 브랜드<br>인지도 제로에서 달성</p>
+                        </div>
+                        <div class="case-item">
+                            <p class="case-metric">6시간</p>
+                            <p class="case-label">식품 브랜드<br>론칭 당일 전량 소진</p>
+                        </div>
+                        <div class="case-item">
+                            <p class="case-metric">+300%</p>
+                            <p class="case-label">라이프스타일<br>신규 고객 유입 증가</p>
                         </div>
                     </div>
                 </div>
@@ -2287,21 +2356,27 @@
                     </div>
                     <div class="stats">
                         <div class="stat">
-                            <p class="value">300+</p>
-                            <p class="label">공동구매 진행</p>
+                            <p class="value">98%</p>
+                            <p class="label">고객 만족도</p>
                         </div>
                         <div class="stat">
-                            <p class="value">ONE-STOP</p>
-                            <p class="label">원스탑 서비스</p>
+                            <p class="value">400+</p>
+                            <p class="label">누적 프로젝트</p>
                         </div>
                         <div class="stat">
-                            <p class="value">CUSTOM</p>
-                            <p class="label">맞춤 전략 설계</p>
+                            <p class="value">50+</p>
+                            <p class="label">협업 브랜드</p>
                         </div>
-                        <div class="stat website">
-                            <p class="value">deardays.kr</p>
+                        <div class="stat">
+                            <p class="value">10분</p>
+                            <p class="label">평균 응답시간</p>
                         </div>
                     </div>
+                </div>
+
+                <div class="review-quote">
+                    <p class="quote-text">"공구로 바이럴이 잘 되어서 저희쪽 브랜드 인지도가 많이 올라갔어요."</p>
+                    <p class="quote-meta">— 협업 브랜드 담당자 ★★★★★</p>
                 </div>
 
                 <div class="contact-card">
@@ -2511,30 +2586,45 @@ ${index + 1}. ${handle.replace('@', '')} | ${name} ${followers} ${instagramUrl}
             });
 
             // 본문 생성
-            const body = `안녕하세요
-공동구매 벤더 디어데이즈의 정준기 이사 입니다.
+            const body = `안녕하세요, ${companyName} 담당자님.
 
-${companyName}의 「${productName}」 제품을 보고 좋은 제품을 판매하고 계셔
-공동구매 프로모션을 함께 진행하고 싶어 연락드립니다.
+공동구매 전문 에이전시 디어데이즈의 정준기 이사입니다.
 
-저희가 협업 중인 살림·리빙 인플루언서 분들과 ${productName} 제품과 핏이 맞는 분들이 계셔 공동구매를 제안드립니다.
-전반적으로 공구 판매실적, 릴스 조회수, 팔로워 소통, 이벤트, 공구활동의 참여율 외 내부 검토 프로세스로 매칭하였습니다.
+${companyName}의 「${productName}」 제품을 보고 연락드립니다.
+좋은 제품을 판매하고 계셔서 공동구매 프로모션을 함께 진행하고 싶습니다.
+
+저희가 협업 중인 인플루언서 분들 중 ${productName} 제품과 핏이 맞는 분들이 계셔 공동구매를 제안드립니다.
+공구 판매실적, 릴스 조회수, 팔로워 소통, 참여율 외 내부 검토 프로세스를 거쳐 매칭하였습니다.
 
 ${influencerSection}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-디어데이즈 소개 : https://deardays.kr
-저희는 400건 이상의 공동구매를 진행한 전문 벤더입니다.
+■ 디어데이즈 소개
 
-• 인플루언서 협업부터 콘텐츠 기획, 판매 운영까지 원스톱으로 진행
-• 리빙·주방·식품·육아 등 다양한 카테고리 인플루언서와 협업 네트워크를 보유
-• 브랜드·제품별 타깃에 맞춘 맞춤 전략으로 목표 매출은 물론 장기 고객 확보까지 함께 도모하고 있습니다.
+저희는 400건 이상의 공동구매를 진행하며 98% 고객 만족도를 달성한
+50개 브랜드의 신뢰받는 파트너입니다.
 
-저희의 목표는 단순 매출 상승이 아니라, 공동구매를 통해 브랜드가 고객에게 기억되도록 돕는 것입니다.
+• 300명 이상의 검증된 인플루언서와 직접 협업
+• 콘텐츠 기획부터 판매 운영까지 원스톱 진행
+• 데이터 기반 매칭으로 최적의 인플루언서 연계
+• 브랜드별 맞춤 전략으로 목표 매출과 장기 고객 확보
 
-긍정적인 검토 부탁드리며
-필요하다면 언제든지 유선으로 연락 부탁드립니다.
+▸ 성공 사례
+  - 키친 브랜드: 인지도 제로에서 5차 공구 연속 완판
+  - 식품 브랜드: 론칭 6시간 만에 전량 소진
+  - 라이프스타일 브랜드: 신규 고객 유입 300% 증가
+
+▸ 고객 만족도 피드백
+  "공구로 바이럴이 잘 되어서 저희쪽 브랜드 인지도가 많이 올라갔어요."
+  "저희쪽 브랜드와 잘 맞는 셀러분을 매칭해주셨어요."
+  "앞으로 자주 거래하고 싶어요. 특히 담당 이사님이 너무 잘해주셨어요."
+
+저희의 목표는 단순 매출 상승이 아니라,
+공동구매를 통해 브랜드가 고객에게 기억되도록 돕는 것입니다.
+
+긍정적인 검토 부탁드리며,
+편하신 시간대에 연락주시면 바로 답변드릴 수 있도록 하겠습니다.
 
 감사합니다.
 정준기 드림`;

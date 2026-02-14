@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>디어데이즈 - 인플루언서 관리</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Work+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #0f0f17;
+            min-height: 100vh;
+            color: #fff;
+            font-size: 13px;
+        }
+
+        .container { max-width: 100%; padding: 30px 30px 60px; }
+
+        /* ─── 헤더 ────────────────────────── */
+        .header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        .header-left .logo {
+            font-family: 'Work Sans', sans-serif;
+            font-size: 12px; font-weight: 600;
+            color: #ffaf5f; letter-spacing: 2px; margin-bottom: 8px;
+        }
+        .header-left .logo a {
+            color: #8c91a0; text-decoration: none;
+            font-size: 11px; letter-spacing: 0; margin-left: 12px;
+        }
+        .header-left .logo a:hover { color: #fff; }
+        .header-left h1 { font-size: 24px; font-weight: 700; }
+        .header-right { display: flex; align-items: center; gap: 10px; }
+        .stats-bar {
+            display: flex; align-items: center; gap: 16px;
+            font-size: 12px; color: #8c91a0;
+        }
+        .stats-bar .stat-value {
+            color: #ffaf5f; font-weight: 600; font-family: 'Work Sans', sans-serif;
+        }
+
+        /* ─── 버튼 ────────────────────────── */
+        .btn {
+            padding: 9px 16px; border: 1px solid #32323c; border-radius: 8px;
+            background: #1a1a2e; color: #fff; font-size: 12px;
+            font-family: inherit; cursor: pointer; transition: all 0.2s; white-space: nowrap;
+        }
+        .btn:hover { border-color: #ffaf5f; color: #ffaf5f; }
+        .btn-primary {
+            background: #ffaf5f; color: #1a1a2e;
+            border-color: #ffaf5f; font-weight: 600;
+        }
+        .btn-primary:hover { background: #e89d4f; border-color: #e89d4f; color: #1a1a2e; }
+
+        /* ─── 필터바 ──────────────────────── */
+        .filter-bar {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 16px; flex-wrap: wrap;
+        }
+        .search-input {
+            flex: 0 0 260px; padding: 9px 14px 9px 36px;
+            background: #1a1a2e; border: 1px solid #32323c; border-radius: 8px;
+            color: #fff; font-size: 13px; font-family: inherit; outline: none;
+            transition: border-color 0.2s;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238c91a0' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: 12px center;
+        }
+        .search-input:focus { border-color: #ffaf5f; }
+        .search-input::placeholder { color: #5a5f6e; }
+        .filter-count { font-size: 12px; color: #8c91a0; margin-left: 4px; }
+        .filter-count .num { color: #ffaf5f; font-family: 'Work Sans', sans-serif; font-weight: 600; }
+
+        /* ─── 멀티셀렉트 ─────────────────── */
+        .msel {
+            position: relative; display: inline-block;
+        }
+        .msel-btn {
+            padding: 9px 32px 9px 12px; background: #1a1a2e;
+            border: 1px solid #32323c; border-radius: 8px;
+            color: #fff; font-size: 12px; font-family: inherit;
+            cursor: pointer; white-space: nowrap; outline: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238c91a0' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: calc(100% - 10px) center;
+        }
+        .msel-btn:hover, .msel-btn.active { border-color: #ffaf5f; }
+        .msel-btn .msel-count {
+            display: inline-block; background: #ffaf5f; color: #1a1a2e;
+            font-size: 10px; font-weight: 700; border-radius: 3px;
+            padding: 1px 5px; margin-left: 6px;
+        }
+        .msel-drop {
+            display: none; position: absolute; top: calc(100% + 4px); left: 0;
+            background: #1a1a2e; border: 1px solid #32323c; border-radius: 8px;
+            min-width: 200px; max-height: 260px; overflow-y: auto;
+            z-index: 50; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+        .msel-drop.open { display: block; }
+        .msel-item {
+            display: flex; align-items: center; gap: 8px;
+            padding: 8px 12px; cursor: pointer; font-size: 12px;
+            transition: background 0.15s;
+        }
+        .msel-item:hover { background: #26262f; }
+        .msel-item input[type="checkbox"] {
+            accent-color: #ffaf5f; width: 14px; height: 14px; cursor: pointer;
+        }
+        .msel-actions {
+            display: flex; gap: 8px; padding: 8px 12px;
+            border-top: 1px solid #26262f;
+        }
+        .msel-actions button {
+            flex: 1; padding: 5px 8px; border: 1px solid #32323c; border-radius: 4px;
+            background: transparent; color: #8c91a0; font-size: 11px;
+            cursor: pointer; font-family: inherit;
+        }
+        .msel-actions button:hover { color: #ffaf5f; border-color: #ffaf5f; }
+
+        /* ─── 등급 설정 패널 ──────────────── */
+        .grade-config-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.6); z-index: 900;
+            justify-content: center; align-items: center;
+        }
+        .grade-config-overlay.open { display: flex; }
+        .grade-config-modal {
+            background: #1a1a2e; border: 1px solid #32323c; border-radius: 12px;
+            width: 640px; max-width: 90vw; max-height: 90vh; overflow-y: auto;
+            padding: 28px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .grade-config-modal h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+        .grade-config-modal .desc { font-size: 11px; color: #8c91a0; margin-bottom: 20px; }
+        .grade-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+        .grade-table th {
+            font-size: 11px; font-weight: 500; color: #8c91a0; text-align: left;
+            padding: 8px 10px; border-bottom: 1px solid #32323c; letter-spacing: 0.3px;
+        }
+        .grade-table td { padding: 6px 6px; border-bottom: 1px solid #1e1e2e; }
+        .grade-table input {
+            width: 100%; padding: 7px 10px; background: #0f0f17; border: 1px solid #32323c;
+            border-radius: 6px; color: #fff; font-size: 13px; font-family: 'Work Sans', sans-serif;
+            outline: none; transition: border-color 0.2s;
+        }
+        .grade-table input:focus { border-color: #ffaf5f; }
+        .grade-table input.grade-name {
+            font-family: 'Noto Sans KR', sans-serif; font-weight: 600; text-align: center; width: 80px;
+        }
+        .grade-table input.num-input { text-align: right; }
+        .grade-logic {
+            font-size: 10px; color: #5a5f6e; padding: 2px 0; text-align: center;
+        }
+        .grade-config-hint {
+            background: #0f0f17; border-radius: 8px; padding: 12px 14px;
+            margin-bottom: 20px; font-size: 11px; color: #8c91a0; line-height: 1.7;
+        }
+        .grade-config-hint code {
+            background: #26262f; padding: 1px 5px; border-radius: 3px;
+            font-family: 'Work Sans', monospace; color: #82b4af; font-size: 10px;
+        }
+        .grade-config-footer {
+            display: flex; gap: 10px; justify-content: flex-end;
+        }
+
+        /* ─── 컬럼 설정 패널 ──────────────── */
+        .col-settings-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.6); z-index: 900;
+        }
+        .col-settings-overlay.open { display: block; }
+        .col-settings-panel {
+            position: fixed; top: 0; right: 0; bottom: 0;
+            width: 320px; background: #1a1a2e; border-left: 1px solid #32323c;
+            z-index: 901; overflow-y: auto; padding: 24px;
+            transform: translateX(100%); transition: transform 0.25s ease;
+        }
+        .col-settings-overlay.open .col-settings-panel { transform: translateX(0); }
+        .col-settings-panel h3 {
+            font-size: 16px; font-weight: 700; margin-bottom: 6px;
+        }
+        .col-settings-panel .desc {
+            font-size: 11px; color: #8c91a0; margin-bottom: 16px;
+        }
+        .col-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 8px 0; border-bottom: 1px solid #1e1e2e;
+        }
+        .col-item label { font-size: 12px; cursor: pointer; flex: 1; }
+        .col-item .col-toggle {
+            width: 36px; height: 20px; border-radius: 10px; border: none;
+            cursor: pointer; transition: all 0.2s; position: relative;
+        }
+        .col-toggle.on { background: #82b4af; }
+        .col-toggle.off { background: #32323c; }
+        .col-toggle::after {
+            content: ''; position: absolute; top: 3px;
+            width: 14px; height: 14px; border-radius: 50%; background: #fff;
+            transition: left 0.2s;
+        }
+        .col-toggle.on::after { left: 19px; }
+        .col-toggle.off::after { left: 3px; }
+        .col-settings-footer {
+            position: sticky; bottom: 0; padding: 16px 0 0;
+            background: #1a1a2e; border-top: 1px solid #32323c; margin-top: 16px;
+        }
+
+        /* ─── 테이블 ──────────────────────── */
+        .table-wrapper {
+            background: #1a1a2e; border-radius: 12px;
+            border: 1px solid #26262f; overflow: hidden;
+        }
+        .table-scroll { overflow-x: auto; overflow-y: auto; max-height: calc(100vh - 200px); }
+        table {
+            width: max-content; min-width: 100%;
+            border-collapse: collapse; table-layout: fixed;
+        }
+
+        thead th {
+            position: sticky; top: 0; z-index: 20;
+            background: #1e1e30; padding: 10px 12px; text-align: left;
+            font-size: 11px; font-weight: 500; color: #8c91a0;
+            letter-spacing: 0.3px; border-bottom: 1px solid #32323c;
+            white-space: nowrap; cursor: default; user-select: none;
+        }
+        thead th.sortable { cursor: pointer; }
+        thead th.sortable:hover { color: #ffaf5f; }
+        thead th .sort-icon { display: inline-block; margin-left: 4px; font-size: 10px; opacity: 0.4; }
+        thead th.sort-active .sort-icon { opacity: 1; color: #ffaf5f; }
+        thead th.editable-header { background: #1e2435; }
+
+        /* 고정 컬럼 - 명시적 배경색 */
+        .col-sticky { position: sticky; z-index: 25; }
+        thead th.col-sticky { z-index: 30; background: #1e1e30; }
+        thead th.col-sticky.editable-header { background: #1e2435; }
+
+        tbody tr { border-bottom: 1px solid #1e1e2e; transition: background 0.15s; }
+        tbody tr:nth-child(odd) td.col-sticky { background: #1a1a2e; }
+        tbody tr:nth-child(even) { background: #16162a; }
+        tbody tr:nth-child(even) td.col-sticky { background: #16162a; }
+        tbody tr:hover td { background: #22223a; }
+        tbody tr:hover td.col-sticky { background: #22223a; }
+
+        /* 마지막 고정 컬럼에 그림자 */
+        .col-sticky-last { box-shadow: 2px 0 6px rgba(0,0,0,0.3); }
+
+        tbody td {
+            padding: 8px 12px; white-space: nowrap; overflow: hidden;
+            text-overflow: ellipsis; vertical-align: middle; font-size: 12px;
+        }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+
+        /* ─── 셀 타입 ─────────────────────── */
+        .cell-id { color: #a89bc9; font-weight: 500; }
+        .cell-id a { color: inherit; text-decoration: none; }
+        .cell-id a:hover { color: #ffaf5f; text-decoration: underline; }
+        .cell-name { font-weight: 500; color: #e8e8f0; max-width: 200px; overflow: hidden; text-overflow: ellipsis; }
+        .cell-desc { max-width: 200px; overflow: hidden; text-overflow: ellipsis; color: #8c91a0; font-size: 11px; }
+        .cell-number { font-family: 'Work Sans', sans-serif; font-weight: 400; color: #c8c8d8; }
+        .cell-link { color: #82b4af; text-decoration: none; font-size: 14px; }
+        .cell-link:hover { color: #ffaf5f; }
+        .cell-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+        .tag-category { background: #a89bc920; color: #a89bc9; }
+        .tag-sub { background: #82b4af20; color: #82b4af; }
+
+        .cell-editable { background: rgba(255,175,95,0.03); cursor: pointer; transition: background 0.2s; }
+        .cell-editable:hover { background: rgba(255,175,95,0.08); }
+
+        /* 토글 */
+        .toggle-btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 32px; height: 20px; border-radius: 10px;
+            border: none; cursor: pointer; transition: all 0.2s; font-size: 0;
+        }
+        .toggle-btn.on { background: #82b4af; }
+        .toggle-btn.off { background: #32323c; }
+        .toggle-btn::after {
+            content: ''; width: 14px; height: 14px; border-radius: 50%;
+            background: #fff; transition: transform 0.2s;
+        }
+        .toggle-btn.on::after { transform: translateX(6px); }
+        .toggle-btn.off::after { transform: translateX(-6px); }
+
+        .edit-number-input {
+            width: 70px; padding: 4px 8px; background: #26262f;
+            border: 1px solid #ffaf5f; border-radius: 4px; color: #fff;
+            font-size: 12px; font-family: 'Work Sans', sans-serif;
+            text-align: right; outline: none;
+        }
+        .grade-select {
+            padding: 4px 8px; background: #26262f; border: 1px solid #ffaf5f;
+            border-radius: 4px; color: #fff; font-size: 12px;
+            font-family: 'Work Sans', sans-serif; outline: none; cursor: pointer;
+        }
+        .grade-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 22px; border-radius: 4px;
+            font-family: 'Work Sans', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer;
+        }
+        .grade-S { background: #ffaf5f30; color: #ffaf5f; }
+        .grade-A { background: #82b4af30; color: #82b4af; }
+        .grade-B { background: #a89bc930; color: #a89bc9; }
+        .grade-C { background: #8c91a030; color: #8c91a0; }
+        .grade-D { background: #f09b8230; color: #f09b82; }
+        .grade-default { background: #32323c; color: #8c91a0; }
+
+        /* ─── 로딩/에러/빈상태 ────────────── */
+        .loading-overlay {
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; padding: 80px 20px; color: #8c91a0;
+        }
+        .spinner {
+            width: 32px; height: 32px; border: 3px solid #32323c;
+            border-top-color: #ffaf5f; border-radius: 50%;
+            animation: spin 0.8s linear infinite; margin-bottom: 16px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .error-box {
+            padding: 20px; background: #f09b8215; border: 1px solid #f09b8240;
+            border-radius: 8px; color: #f09b82; text-align: center;
+        }
+        .empty-state { padding: 60px 20px; text-align: center; color: #8c91a0; }
+        .empty-state .icon { font-size: 32px; margin-bottom: 12px; }
+
+        /* ─── 토스트 ──────────────────────── */
+        .toast-container {
+            position: fixed; bottom: 20px; right: 20px; z-index: 9999;
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .toast {
+            padding: 10px 20px; border-radius: 8px; font-size: 13px;
+            animation: toastIn 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .toast-success { background: #82b4af; color: #0f0f17; }
+        .toast-error { background: #f09b82; color: #0f0f17; }
+        @keyframes toastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ─── 툴팁 ────────────────────────── */
+        [data-tooltip] { position: relative; }
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip); position: absolute;
+            bottom: calc(100% + 6px); left: 0;
+            background: #32323c; color: #e8e8f0; padding: 6px 10px;
+            border-radius: 6px; font-size: 11px; white-space: pre-wrap;
+            max-width: 300px; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.3); line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 16px; }
+            .header { flex-direction: column; gap: 12px; }
+            .filter-bar { flex-direction: column; }
+            .search-input { flex: 1 1 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-left">
+                <p class="logo">DEARDAYS ADMIN <a href="/admin/">&larr; 대시보드</a></p>
+                <h1>인플루언서 관리</h1>
+            </div>
+            <div class="header-right">
+                <div class="stats-bar">
+                    <span>총 <span class="stat-value" id="totalCount">-</span>명</span>
+                    <span>캐시: <span id="cacheStatus" style="color:#82b4af">-</span></span>
+                </div>
+                <button class="btn" onclick="openGradeConfig()">등급 설정</button>
+                <button class="btn" onclick="openColumnSettings()">컬럼 설정</button>
+                <button class="btn" onclick="refreshData()" id="refreshBtn">새로고침</button>
+            </div>
+        </header>
+
+        <div class="filter-bar">
+            <input type="text" class="search-input" id="searchInput" placeholder="인스타ID 또는 이름 검색..." />
+
+            <div class="msel" id="mselCategory">
+                <button class="msel-btn" onclick="toggleMsel('mselCategory')">카테고리(대)</button>
+                <div class="msel-drop" id="mselCategoryDrop"></div>
+            </div>
+
+            <div class="msel" id="mselGrade">
+                <button class="msel-btn" onclick="toggleMsel('mselGrade')">등급</button>
+                <div class="msel-drop" id="mselGradeDrop"></div>
+            </div>
+
+            <div class="msel" id="mselActivity">
+                <button class="msel-btn" onclick="toggleMsel('mselActivity')">활동 필터</button>
+                <div class="msel-drop" id="mselActivityDrop"></div>
+            </div>
+
+            <span class="filter-count">필터 결과: <span class="num" id="filteredCount">-</span>명</span>
+        </div>
+
+        <div class="table-wrapper">
+            <div class="table-scroll" id="tableScroll">
+                <div class="loading-overlay" id="loadingState">
+                    <div class="spinner"></div>
+                    <p>데이터를 불러오는 중...</p>
+                </div>
+                <div class="error-box" id="errorState" style="display:none"></div>
+                <table id="dataTable" style="display:none">
+                    <thead id="tableHead"></thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+                <div class="empty-state" id="emptyState" style="display:none">
+                    <div class="icon">&#128269;</div>
+                    <p>검색 결과가 없습니다</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 등급 설정 모달 -->
+    <div class="grade-config-overlay" id="gradeConfigOverlay" onclick="if(event.target===this)closeGradeConfig()">
+        <div class="grade-config-modal">
+            <h3>등급 분류 기준 설정</h3>
+            <p class="desc">grade_config 시트에 저장됩니다. 수식 적용 시 스프레드시트의 등급 컬럼 함수가 자동 업데이트됩니다.</p>
+
+            <table class="grade-table">
+                <thead>
+                    <tr>
+                        <th style="width:80px">등급</th>
+                        <th>팔로워 최소</th>
+                        <th>조회수 최소</th>
+                        <th>참여율 최소</th>
+                        <th style="width:60px">로직</th>
+                    </tr>
+                </thead>
+                <tbody id="gradeConfigBody"></tbody>
+            </table>
+
+            <div class="grade-config-hint">
+                <strong style="color:#ffaf5f">분류 로직:</strong><br/>
+                참여율 값이 <code>있으면</code>: 팔로워 &ge; 최소 <strong>AND</strong> (조회수 &ge; 최소 <strong>OR</strong> 참여율 &ge; 최소)<br/>
+                참여율 값이 <code>비어있으면</code>: 팔로워 &ge; 최소 <strong>AND</strong> 조회수 &ge; 최소<br/>
+                마지막 등급은 위 조건에 해당하지 않는 <strong>나머지</strong>에 적용됩니다.
+            </div>
+
+            <div class="grade-config-footer">
+                <button class="btn" onclick="closeGradeConfig()">취소</button>
+                <button class="btn" onclick="saveGradeConfig(false)">저장만</button>
+                <button class="btn btn-primary" onclick="saveGradeConfig(true)">저장 + 수식 적용</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 컬럼 설정 패널 -->
+    <div class="col-settings-overlay" id="colSettingsOverlay" onclick="if(event.target===this)closeColumnSettings()">
+        <div class="col-settings-panel">
+            <h3>컬럼 노출 설정</h3>
+            <p class="desc">influencer_config 시트에 저장됩니다</p>
+            <div id="colSettingsList"></div>
+            <div class="col-settings-footer">
+                <button class="btn-primary btn" onclick="saveColumnSettings()" style="width:100%">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+    // ─── 설정 ────────────────────────────────────────────
+    const WORKER_URL = 'https://sheets-proxy.dev-joongi.workers.dev';
+
+    const EDITABLE_BOOLEAN_COLUMNS = [];
+    const EDITABLE_NUMBER_COLUMNS = ['공지채널 멤버수'];
+    const EDITABLE_GRADE_COLUMN = '인플루언서 등급';
+    const EDITABLE_BOOLEAN_EXTRA = ['활동성(24H스토리'];
+    const ALL_EDITABLE = [...EDITABLE_BOOLEAN_COLUMNS, ...EDITABLE_NUMBER_COLUMNS, EDITABLE_GRADE_COLUMN, ...EDITABLE_BOOLEAN_EXTRA];
+
+    const HIDDEN_COLUMNS = ['_rowIndex', '댓글활동여부', '소통채널여부', '최근 공동구매 상품'];
+    const STICKY_COUNT = 3;
+
+    const COLUMN_CONFIG = {
+        'No.': { width: 50, align: 'center', type: 'number' },
+        '인스타ID': { width: 140, type: 'id' },
+        '인스타 이름': { width: 200, type: 'name' },
+        '설명란': { width: 200, type: 'desc' },
+        '외부링크': { width: 50, align: 'center', type: 'link' },
+        '프로필 링크': { width: 50, align: 'center', type: 'link' },
+        '팔로워': { width: 90, align: 'right', type: 'number' },
+        '최근 10 평균 릴스 조회수': { width: 100, align: 'right', type: 'number', label: '평균 릴스' },
+        '최대 릴스 조회수': { width: 100, align: 'right', type: 'number', label: '최대 릴스' },
+        '카테고리(대)': { width: 100, type: 'tag-main' },
+        '카테고리(중)': { width: 100, type: 'tag-sub' },
+        '공지채널 멤버수': { width: 85, align: 'right', type: 'editNumber', label: '공지멤버' },
+        '전체인원대비 소통참여율': { width: 90, align: 'right', label: '소통참여율' },
+        '팔로워수 대비 조회수': { width: 90, align: 'right', type: 'number', label: '조회수비' },
+        '활동성(24H스토리': { width: 80, align: 'center', type: 'boolean', label: '활동성24H' },
+        '최근10개 평균 댓글수': { width: 90, align: 'right', type: 'number', label: '평균댓글' },
+        '마지막 피드 게시일': { width: 110, label: '최근게시' },
+        '인플루언서 등급': { width: 60, align: 'center', type: 'grade', label: '등급' }
+    };
+
+    // ─── 상태 ────────────────────────────────────────────
+    let allData = [];
+    let filteredData = [];
+    let headers = [];
+    let headerIndexMap = {};
+    let visibleColumns = new Set();
+    let sortColumn = null;
+    let sortDirection = 'asc';
+    let searchTimeout = null;
+
+    // 멀티셀렉트 상태
+    let selectedCategories = new Set();
+    let selectedGrades = new Set();
+    let selectedActivities = new Set();
+
+    // ─── 초기화 ──────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', async () => {
+        document.getElementById('searchInput').addEventListener('input', () => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => applyFilters(), 250);
+        });
+        // 외부 클릭 시 멀티셀렉트 닫기
+        document.addEventListener('click', (e) => {
+            document.querySelectorAll('.msel').forEach(ms => {
+                if (!ms.contains(e.target)) {
+                    ms.querySelector('.msel-drop').classList.remove('open');
+                    ms.querySelector('.msel-btn').classList.remove('active');
+                }
+            });
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') { closeColumnSettings(); closeGradeConfig(); }
+        });
+
+        await loadData();
+    });
+
+    // ─── 데이터 로드 ─────────────────────────────────────
+    async function loadData() {
+        showLoading(true);
+        try {
+            // config와 데이터를 병렬 로드
+            const [configRes, dataRes] = await Promise.all([
+                fetch(`${WORKER_URL}/config`).catch(() => null),
+                fetch(`${WORKER_URL}/influencers`)
+            ]);
+
+            // Config 처리
+            let configColumns = null;
+            if (configRes && configRes.ok) {
+                const configJson = await configRes.json();
+                if (configJson.columns && configJson.columns.length > 0) {
+                    configColumns = configJson.columns;
+                }
+            }
+
+            // 데이터 처리
+            if (!dataRes.ok) throw new Error(`HTTP ${dataRes.status}`);
+            const json = await dataRes.json();
+            if (json.error) throw new Error(json.error);
+
+            allData = json.data || [];
+            headers = json.headers || (allData.length > 0 ? Object.keys(allData[0]).filter(k => !k.startsWith('_')) : []);
+
+            headerIndexMap = {};
+            headers.forEach((h, i) => { headerIndexMap[h] = i; });
+
+            // 컬럼 가시성 설정
+            if (configColumns) {
+                visibleColumns = new Set();
+                configColumns.forEach(col => {
+                    const name = col['컬럼명'] || col.name || '';
+                    const visible = (col['노출'] || col.visible || '').toUpperCase();
+                    if (visible === 'TRUE' && headers.includes(name)) {
+                        visibleColumns.add(name);
+                    }
+                });
+            } else {
+                // config 없으면 전체 표시
+                visibleColumns = new Set(headers.filter(h => !HIDDEN_COLUMNS.includes(h)));
+            }
+
+            document.getElementById('cacheStatus').textContent = json.fromCache ? 'KV' : 'API';
+            document.getElementById('cacheStatus').style.color = json.fromCache ? '#82b4af' : '#ffaf5f';
+
+            populateFilters();
+            buildTableHeader();
+            applyFilters();
+            showLoading(false);
+        } catch (err) {
+            showError(err.message);
+        }
+    }
+
+    async function refreshData() {
+        const btn = document.getElementById('refreshBtn');
+        btn.textContent = '갱신 중...';
+        btn.disabled = true;
+        try {
+            const res = await fetch(`${WORKER_URL}/influencers/refresh`, { method: 'POST' });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const json = await res.json();
+
+            allData = json.data || [];
+            headers = json.headers || [];
+            headerIndexMap = {};
+            headers.forEach((h, i) => { headerIndexMap[h] = i; });
+
+            document.getElementById('cacheStatus').textContent = 'API (갱신)';
+            document.getElementById('cacheStatus').style.color = '#ffaf5f';
+
+            populateFilters();
+            buildTableHeader();
+            applyFilters();
+            showToast('데이터가 갱신되었습니다', 'success');
+        } catch (err) {
+            showToast('갱신 실패: ' + err.message, 'error');
+        } finally {
+            btn.textContent = '새로고침';
+            btn.disabled = false;
+        }
+    }
+
+    // ─── 멀티셀렉트 ─────────────────────────────────────
+    function toggleMsel(id) {
+        const msel = document.getElementById(id);
+        const drop = msel.querySelector('.msel-drop');
+        const btn = msel.querySelector('.msel-btn');
+        const isOpen = drop.classList.contains('open');
+
+        // 다른 드롭다운 모두 닫기
+        document.querySelectorAll('.msel-drop.open').forEach(d => d.classList.remove('open'));
+        document.querySelectorAll('.msel-btn.active').forEach(b => b.classList.remove('active'));
+
+        if (!isOpen) {
+            drop.classList.add('open');
+            btn.classList.add('active');
+        }
+    }
+
+    function populateFilters() {
+        // 카테고리
+        const categories = new Set();
+        const catCol = findHeader('카테고리(대)');
+        if (catCol) {
+            allData.forEach(row => {
+                const val = row[catCol];
+                if (val) val.split(',').forEach(c => categories.add(c.trim()));
+            });
+        }
+        renderMselOptions('mselCategoryDrop', [...categories].sort(), selectedCategories, (sel) => {
+            selectedCategories = sel;
+            updateMselBtn('mselCategory', '카테고리(대)', sel.size);
+            applyFilters();
+        });
+
+        // 등급
+        renderMselOptions('mselGradeDrop', ['S', 'A', 'B', 'C', 'D', '검토대상'], selectedGrades, (sel) => {
+            selectedGrades = sel;
+            updateMselBtn('mselGrade', '등급', sel.size);
+            applyFilters();
+        });
+
+        // 활동 필터
+        const activityOptions = [
+            '활동성24H O', '활동성24H X'
+        ];
+        renderMselOptions('mselActivityDrop', activityOptions, selectedActivities, (sel) => {
+            selectedActivities = sel;
+            updateMselBtn('mselActivity', '활동 필터', sel.size);
+            applyFilters();
+        });
+
+        updateMselBtn('mselCategory', '카테고리(대)', selectedCategories.size);
+        updateMselBtn('mselGrade', '등급', selectedGrades.size);
+        updateMselBtn('mselActivity', '활동 필터', selectedActivities.size);
+    }
+
+    function renderMselOptions(dropId, options, selected, onChange) {
+        const drop = document.getElementById(dropId);
+        let html = '';
+        options.forEach(opt => {
+            const checked = selected.has(opt) ? 'checked' : '';
+            html += `<label class="msel-item"><input type="checkbox" value="${escapeHtml(opt)}" ${checked} />${escapeHtml(opt)}</label>`;
+        });
+        html += `<div class="msel-actions"><button onclick="mselClear('${dropId}')">초기화</button><button onclick="mselAll('${dropId}')">전체선택</button></div>`;
+        drop.innerHTML = html;
+
+        drop.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', () => {
+                const newSel = new Set();
+                drop.querySelectorAll('input[type="checkbox"]:checked').forEach(c => newSel.add(c.value));
+                onChange(newSel);
+            });
+        });
+    }
+
+    function mselClear(dropId) {
+        const drop = document.getElementById(dropId);
+        drop.querySelectorAll('input[type="checkbox"]').forEach(cb => { cb.checked = false; });
+        drop.querySelector('input[type="checkbox"]').dispatchEvent(new Event('change'));
+    }
+
+    function mselAll(dropId) {
+        const drop = document.getElementById(dropId);
+        drop.querySelectorAll('input[type="checkbox"]').forEach(cb => { cb.checked = true; });
+        drop.querySelector('input[type="checkbox"]').dispatchEvent(new Event('change'));
+    }
+
+    function updateMselBtn(mselId, label, count) {
+        const btn = document.getElementById(mselId).querySelector('.msel-btn');
+        if (count > 0) {
+            btn.innerHTML = `${escapeHtml(label)}<span class="msel-count">${count}</span>`;
+        } else {
+            btn.textContent = label;
+        }
+    }
+
+    // ─── 필터 ────────────────────────────────────────────
+    function applyFilters() {
+        const search = document.getElementById('searchInput').value.trim().toLowerCase();
+
+        const idCol = findHeader('인스타ID');
+        const nameCol = findHeader('인스타 이름');
+        const catCol = findHeader('카테고리(대)');
+        const gradeCol = findHeader('인플루언서 등급');
+        const activeCol = findHeader('활동성(24H스토리');
+
+        filteredData = allData.filter(row => {
+            if (search) {
+                const id = (row[idCol] || '').toLowerCase();
+                const name = (row[nameCol] || '').toLowerCase();
+                if (!id.includes(search) && !name.includes(search)) return false;
+            }
+            if (selectedCategories.size > 0 && catCol) {
+                const val = row[catCol] || '';
+                const matched = [...selectedCategories].some(cat => val.includes(cat));
+                if (!matched) return false;
+            }
+            if (selectedGrades.size > 0 && gradeCol) {
+                if (!selectedGrades.has(row[gradeCol])) return false;
+            }
+            if (selectedActivities.size > 0) {
+                for (const act of selectedActivities) {
+                    if (act === '활동성24H O' && activeCol && row[activeCol] !== 'TRUE') return false;
+                    if (act === '활동성24H X' && activeCol && row[activeCol] !== 'FALSE') return false;
+                }
+            }
+            return true;
+        });
+
+        if (sortColumn) sortData(sortColumn, sortDirection, false);
+        renderTable();
+    }
+
+    // ─── 등급 설정 ──────────────────────────────────────
+    let gradeConfigData = [];
+
+    async function openGradeConfig() {
+        const body = document.getElementById('gradeConfigBody');
+        body.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#8c91a0;padding:20px">로딩 중...</td></tr>';
+        document.getElementById('gradeConfigOverlay').classList.add('open');
+
+        try {
+            const res = await fetch(`${WORKER_URL}/grade-config`);
+            const json = await res.json();
+            gradeConfigData = json.grades || [];
+            renderGradeConfigTable();
+        } catch (err) {
+            body.innerHTML = `<tr><td colspan="5" style="color:#f09b82;padding:20px">로드 실패: ${escapeHtml(err.message)}</td></tr>`;
+        }
+    }
+
+    function closeGradeConfig() {
+        document.getElementById('gradeConfigOverlay').classList.remove('open');
+    }
+
+    function renderGradeConfigTable() {
+        const body = document.getElementById('gradeConfigBody');
+        let html = '';
+        gradeConfigData.forEach((g, i) => {
+            const isLast = i === gradeConfigData.length - 1;
+            const logic = isLast ? '기본값' : (g.minEngagement ? 'AND+OR' : 'AND');
+            const logicColor = isLast ? '#8c91a0' : (g.minEngagement ? '#82b4af' : '#a89bc9');
+            html += `<tr>
+                <td><input class="grade-name" value="${escapeHtml(g.grade)}" data-idx="${i}" data-field="grade" onchange="updateGradeField(this)" /></td>
+                <td><input class="num-input" value="${escapeHtml(g.minFollowers)}" data-idx="${i}" data-field="minFollowers" onchange="updateGradeField(this)" ${isLast ? 'disabled style="opacity:0.3"' : ''} /></td>
+                <td><input class="num-input" value="${escapeHtml(g.minViews)}" data-idx="${i}" data-field="minViews" onchange="updateGradeField(this)" ${isLast ? 'disabled style="opacity:0.3"' : ''} /></td>
+                <td><input class="num-input" value="${escapeHtml(g.minEngagement)}" data-idx="${i}" data-field="minEngagement" onchange="updateGradeField(this)" placeholder="-" ${isLast ? 'disabled style="opacity:0.3"' : ''} /></td>
+                <td><span class="grade-logic" style="color:${logicColor}">${logic}</span></td>
+            </tr>`;
+        });
+        body.innerHTML = html;
+    }
+
+    function updateGradeField(input) {
+        const idx = parseInt(input.dataset.idx);
+        const field = input.dataset.field;
+        gradeConfigData[idx][field] = input.value;
+        // 로직 표시 업데이트
+        renderGradeConfigTable();
+    }
+
+    async function saveGradeConfig(applyFormula) {
+        const actionText = applyFormula ? '저장 + 수식 적용' : '저장';
+        const buttons = document.querySelectorAll('.grade-config-footer .btn');
+        buttons.forEach(b => b.disabled = true);
+
+        try {
+            const res = await fetch(`${WORKER_URL}/grade-config/save`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ grades: gradeConfigData, applyFormula })
+            });
+            const json = await res.json();
+            if (json.error) throw new Error(json.error);
+
+            if (applyFormula && json.formulaApplied) {
+                if (json.formulaApplied.error) {
+                    showToast(`Config 저장 완료. 수식 적용 실패: ${json.formulaApplied.error}`, 'error');
+                } else {
+                    showToast(`등급 기준 저장 + 수식 ${json.formulaApplied.updatedRows}행 적용 완료`, 'success');
+                    // 데이터 새로고침 (등급이 재계산되었으므로)
+                    await refreshData();
+                }
+            } else {
+                showToast('등급 기준이 저장되었습니다', 'success');
+            }
+            closeGradeConfig();
+        } catch (err) {
+            showToast(`${actionText} 실패: ${err.message}`, 'error');
+        } finally {
+            buttons.forEach(b => b.disabled = false);
+        }
+    }
+
+    // ─── 컬럼 설정 ──────────────────────────────────────
+    function openColumnSettings() {
+        const list = document.getElementById('colSettingsList');
+        const allHeaders = headers.filter(h => !HIDDEN_COLUMNS.includes(h));
+        let html = '';
+        allHeaders.forEach(h => {
+            const config = COLUMN_CONFIG[h] || {};
+            const label = config.label || h;
+            const isOn = visibleColumns.has(h);
+            html += `<div class="col-item">
+                <label>${escapeHtml(label)} <span style="color:#5a5f6e;font-size:10px">${escapeHtml(h !== label ? h : '')}</span></label>
+                <button class="col-toggle ${isOn ? 'on' : 'off'}" data-col="${escapeHtml(h)}" onclick="toggleColVisibility(this)"></button>
+            </div>`;
+        });
+        list.innerHTML = html;
+        document.getElementById('colSettingsOverlay').classList.add('open');
+    }
+
+    function closeColumnSettings() {
+        document.getElementById('colSettingsOverlay').classList.remove('open');
+    }
+
+    function toggleColVisibility(btn) {
+        const col = btn.dataset.col;
+        if (btn.classList.contains('on')) {
+            btn.classList.remove('on');
+            btn.classList.add('off');
+            visibleColumns.delete(col);
+        } else {
+            btn.classList.remove('off');
+            btn.classList.add('on');
+            visibleColumns.add(col);
+        }
+    }
+
+    async function saveColumnSettings() {
+        const allHeaders = headers.filter(h => !HIDDEN_COLUMNS.includes(h));
+        const columns = allHeaders.map(h => ({
+            name: h,
+            visible: visibleColumns.has(h)
+        }));
+
+        try {
+            const res = await fetch(`${WORKER_URL}/config/save`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ columns })
+            });
+            const json = await res.json();
+            if (json.error) throw new Error(json.error);
+
+            closeColumnSettings();
+            buildTableHeader();
+            renderTable();
+            showToast('컬럼 설정이 저장되었습니다', 'success');
+        } catch (err) {
+            showToast('저장 실패: ' + err.message, 'error');
+        }
+    }
+
+    // ─── 테이블 렌더링 ──────────────────────────────────
+    function getVisibleHeaders() {
+        return headers.filter(h => !HIDDEN_COLUMNS.includes(h) && visibleColumns.has(h));
+    }
+
+    function buildTableHeader() {
+        const vh = getVisibleHeaders();
+        let stickyLeft = 0;
+        let stickyIdx = 0;
+        let html = '<tr>';
+
+        vh.forEach((header, idx) => {
+            const config = COLUMN_CONFIG[header] || {};
+            const width = config.width || 120;
+            const align = config.align || 'left';
+            const label = config.label || header;
+            const isEditable = ALL_EDITABLE.some(e => header.includes(e) || e.includes(header));
+            const isSticky = stickyIdx < STICKY_COUNT;
+            const isLastSticky = stickyIdx === STICKY_COUNT - 1;
+
+            let classes = ['sortable'];
+            if (isSticky) classes.push('col-sticky');
+            if (isLastSticky) classes.push('col-sticky-last');
+            if (isEditable) classes.push('editable-header');
+
+            let style = `width:${width}px;min-width:${width}px;text-align:${align};`;
+            if (isSticky) {
+                style += `left:${stickyLeft}px;`;
+                stickyLeft += width;
+            }
+
+            if (isSticky) stickyIdx++;
+
+            const sortIcon = sortColumn === header
+                ? (sortDirection === 'asc' ? '&#9650;' : '&#9660;') : '&#8597;';
+            const activeClass = sortColumn === header ? ' sort-active' : '';
+
+            html += `<th class="${classes.join(' ')}${activeClass}" style="${style}" onclick="toggleSort('${escapeHtml(header)}')">${escapeHtml(label)}<span class="sort-icon">${sortIcon}</span></th>`;
+        });
+
+        html += '</tr>';
+        document.getElementById('tableHead').innerHTML = html;
+    }
+
+    function renderTable() {
+        const table = document.getElementById('dataTable');
+        const empty = document.getElementById('emptyState');
+        const tbody = document.getElementById('tableBody');
+        const vh = getVisibleHeaders();
+
+        document.getElementById('totalCount').textContent = allData.length;
+        document.getElementById('filteredCount').textContent = filteredData.length;
+
+        if (filteredData.length === 0) {
+            table.style.display = 'none';
+            empty.style.display = 'block';
+            return;
+        }
+        table.style.display = 'table';
+        empty.style.display = 'none';
+
+        let html = '';
+        filteredData.forEach((row, rowIdx) => {
+            html += '<tr>';
+            let stickyLeft = 0;
+            let stickyIdx = 0;
+
+            vh.forEach((header) => {
+                const config = COLUMN_CONFIG[header] || {};
+                const width = config.width || 120;
+                const align = config.align || 'left';
+                const type = config.type || 'text';
+                const isSticky = stickyIdx < STICKY_COUNT;
+                const isLastSticky = stickyIdx === STICKY_COUNT - 1;
+                const isEditable = ALL_EDITABLE.some(e => header.includes(e) || e.includes(header));
+
+                let classes = [];
+                if (isSticky) classes.push('col-sticky');
+                if (isLastSticky) classes.push('col-sticky-last');
+                if (isEditable) classes.push('cell-editable');
+                if (align === 'right') classes.push('text-right');
+                if (align === 'center') classes.push('text-center');
+
+                let style = `width:${width}px;min-width:${width}px;`;
+                if (isSticky) {
+                    style += `left:${stickyLeft}px;`;
+                    stickyLeft += width;
+                }
+                if (isSticky) stickyIdx++;
+
+                const value = row[header] || '';
+                const cellHtml = renderCell(value, type, row, header, rowIdx);
+                html += `<td class="${classes.join(' ')}" style="${style}">${cellHtml}</td>`;
+            });
+            html += '</tr>';
+        });
+        tbody.innerHTML = html;
+    }
+
+    function renderCell(value, type, row, header, rowIdx) {
+        const profileCol = findHeader('프로필 링크');
+        switch (type) {
+            case 'id': {
+                const url = row[profileCol] || '';
+                return url
+                    ? `<span class="cell-id"><a href="${escapeHtml(url)}" target="_blank" rel="noopener">${escapeHtml(value)}</a></span>`
+                    : `<span class="cell-id">${escapeHtml(value)}</span>`;
+            }
+            case 'name':
+                return `<span class="cell-name" data-tooltip="${escapeHtml(value)}">${escapeHtml(value)}</span>`;
+            case 'desc':
+                return `<span class="cell-desc" data-tooltip="${escapeHtml(value)}">${escapeHtml(value)}</span>`;
+            case 'link':
+                return value ? `<a href="${escapeHtml(value)}" target="_blank" rel="noopener" class="cell-link">&#128279;</a>` : '<span style="color:#32323c">-</span>';
+            case 'number':
+                return `<span class="cell-number">${escapeHtml(formatNumber(value))}</span>`;
+            case 'tag-main':
+                return value ? value.split(',').map(v => `<span class="cell-tag tag-category">${escapeHtml(v.trim())}</span>`).join(' ') : '';
+            case 'tag-sub':
+                return value ? value.split(',').map(v => `<span class="cell-tag tag-sub">${escapeHtml(v.trim())}</span>`).join(' ') : '';
+            case 'boolean': {
+                const isOn = value === 'TRUE' || value === 'true';
+                return `<button class="toggle-btn ${isOn ? 'on' : 'off'}" onclick="toggleBoolean(${rowIdx}, '${escapeAttr(header)}')" title="${isOn ? 'TRUE' : 'FALSE'}"></button>`;
+            }
+            case 'editNumber':
+                return `<span class="cell-number" ondblclick="startEditNumber(this, ${rowIdx}, '${escapeAttr(header)}')">${escapeHtml(value || '-')}</span>`;
+            case 'grade': {
+                const gc = value ? `grade-${value}` : 'grade-default';
+                return `<span class="grade-badge ${gc}" onclick="startEditGrade(this, ${rowIdx}, '${escapeAttr(header)}')">${escapeHtml(value || '-')}</span>`;
+            }
+            default:
+                return escapeHtml(value);
+        }
+    }
+
+    // ─── 정렬 ────────────────────────────────────────────
+    function toggleSort(header) {
+        if (sortColumn === header) {
+            sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            sortColumn = header;
+            sortDirection = 'asc';
+        }
+        sortData(header, sortDirection, true);
+    }
+
+    function sortData(header, direction, rerender) {
+        const config = COLUMN_CONFIG[header] || {};
+        const isNumeric = config.type === 'number' || config.type === 'editNumber';
+        filteredData.sort((a, b) => {
+            let va = a[header] || '', vb = b[header] || '';
+            if (isNumeric) { va = parseNumeric(va); vb = parseNumeric(vb); }
+            else { va = va.toString().toLowerCase(); vb = vb.toString().toLowerCase(); }
+            const cmp = isNumeric ? va - vb : (va < vb ? -1 : va > vb ? 1 : 0);
+            return direction === 'asc' ? cmp : -cmp;
+        });
+        if (rerender) { buildTableHeader(); renderTable(); }
+    }
+
+    function parseNumeric(val) {
+        if (typeof val === 'number') return val;
+        const str = val.toString().replace(/,/g, '').replace(/만/g, '0000').replace(/%/g, '');
+        return parseFloat(str) || 0;
+    }
+
+    // ─── 인라인 수정 ─────────────────────────────────────
+    async function toggleBoolean(rowIdx, header) {
+        const row = filteredData[rowIdx];
+        const current = row[header];
+        const newValue = (current === 'TRUE' || current === 'true') ? 'FALSE' : 'TRUE';
+        const colIndex = headerIndexMap[header];
+        if (colIndex === undefined) { showToast('컬럼을 찾을 수 없습니다', 'error'); return; }
+        row[header] = newValue;
+        renderTable();
+        try {
+            await updateCell(row._rowIndex, colIndex, newValue);
+            showToast(`${header}: ${newValue}`, 'success');
+        } catch (err) {
+            row[header] = current;
+            renderTable();
+            showToast('저장 실패: ' + err.message, 'error');
+        }
+    }
+
+    function startEditNumber(el, rowIdx, header) {
+        const row = filteredData[rowIdx];
+        const current = row[header] || '';
+        const input = document.createElement('input');
+        input.type = 'text'; input.className = 'edit-number-input'; input.value = current;
+        el.replaceWith(input); input.focus(); input.select();
+        const save = async () => {
+            const nv = input.value.trim();
+            if (nv === current) { applyFilters(); return; }
+            row[header] = nv;
+            try { await updateCell(row._rowIndex, headerIndexMap[header], nv); showToast(`${header}: ${nv}`, 'success'); }
+            catch (err) { row[header] = current; showToast('저장 실패: ' + err.message, 'error'); }
+            applyFilters();
+        };
+        input.addEventListener('blur', save);
+        input.addEventListener('keydown', (e) => { if (e.key === 'Enter') input.blur(); if (e.key === 'Escape') { row[header] = current; applyFilters(); } });
+    }
+
+    function startEditGrade(el, rowIdx, header) {
+        const row = filteredData[rowIdx];
+        const current = row[header] || '';
+        const select = document.createElement('select');
+        select.className = 'grade-select';
+        ['', 'S', 'A', 'B', 'C', 'D'].forEach(g => {
+            const opt = document.createElement('option'); opt.value = g; opt.textContent = g || '-';
+            if (g === current) opt.selected = true; select.appendChild(opt);
+        });
+        el.replaceWith(select); select.focus();
+        const save = async () => {
+            const nv = select.value;
+            if (nv === current) { applyFilters(); return; }
+            row[header] = nv;
+            try { await updateCell(row._rowIndex, headerIndexMap[header], nv); showToast(`등급: ${nv || '-'}`, 'success'); }
+            catch (err) { row[header] = current; showToast('저장 실패: ' + err.message, 'error'); }
+            applyFilters();
+        };
+        select.addEventListener('blur', save);
+        select.addEventListener('change', () => select.blur());
+        select.addEventListener('keydown', (e) => { if (e.key === 'Escape') { row[header] = current; applyFilters(); } });
+    }
+
+    async function updateCell(rowIndex, columnIndex, value) {
+        const res = await fetch(`${WORKER_URL}/influencers/update`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ rowIndex, columnIndex, value })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        if (json.error) throw new Error(json.error);
+        return json;
+    }
+
+    // ─── 유틸리티 ────────────────────────────────────────
+    function findHeader(partial) {
+        return headers.find(h => h === partial || h.includes(partial)) || null;
+    }
+    function formatNumber(val) {
+        if (!val) return '-';
+        const str = val.toString();
+        if (str.includes('만') || str.includes('%')) return str;
+        const num = parseFloat(str.replace(/,/g, ''));
+        if (isNaN(num)) return val;
+        if (num >= 10000) return (num / 10000).toFixed(1).replace(/\.0$/, '') + '만';
+        if (num >= 1000) return num.toLocaleString();
+        return str;
+    }
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+    }
+    function escapeAttr(str) { return str.replace(/'/g, "\\'").replace(/"/g, '\\"'); }
+    function showLoading(show) {
+        document.getElementById('loadingState').style.display = show ? 'flex' : 'none';
+        document.getElementById('dataTable').style.display = show ? 'none' : 'table';
+        document.getElementById('errorState').style.display = 'none';
+    }
+    function showError(msg) {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('dataTable').style.display = 'none';
+        document.getElementById('errorState').style.display = 'block';
+        document.getElementById('errorState').innerHTML = `<p style="margin-bottom:8px">데이터 로드 실패</p><p style="font-size:12px;opacity:0.8">${escapeHtml(msg)}</p><button class="btn" style="margin-top:12px" onclick="loadData()">다시 시도</button>`;
+    }
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.textContent = message;
+        container.appendChild(toast);
+        setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateY(10px)'; toast.style.transition = 'all 0.3s'; setTimeout(() => toast.remove(), 300); }, 2500);
+    }
+    </script>
+</body>
+</html>
