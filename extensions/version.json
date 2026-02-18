@@ -1,0 +1,8 @@
+{
+  "instagram-analyzer": {
+    "version": "1.2.0",
+    "name": "Instagram 인플루언서 분석기",
+    "description": "인플루언서명, 링크, 팔로워수, 릴스 평균 조회수를 분석하고 Google Sheets에 저장합니다",
+    "updatedAt": "2026-02-18T00:47:24Z"
+  }
+}
