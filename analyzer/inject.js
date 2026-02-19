@@ -307,18 +307,35 @@
   }
 
   async function extractReelsData(username) {
+    // Instagram은 SPA이므로 fetch+DOMParser로는 릴스 데이터를 못 가져옴.
+    // 릴스 탭을 클릭하여 SPA 내부 네비게이션 후 렌더링된 DOM에서 추출.
+    var originalUrl = location.href;
+
     try {
-      var resp = await fetch('/' + username + '/reels/', { credentials: 'include' });
-      if (!resp.ok) return [];
+      // 1. 릴스 탭 클릭 또는 SPA 네비게이션
+      var reelsTab = document.querySelector('a[href="/' + username + '/reels/"]') ||
+        document.querySelector('a[href*="/' + username + '/reels"]');
 
-      var html = await resp.text();
+      if (reelsTab) {
+        reelsTab.click();
+      } else {
+        // 탭을 못 찾으면 직접 URL 변경 (SPA가 감지)
+        history.pushState(null, '', '/' + username + '/reels/');
+        window.dispatchEvent(new PopStateEvent('popstate'));
+      }
 
-      var parser = new DOMParser();
-      var doc = parser.parseFromString(html, 'text/html');
+      // 2. 릴스 콘텐츠 렌더링 대기 (최대 10초)
+      var reelLinks = [];
+      for (var wait = 0; wait < 40; wait++) {
+        await new Promise(function(r) { setTimeout(r, 250); });
+        reelLinks = document.querySelectorAll('a[href*="/reel/"]');
+        if (reelLinks.length > 0) break;
+        // 스크롤로 lazy load 트리거
+        if (wait === 5 || wait === 15) window.scrollBy(0, 300);
+      }
 
-      var reelLinks = doc.querySelectorAll('a[href*="/reel/"]');
+      // 3. 릴스 DOM에서 데이터 추출 (확장프로그램과 동일한 로직)
       var reelsInfo = [];
-
       reelLinks.forEach(function(link, index) {
         try {
           var isPinned = false;
@@ -327,8 +344,17 @@
             var label = svgs[i].getAttribute('aria-label') || '';
             if (label.includes('고정') || label.toLowerCase().includes('pin')) { isPinned = true; break; }
           }
+          if (!isPinned) {
+            var titles = link.querySelectorAll('title');
+            for (var j = 0; j < titles.length; j++) {
+              var titleText = titles[j].textContent || '';
+              if (titleText.includes('고정') || titleText.toLowerCase().includes('pin')) { isPinned = true; break; }
+            }
+          }
 
           var views = '';
+
+          // 방법 1: svg aria-label로 찾기
           var allSvgs = link.querySelectorAll('svg');
           for (var k = 0; k < allSvgs.length; k++) {
             var ariaLabel = allSvgs[k].getAttribute('aria-label') || '';
@@ -341,11 +367,21 @@
             }
           }
 
+          // 방법 2: 오버레이 span에서 숫자 패턴
           if (!views) {
             var overlaySpans = link.querySelectorAll('span');
             for (var m = 0; m < overlaySpans.length; m++) {
               var spanText = overlaySpans[m].textContent.trim();
               if (spanText && /^[\d,.]+[만천KMB]?$/.test(spanText)) { views = spanText; break; }
+            }
+          }
+
+          // 방법 3: div 내부 텍스트에서 숫자 패턴
+          if (!views) {
+            var allDivs = link.querySelectorAll('div');
+            for (var n = 0; n < allDivs.length; n++) {
+              var divText = allDivs[n].textContent.trim();
+              if (divText && /^[\d,.]+[만천KMB]?$/.test(divText) && divText.length < 15) { views = divText; break; }
             }
           }
 
@@ -360,8 +396,15 @@
         } catch(e) {}
       });
 
+      // 4. 원래 페이지로 복귀 (프로필)
+      history.pushState(null, '', '/' + username + '/');
+      window.dispatchEvent(new PopStateEvent('popstate'));
+      await new Promise(function(r) { setTimeout(r, 500); });
+
       return reelsInfo;
     } catch(e) {
+      // 실패 시 원래 URL로 복귀
+      try { history.pushState(null, '', '/' + username + '/'); } catch(ex) {}
       return [];
     }
   }
