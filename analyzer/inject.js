@@ -119,27 +119,21 @@
       hasBroadcastChannel: false
     };
 
-    // 표시 이름 (숫자 전용 span 건너뛰기 — 게시물/팔로워 수 회피)
-    var displayNameSpans = document.querySelectorAll('header section span[dir="auto"]');
-    for (var di = 0; di < displayNameSpans.length; di++) {
-      var dnText = displayNameSpans[di].textContent.trim();
-      if (dnText && dnText !== username && !/^[\d,.]+[만천KMB]?$/.test(dnText)) {
-        data.displayName = dnText;
-        break;
-      }
+    // 표시 이름: document.title에서 추출 ("표시이름(@username) • Instagram...")
+    var titleMatch = document.title.match(/^([^(@]+)/);
+    if (titleMatch) {
+      var titleName = titleMatch[1].trim();
+      if (titleName && titleName !== username) data.displayName = titleName;
     }
+    // fallback: DOM 탐색 (숫자 전용 span 건너뛰기)
     if (!data.displayName) {
-      var fontWeightEl = document.querySelector('header span[style*="font-weight"]');
-      if (fontWeightEl && fontWeightEl.textContent.trim() !== username) {
-        data.displayName = fontWeightEl.textContent.trim();
-      }
-    }
-    if (!data.displayName) {
-      var metaTitle = document.querySelector('meta[property="og:title"]');
-      if (metaTitle) {
-        var titleContent = metaTitle.getAttribute('content');
-        var nameMatch = titleContent && titleContent.match(/^([^(]+)\(/);
-        if (nameMatch) data.displayName = nameMatch[1].trim();
+      var displayNameSpans = document.querySelectorAll('header section span[dir="auto"]');
+      for (var di = 0; di < displayNameSpans.length; di++) {
+        var dnText = displayNameSpans[di].textContent.trim();
+        if (dnText && dnText !== username && !/^[\d,.]+[만천KMB]?$/.test(dnText)) {
+          data.displayName = dnText;
+          break;
+        }
       }
     }
 
@@ -270,10 +264,12 @@
       if (!resp.ok) return { comments: 0, likes: 0, date: '' };
 
       var fullText = await resp.text();
-      var html = fullText.substring(0, 30000);
+      var html = fullText.substring(0, 50000);
 
       var result = { comments: 0, likes: 0, date: '' };
-      var metaMatch = html.match(/<meta[^>]*name="description"[^>]*content="([^"]*)"/i);
+      // 1차: meta description (name 또는 og:description)
+      var metaMatch = html.match(/<meta[^>]*name="description"[^>]*content="([^"]*)"/i) ||
+                      html.match(/<meta[^>]*property="og:description"[^>]*content="([^"]*)"/i);
       if (metaMatch) {
         var desc = metaMatch[1];
         var commentMatch = desc.match(/([\d,]+)\s*comment/i);
@@ -303,9 +299,21 @@
           }
         }
       }
+      // 2차: LD+JSON 구조화 데이터 (interactionStatistic)
+      if (!result.likes && !result.comments) {
+        var lk = html.match(/LikeAction[^}]*?userInteractionCount["\s:]+(\d+)/);
+        if (lk) result.likes = parseInt(lk[1], 10) || 0;
+        var ck = html.match(/CommentAction[^}]*?userInteractionCount["\s:]+(\d+)/);
+        if (ck) result.comments = parseInt(ck[1], 10) || 0;
+      }
       if (!result.date) {
         var timeMatch = html.match(/<time[^>]*datetime="(\d{4}-\d{2}-\d{2})/i);
         if (timeMatch) result.date = timeMatch[1];
+      }
+      // 3차: LD+JSON에서 날짜 추출
+      if (!result.date) {
+        var dateLD = html.match(/"datePublished"\s*:\s*"(\d{4}-\d{2}-\d{2})/);
+        if (dateLD) result.date = dateLD[1];
       }
       return result;
     } catch(e) {
