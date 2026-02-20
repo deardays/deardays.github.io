@@ -119,11 +119,20 @@
       hasBroadcastChannel: false
     };
 
-    // 표시 이름
-    var displayNameEl = document.querySelector('header section span[dir="auto"]') ||
-      document.querySelector('header span[style*="font-weight"]');
-    if (displayNameEl && displayNameEl.textContent.trim() !== username) {
-      data.displayName = displayNameEl.textContent.trim();
+    // 표시 이름 (숫자 전용 span 건너뛰기 — 게시물/팔로워 수 회피)
+    var displayNameSpans = document.querySelectorAll('header section span[dir="auto"]');
+    for (var di = 0; di < displayNameSpans.length; di++) {
+      var dnText = displayNameSpans[di].textContent.trim();
+      if (dnText && dnText !== username && !/^[\d,.]+[만천KMB]?$/.test(dnText)) {
+        data.displayName = dnText;
+        break;
+      }
+    }
+    if (!data.displayName) {
+      var fontWeightEl = document.querySelector('header span[style*="font-weight"]');
+      if (fontWeightEl && fontWeightEl.textContent.trim() !== username) {
+        data.displayName = fontWeightEl.textContent.trim();
+      }
     }
     if (!data.displayName) {
       var metaTitle = document.querySelector('meta[property="og:title"]');
