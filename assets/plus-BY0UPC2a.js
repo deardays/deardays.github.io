@@ -1,0 +1,1 @@
+import{c as e}from"./useInfluencerData-CTg3JsI1.js";const o=[["path",{d:"m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7",key:"132q7q"}],["rect",{x:"2",y:"4",width:"20",height:"16",rx:"2",key:"izxlao"}]],c=e("mail",o);const t=[["path",{d:"M5 12h14",key:"1ays0h"}],["path",{d:"M12 5v14",key:"s699le"}]],s=e("plus",t);export{c as M,s as P};
