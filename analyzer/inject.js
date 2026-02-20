@@ -36,8 +36,7 @@
     setStatus('피드 게시물 수집 중...');
     var feedPosts = await extractFeedPosts(username);
 
-    // ========== 3. 개별 게시물 메타 데이터 fetch ==========
-    setStatus('게시물 상세 데이터 수집 중...');
+    // ========== 3. 개별 게시물 메타 데이터 fetch (병렬) ==========
     var nonPinned = feedPosts.filter(function(p) { return !p.isPinned; });
     var recent = nonPinned.slice(0, 10);
     var dealRecent = recent.filter(function(p) { return p.isDeal; });
@@ -47,15 +46,14 @@
       postsToFetch.push(firstNonPinned);
     }
 
-    for (var fi = 0; fi < postsToFetch.length; fi++) {
-      setStatus('게시물 ' + (fi+1) + '/' + postsToFetch.length + ' 분석 중...');
-      try {
-        var meta = await fetchSinglePostMeta(postsToFetch[fi].href);
-        postsToFetch[fi].comments = meta.comments;
-        postsToFetch[fi].likes = meta.likes;
-        postsToFetch[fi].date = meta.date;
-      } catch(e) { /* 개별 실패 무시 */ }
-    }
+    setStatus('게시물 ' + postsToFetch.length + '개 상세 데이터 수집 중...');
+    await Promise.all(postsToFetch.map(function(post) {
+      return fetchSinglePostMeta(post.href).then(function(meta) {
+        post.comments = meta.comments;
+        post.likes = meta.likes;
+        post.date = meta.date;
+      }).catch(function() {});
+    }));
 
     // ========== 4. 릴스 데이터 추출 (same-origin fetch) ==========
     setStatus('릴스 데이터 수집 중...');
@@ -89,7 +87,7 @@
     await new Promise(function(r) { setTimeout(r, 500); });
 
     var TARGET_ORIGIN = 'https://deardays.kr';
-    window.location = TARGET_ORIGIN + '/analyzer#' + encodeURIComponent(JSON.stringify(payload));
+    window.location = TARGET_ORIGIN + '/admin/analyzer#' + encodeURIComponent(JSON.stringify(payload));
 
   } catch(e) {
     overlay.innerHTML = '<div style="font-size:20px;color:#ff6b6b;">❌ 분석 실패</div>' +
@@ -325,11 +323,18 @@
       }
 
       // 2. 릴스 콘텐츠 렌더링 대기 (최대 10초)
+      // 피드에 있던 reel 링크 수 기억 (SPA 전환 감지)
+      var feedReelCount = document.querySelectorAll('a[href*="/reel/"]').length;
+      // SPA 전환 시작 대기
+      await new Promise(function(r) { setTimeout(r, 1000); });
+
       var reelLinks = [];
       for (var wait = 0; wait < 40; wait++) {
         await new Promise(function(r) { setTimeout(r, 250); });
         reelLinks = document.querySelectorAll('a[href*="/reel/"]');
-        if (reelLinks.length > 0) break;
+        // SPA 전환 확인: 릴스 탭 URL이거나 링크 수가 변경된 경우만 처리
+        var onReelsTab = location.pathname.includes('/reels');
+        if (reelLinks.length > 0 && (onReelsTab || reelLinks.length !== feedReelCount)) break;
         // 스크롤로 lazy load 트리거
         if (wait === 5 || wait === 15) window.scrollBy(0, 300);
       }
