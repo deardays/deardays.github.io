@@ -2,6 +2,6 @@
 <gupdate xmlns='http://www.google.com/update2/response' protocol='2.0'>
   <app appid='iaboincfmljfejnjkphlohlolccgglhl'>
     <updatecheck codebase='https://deardays.kr/extensions/instagram-analyzer.crx'
-                 version='1.4.7' />
+                 version='1.5.0' />
   </app>
 </gupdate>
