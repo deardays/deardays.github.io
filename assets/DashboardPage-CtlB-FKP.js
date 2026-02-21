@@ -1,4 +1,4 @@
-import{j as t,L as m}from"./index-D1dfEKaK.js";const p={main:"bg-admin-accent/20 text-admin-accent",new:"bg-admin-success/20 text-admin-success",coming:"bg-admin-error/20 text-admin-error"};function e({href:n,tag:s,tagVariant:o,icon:c,title:l,description:d,disabled:a=!1,external:x=!1}){const r=`
+import{j as t,L as m}from"./index-DV0hRhEn.js";const p={main:"bg-admin-accent/20 text-admin-accent",new:"bg-admin-success/20 text-admin-success",coming:"bg-admin-error/20 text-admin-error"};function e({href:n,tag:s,tagVariant:o,icon:c,title:l,description:d,disabled:a=!1,external:x=!1}){const r=`
     bg-admin-card rounded-xl p-8 border border-transparent
     transition-all duration-300 relative overflow-hidden
     ${a?"opacity-50 cursor-not-allowed":"hover:border-admin-accent hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(255,175,95,0.1)]"}
