@@ -14,20 +14,31 @@
     <meta property="og:url" content="https://deardays.kr" />
     <meta name="theme-color" content="#0f172a" />
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JLYQ4LGHZG"></script>
+    <!-- Google tag (gtag.js) — deferred -->
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-JLYQ4LGHZG');
+      function loadGA() {
+        var s = document.createElement('script');
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-JLYQ4LGHZG';
+        s.async = true;
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', 'G-JLYQ4LGHZG');
+      }
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(loadGA);
+      } else {
+        window.addEventListener('load', loadGA);
+      }
     </script>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Serif+KR:wght@700&family=Noto+Sans+KR:wght@300;400;500;700&family=Work+Sans:wght@300;400;600;700&display=swap" rel="stylesheet" />
     <script>
       // Handle SPA redirect from 404.html
@@ -40,8 +51,10 @@
         }
       }(window.location))
     </script>
-    <script type="module" crossorigin src="/assets/index-DgTccGhv.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-jmsMnL4Y.css">
+    <script type="module" crossorigin src="/assets/index-B60IXxEM.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-vendor-9l3RvKiN.js">
+    <link rel="modulepreload" crossorigin href="/assets/framer-motion-6E75tBg3.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-E5eIlcHC.css">
   </head>
   <body>
     <div id="root"></div>
